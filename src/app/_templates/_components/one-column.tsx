@@ -1,28 +1,21 @@
-import { type PropsWithChildren } from "react";
+import { type ReactNode } from "react";
+import { closestCorners, DndContext } from "@dnd-kit/core";
 import {
-  type DragEndEvent,
-  closestCorners,
-  DndContext,
-  KeyboardSensor,
-  PointerSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
-interface OneColumnProps extends PropsWithChildren {
-  handleDragEnd: (event: DragEndEvent) => void;
+import { useDragEndOneColumn } from "~/hooks/use-drag-end-section";
+import { type SectionType } from "~/types/template";
+
+interface OneColumnProps {
+  renderSection: (section: SectionType) => ReactNode;
 }
 
-export const OneColumn = ({ handleDragEnd, children }: OneColumnProps) => {
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(TouchSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
+export const OneColumn = ({ renderSection }: OneColumnProps) => {
+  const { sensors, handleDragEnd, items } = useDragEndOneColumn<SectionType>({
+    type: "sections",
+  });
 
   return (
     <DndContext
@@ -30,7 +23,14 @@ export const OneColumn = ({ handleDragEnd, children }: OneColumnProps) => {
       onDragEnd={handleDragEnd}
       sensors={sensors}
     >
-      {children}
+      <SortableContext
+        items={items.map((item) => {
+          return { id: item.order };
+        })}
+        strategy={verticalListSortingStrategy}
+      >
+        <div id="resume">{items.map(renderSection)}</div>
+      </SortableContext>
     </DndContext>
   );
 };

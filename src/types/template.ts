@@ -26,3 +26,7 @@ export interface SkillType {
   title: string;
   order: number
 }
+
+export interface ItemType {
+  order: number;
+}
