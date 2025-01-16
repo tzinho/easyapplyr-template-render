@@ -28,6 +28,7 @@ import {
   type SectionType,
 } from "~/types/template";
 import { Item } from "./_components/item";
+import { useFormContext } from "react-hook-form";
 
 const Skills = ({ id }: { id: number }) => {
   const [items, setItems] = useState<SkillType[]>(() => {
@@ -173,28 +174,45 @@ const Summary = ({ id, disabled }: { id: number; disabled?: boolean }) => {
 };
 
 const Contact = ({ id, disabled }: { id: number; disabled?: boolean }) => {
-  const data = {
-    name: "George Turner",
-    phone: "(555) 132-2356",
-    email: "george@turner.com",
-    location: "New York City, United States",
-  };
+  const form = useFormContext();
 
   return (
     <Section id={id} disabled={disabled}>
-      <h2 className="text-lg">{data.name}</h2>
-      <div className="flex gap-1">
+      <h2 className="text-lg">
+        <input
+          contentEditable
+          suppressContentEditableWarning
+          className="focus:outline-none"
+          {...form.register("contact.name")}
+        />
+      </h2>
+      <div className="flex">
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin size={12} />
-          {data.location}
+          <input
+            contentEditable
+            suppressContentEditableWarning
+            className="focus:outline-none"
+            {...form.register("contact.location")}
+          />
         </div>
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <Linkedin size={12} />
-          {data.email}
+          <input
+            contentEditable
+            suppressContentEditableWarning
+            className="focus:outline-none"
+            {...form.register("contact.email")}
+          />
         </div>
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <Phone size={12} />
-          {data.phone}
+          <input
+            contentEditable
+            suppressContentEditableWarning
+            className="focus:outline-none"
+            {...form.register("contact.phone")}
+          />
         </div>
       </div>
     </Section>
