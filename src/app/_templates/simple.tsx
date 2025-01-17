@@ -87,9 +87,14 @@ const Experiences = ({ id }: { id: number }) => {
 };
 
 const Summary = ({ id, disabled }: { id: number; disabled?: boolean }) => {
+  const form = useFormContext<{ summary: string }>();
+
+  const summary = form.watch("summary");
+
   return (
     <Section id={id} disabled={disabled}>
       <h3>Summary</h3>
+      <p>{summary}</p>
     </Section>
   );
 };

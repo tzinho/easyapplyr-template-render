@@ -5,6 +5,7 @@ import { Simple } from "../_templates/simple";
 import { Form } from "~/components/ui/form";
 
 const defaultValues = {
+  summary: "I have experience creating a software ...",
   contact: {
     name: "George Turner",
     phone: "(555) 132-2356",
@@ -38,12 +39,6 @@ export const TemplateRender = () => {
     <Form {...form}>
       <form>
         <Simple />
-        {/* <AutoSave
-          defaultValues={defaultValues}
-          onSubmit={(d) => {
-            console.log("d", d);
-          }}
-        /> */}
       </form>
     </Form>
   );
