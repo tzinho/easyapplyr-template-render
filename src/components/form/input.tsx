@@ -14,10 +14,17 @@ interface InputProps {
   name: string;
   placeholder?: string;
   required?: boolean;
+  description?: string;
   label: string;
 }
 
-export const Input = ({ name, label, placeholder, required }: InputProps) => {
+export const Input = ({
+  name,
+  label,
+  placeholder,
+  description,
+  required,
+}: InputProps) => {
   const { control } = useFormContext();
 
   return (
@@ -25,14 +32,14 @@ export const Input = ({ name, label, placeholder, required }: InputProps) => {
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="w-full">
           <FormLabel>
             {label} {required && <span className="text-red-500">*</span>}
           </FormLabel>
           <FormControl>
             <InputShadcn placeholder={placeholder} {...field} />
           </FormControl>
-          <FormDescription>This is your public display name.</FormDescription>
+          <FormDescription>{description}</FormDescription>
           <FormMessage />
         </FormItem>
       )}

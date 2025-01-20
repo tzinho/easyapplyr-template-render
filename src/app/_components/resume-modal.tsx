@@ -3,6 +3,7 @@
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -15,16 +16,31 @@ import {
   DialogClose,
 } from "~/components/ui/dialog";
 import { Form } from "~/components/ui/form";
-import { Label } from "~/components/ui/label";
-import { Switch } from "~/components/ui/switch";
 import { Select } from "~/components/form/select";
 import { SelectItem } from "~/components/ui/select";
 import { Input } from "~/components/form/input";
+import { api } from "~/trpc/react";
+import { useToast } from "~/hooks/use-toast";
+import { ButtonLoading } from "~/components/ui/button-loading";
+import { Card, CardContent } from "~/components/ui/card";
 
 export const ResumeModal = () => {
+  const { toast } = useToast();
+
+  const router = useRouter();
+  const createResumeMutation = api.resume.create.useMutation({
+    onSuccess: () => {
+      toast({ title: "Curriculum criado com sucesso!", description: "" });
+    },
+  });
+
   const formSchema = z.object({
-    title: z.string(),
-    experience: z.string(),
+    title: z
+      .string({ required_error: "O título do curriculum é obrigatório" })
+      .min(3, {
+        message: "O título do curriculum deve possuir ao menos 3 caracteres!",
+      }),
+    experience: z.coerce.number().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -32,91 +48,65 @@ export const ResumeModal = () => {
   });
 
   const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (d) => {
-    console.log("d", d);
+    await createResumeMutation.mutateAsync(d, {
+      onSuccess: (resumes) => {
+        if (resumes.length) {
+          router.push(`/resume/${resumes[0]?.id}/contact`);
+        }
+      },
+    });
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Create new resume</Button>
+        <Card className="flex h-[290px] w-full max-w-[215.16px] cursor-pointer flex-col justify-between overflow-hidden border-dashed">
+          <CardContent className="m-auto flex h-full w-full items-center justify-center">
+            <span className="my-auto text-muted-foreground">
+              Criar novo curriculum
+            </span>
+          </CardContent>
+        </Card>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <DialogHeader>
-              <DialogTitle>Create a resume</DialogTitle>
+              <DialogTitle>Criar um curriculum</DialogTitle>
             </DialogHeader>
             <div className="space-y-6 py-4">
               <Input
                 name="title"
-                label="Resume name"
-                placeholder="Enter here..."
+                label="Título do curriculum"
+                placeholder="Digite aqui..."
+                description="Insira um título pra que fique fácil você identificá-lo"
                 required
               />
 
-              <Select name="experience" placeholder="Select...">
-                <SelectItem value="0-1">0-1 years</SelectItem>
-                <SelectItem value="1-3">1-3 years</SelectItem>
-                <SelectItem value="3-5">3-5 years</SelectItem>
-                <SelectItem value="5+">5+ years</SelectItem>
+              <Select
+                name="experience"
+                placeholder="Selecione..."
+                label="Experiência"
+              >
+                <SelectItem value="0">0-1 anos</SelectItem>
+                <SelectItem value="1">1-3 anos</SelectItem>
+                <SelectItem value="2">3-5 anos</SelectItem>
+                <SelectItem value="3">5+ anos</SelectItem>
               </Select>
-
-              <div className="space-y-4">
-                <button
-                  type="button"
-                  className="flex items-center text-sm font-medium text-primary"
-                >
-                  Import your resume from linkedin →
-                </button>
-                <button
-                  type="button"
-                  className="flex items-center text-sm font-medium text-primary"
-                >
-                  Import your existing resume ▼
-                </button>
-                <div className="space-y-2 rounded-lg border-2 border-dashed p-4 text-center">
-                  <p className="text-sm text-muted-foreground">
-                    Upload PDF, DOCx resume file
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <div className="flex h-5 w-5 items-center justify-center">
-                    ℹ️
-                  </div>
-                  <p>
-                    This process may take up to 60 seconds. Please be patient
-                    and keep this page open.
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="target">Target your resume</Label>
-                  <Switch id="target" />
-                </div>
-                <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <div className="flex h-5 w-5 items-center justify-center">
-                    ✓
-                  </div>
-                  <p>
-                    A targeted resume is a resume tailored to a specific job
-                    opening. You have a significantly higher chance of getting
-                    an interview when you make it clear you have the experience
-                    required for the job.
-                  </p>
-                </div>
-              </div>
             </div>
-
-            <DialogFooter className="justify-end">
+            <DialogFooter className="justify-end gap-3 sm:gap-0">
               <DialogClose asChild>
                 <Button type="button" variant="secondary">
-                  Close
+                  Fechar
                 </Button>
               </DialogClose>
 
-              <Button type="submit">Save</Button>
+              <ButtonLoading
+                type="submit"
+                isLoading={createResumeMutation.isPending}
+              >
+                Salvar
+              </ButtonLoading>
             </DialogFooter>
           </form>
         </Form>

@@ -8,5 +8,5 @@ export default {
   dbCredentials: {
     url: env.DATABASE_URL,
   },
-  tablesFilter: ["easyapplyr-template-render_*"],
+  tablesFilter: ["*"],
 } satisfies Config;

@@ -2,13 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  arrayMove,
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { type DragEndEvent } from "@dnd-kit/core";
 
-import { OneColumn } from "./_components/one-column";
 import { Section } from "./_components/section";
 import { SectionList } from "./_components/section-list";
 import { type SectionType } from "~/types/template";

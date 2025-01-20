@@ -11,40 +11,40 @@ import { Stepper } from "../_components/stepper";
 
 const steps = [
   {
-    label: "Contact Info",
+    label: "Contato",
     description: "What's the best way for employers to reach you?",
     icon: <Contact size={14} />,
-    href: "/resume/contact",
+    href: "/contact",
   },
   {
-    label: "Education",
+    label: "Educação",
     description: "What's the best way for employers to reach you?",
     icon: <Languages size={14} />,
-    href: "/resume/education",
+    href: "/education",
   },
   {
-    label: "Experiences",
+    label: "Experiências",
     description: "What's the best way for employers to reach you?",
     icon: <BookDashed size={14} />,
-    href: "/resume/experiences",
+    href: "/experiences",
   },
   {
-    label: "Skills",
+    label: "Habilidades",
     description: "What's the best way for employers to reach you?",
     icon: <Workflow size={14} />,
-    href: "/resume/skills",
+    href: "/skills",
   },
   {
-    label: "Summary",
+    label: "Sumário",
     description: "What's the best way for employers to reach you?",
     icon: <List size={14} />,
-    href: "/resume/summary",
+    href: "/summary",
   },
   {
-    label: "Format & Download",
+    label: "Formatar & Download",
     description: "What's the best way for employers to reach you?",
     icon: <Download size={14} />,
-    href: "/resume/format",
+    href: "/format",
   },
 ];
 
@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <div className="mt-3 flex min-h-screen w-full flex-col items-center justify-between">
       <Stepper steps={steps} />
-      <div className="flex-1">{children}</div>
+      <div className="w-full flex-1 p-4">{children}</div>
     </div>
   );
 }
