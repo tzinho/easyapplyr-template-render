@@ -58,15 +58,13 @@ const Contact = () => {
             className="w-full space-y-6"
           >
             <div className="flex w-full gap-3">
-              <Input name="name" label="Full Name" />
+              <Input name="name" label="Nome Completo" />
               <Input name="email" label="Email" />
             </div>
 
-            <Input name="phone" label="Phone" />
-            <Input name="address" label="Address" />
-            <Button type="submit" className="">
-              Save
-            </Button>
+            <Input name="phone" label="Telefone" />
+            <Input name="address" label="Endereço" />
+            <Button type="submit">Salvar</Button>
           </form>
         </Form>
 

@@ -1,4 +1,5 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
@@ -27,7 +28,9 @@ export default function Education() {
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (d: any) => {};
+  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (d: any) => {
+    console.log(d);
+  };
 
   return (
     <div className="w-full">
@@ -53,7 +56,7 @@ export default function Education() {
               label="Quando você obteve seu diploma/qualificação?"
             />
             <Button type="submit">
-              {editingId ? "Update Education" : "Add Education"}
+              {editingId ? "Atualizar" : "Adicionar"}
             </Button>
           </form>
         </Form>
