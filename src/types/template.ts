@@ -1,15 +1,15 @@
 export interface SectionType {
   id: string;
   type:
-    | "contact"
-    | "summary"
-    | "skills"
-    | "experiences"
-    | "education"
-    | "certifications"
-    | "courses"
-    | "projects"
-    | "involvements";
+  | "contact"
+  | "summary"
+  | "skills"
+  | "experiences"
+  | "education"
+  | "certifications"
+  | "courses"
+  | "projects"
+  | "involvements";
   order: number;
   disabled?: boolean;
   column?: "column1" | "column2";
@@ -42,4 +42,15 @@ export interface Resume {
   title: string;
   updatedAt: Date;
   createdAt: Date;
+}
+
+
+export interface Experience {
+  id: string;
+  order: number;
+  appear: boolean;
+  role: string;
+  company: string;
+  where: string;
+  did: string;
 }

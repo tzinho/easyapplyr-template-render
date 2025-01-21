@@ -58,12 +58,24 @@ const Contact = () => {
             className="w-full space-y-6"
           >
             <div className="flex w-full gap-3">
-              <Input name="name" label="Nome Completo" />
-              <Input name="email" label="Email" />
+              <Input
+                name="name"
+                label="Nome Completo"
+                placeholder="Thiago Luiz"
+              />
+              <Input name="email" label="Email" placeholder="thiago@luiz.com" />
             </div>
 
-            <Input name="phone" label="Telefone" />
-            <Input name="address" label="Endereço" />
+            <Input
+              name="phone"
+              label="Telefone"
+              placeholder="(11) 96065-7707"
+            />
+            <Input
+              name="address"
+              label="Endereço"
+              placeholder="São Paulo, SP"
+            />
             <Button type="submit">Salvar</Button>
           </form>
         </Form>
