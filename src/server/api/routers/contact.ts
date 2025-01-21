@@ -1,6 +1,6 @@
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { contacts } from "~/server/db/schema";
+// import { contacts } from "~/server/db/schema";
 import { contactSchema } from "~/validators";
 
 export const contactRouter = createTRPCRouter({

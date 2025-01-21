@@ -50,3 +50,13 @@ export interface Skill {
   title: string;
   appear: boolean;
 }
+
+export interface Experience {
+  id: string;
+  order: number;
+  appear: boolean;
+  role: string;
+  company: string;
+  where: string;
+  did: string;
+}

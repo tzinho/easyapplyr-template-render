@@ -18,5 +18,10 @@ export const experienceSchema = z.object({
   did: z.string().optional(),
 });
 
+export const skillSchema = z.object({
+  text: z.string(),
+});
+
 export type ContactSchema = z.infer<typeof contactSchema>;
 export type ExperienceSchema = z.infer<typeof experienceSchema>;
+export type SkillSchema = z.infer<typeof skillSchema>;

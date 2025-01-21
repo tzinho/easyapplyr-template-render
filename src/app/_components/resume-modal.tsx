@@ -28,9 +28,12 @@ export const ResumeModal = () => {
   const { toast } = useToast();
 
   const router = useRouter();
-  const createResumeMutation = api.resume.create.useMutation({
-    onSuccess: () => {
+  const createResumeMutation = api.resume.create.useMutation<{ id: string }[]>({
+    onSuccess: (resumes) => {
       toast({ title: "Curriculum criado com sucesso!", description: "" });
+      if (resumes.length > 0 && resumes[0]) {
+        router.push(`/resume/${(resumes[0] as { id: string }).id}/contact`);
+      }
     },
   });
 
@@ -50,8 +53,8 @@ export const ResumeModal = () => {
   const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (d) => {
     await createResumeMutation.mutateAsync(d, {
       onSuccess: (resumes) => {
-        if (resumes.length) {
-          router.push(`/resume/${resumes[0]?.id}/contact`);
+        if (resumes.length > 0 && resumes[0]) {
+          router.push(`/resume/${(resumes[0] as { id: string }).id}/contact`);
         }
       },
     });
