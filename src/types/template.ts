@@ -12,7 +12,7 @@ export interface SectionType {
     | "involvements";
   order: number;
   disabled?: boolean;
-  column?: "column1" | "column2";
+  column?: 1 | 2;
 }
 
 export interface ExperienceType {
@@ -42,4 +42,11 @@ export interface Resume {
   title: string;
   updatedAt: Date;
   createdAt: Date;
+}
+
+export interface Skill {
+  id: string;
+  order: number;
+  title: string;
+  appear: boolean;
 }

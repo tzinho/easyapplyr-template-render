@@ -12,6 +12,78 @@ import { SectionList } from "./_components/section-list";
 import { type SectionType } from "~/types/template";
 import { TwoColumn } from "./_components/two-column";
 
+const defaultSections = [
+  {
+    id: "1",
+    type: "contact",
+    column: 1,
+    order: 1,
+    data: {
+      name: "Jane Smith",
+      email: "jane@example.com",
+      phone: "(555) 987-6543",
+      location: "New York, NY",
+    },
+  },
+  {
+    id: "2",
+    type: "summary",
+    column: 1,
+    order: 2,
+    data: {
+      text: "Creative designer with expertise in digital and print media.",
+    },
+  },
+  {
+    id: "3",
+    type: "experience",
+    column: 1,
+    order: 3,
+    data: {
+      items: [
+        {
+          id: "1",
+          title: "Senior Designer",
+          subtitle: "Design Studio Inc.",
+          date: "2019 - Present",
+          description: "Leading brand identity projects for major clients",
+        },
+      ],
+    },
+  },
+  {
+    id: "4",
+    type: "education",
+    column: 1,
+    order: 4,
+    data: {
+      items: [
+        {
+          id: "1",
+          title: "Design & Visual Arts",
+          subtitle: "Art Institute",
+          date: "2015 - 2019",
+        },
+      ],
+    },
+  },
+  {
+    id: "5",
+    type: "skills",
+    column: 1,
+    order: 5,
+    data: {
+      items: [
+        {
+          id: "1",
+          title: "Design",
+          skills: ["Adobe Creative Suite", "UI/UX", "Branding"],
+        },
+      ],
+    },
+  },
+];
+
 const Skills = ({ id }: { id: number }) => {
   return <SectionList id={id}>Skills</SectionList>;
 };
@@ -55,22 +127,22 @@ export const Modern = () => {
       return JSON.parse(savedItems) as SectionType[];
     } else {
       return [
-        { id: "1", type: "contact", order: 1, column: "column1" },
-        { id: "2", type: "summary", order: 2, column: "column1" },
-        { id: "3", type: "skills", order: 3, column: "column1" },
-        { id: "4", type: "experiences", order: 4, column: "column2" },
+        { id: "1", type: "contact", order: 1, column: 1 },
+        { id: "2", type: "summary", order: 2, column: 1 },
+        { id: "3", type: "skills", order: 3, column: 1 },
+        { id: "4", type: "experiences", order: 4, column: 2 },
       ];
     }
   });
   const [column1Items, setColumn1Items] = useState(() => {
     return sections
-      .filter((item) => item.column === "column1")
+      .filter((item) => item.column === 1)
       .sort((a, b) => a.order - b.order);
   });
 
   const [column2Items, setColumn2Items] = useState(() => {
     return sections
-      .filter((item) => item.column === "column2")
+      .filter((item) => item.column === 2)
       .sort((a, b) => a.order - b.order);
   });
 
@@ -88,8 +160,8 @@ export const Modern = () => {
     const destinationColumn = column1Items.find(
       (item) => item.order === over.id,
     )
-      ? "column1"
-      : "column2";
+      ? 1
+      : 2;
 
     const updatedItems = sections.map((item) => {
       if (item.id === active.id) {
@@ -105,7 +177,7 @@ export const Modern = () => {
             : destinationIndex;
         item.order = newOrder;
       } else {
-        if (destinationColumn === "column1") {
+        if (destinationColumn === 1) {
           item.order = column1Items.length;
         } else {
           item.order = column2Items.length;

@@ -20,6 +20,78 @@ import {
 import { Item } from "./_components/item";
 import { useDragEnd } from "~/hooks/use-drag-end";
 
+const defaultSections = [
+  {
+    id: "1",
+    type: "contact",
+    column: 1,
+    order: 1,
+    data: {
+      name: "Jane Smith",
+      email: "jane@example.com",
+      phone: "(555) 987-6543",
+      location: "New York, NY",
+    },
+  },
+  {
+    id: "2",
+    type: "summary",
+    column: 1,
+    order: 2,
+    data: {
+      text: "Creative designer with expertise in digital and print media.",
+    },
+  },
+  {
+    id: "3",
+    type: "experience",
+    column: 1,
+    order: 3,
+    data: {
+      items: [
+        {
+          id: "1",
+          title: "Senior Designer",
+          subtitle: "Design Studio Inc.",
+          date: "2019 - Present",
+          description: "Leading brand identity projects for major clients",
+        },
+      ],
+    },
+  },
+  {
+    id: "4",
+    type: "education",
+    column: 1,
+    order: 4,
+    data: {
+      items: [
+        {
+          id: "1",
+          title: "Design & Visual Arts",
+          subtitle: "Art Institute",
+          date: "2015 - 2019",
+        },
+      ],
+    },
+  },
+  {
+    id: "5",
+    type: "skills",
+    column: 1,
+    order: 5,
+    data: {
+      items: [
+        {
+          id: "1",
+          title: "Design",
+          skills: ["Adobe Creative Suite", "UI/UX", "Branding"],
+        },
+      ],
+    },
+  },
+];
+
 const Skills = ({ id }: { id: number }) => {
   const { sensors, handleDragEnd, items } = useDragEnd<SkillType>({
     type: "skills",
