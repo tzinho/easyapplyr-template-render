@@ -16,37 +16,78 @@ const defaultSections = [
   {
     id: "1",
     type: "contact",
+    title: "Contact",
     column: 1,
     order: 1,
     data: {
       name: "Jane Smith",
       email: "jane@example.com",
       phone: "(555) 987-6543",
-      location: "New York, NY",
+      linkedin: "https://www.linkedin.com/in/jane-smith",
+      personalWebsite: "https://www.janesmith.com",
+      country: "United States",
+      state: "New York",
+      city: "New York",
     },
   },
   {
     id: "2",
-    type: "summary",
+    type: "experience",
+    title: "Experiences",
     column: 1,
     order: 2,
-    data: {
-      text: "Creative designer with expertise in digital and print media.",
-    },
-  },
-  {
-    id: "3",
-    type: "experience",
-    column: 1,
-    order: 3,
     data: {
       items: [
         {
           id: "1",
-          title: "Senior Designer",
-          subtitle: "Design Studio Inc.",
+          role: "Senior Designer",
+          company: "Design Studio Inc.",
           date: "2019 - Present",
+          location: "New York, NY",
           description: "Leading brand identity projects for major clients",
+          order: 1,
+          appear: true,
+        },
+        {
+          id: "2",
+          role: "Junior Designer",
+          company: "Creative Agency Co.",
+          date: "2017 - 2019",
+          location: "Boston, MA",
+          description:
+            "Collaborated on branding and digital design projects for startup clients",
+          order: 2,
+          appear: false,
+        },
+      ],
+    },
+  },
+  {
+    id: "3",
+    type: "projects",
+    title: "Projects",
+    appear: true,
+    column: 2,
+    order: 1,
+    data: {
+      items: [
+        {
+          title: "Project 1",
+          organization: "Organization 1",
+          date: "2024 - Present",
+          url: "https://www.project1.com",
+          description: "Description of project 1",
+          order: 1,
+          appear: true,
+        },
+        {
+          title: "Project 2",
+          organization: "Organization 2",
+          date: "2023 - 2024",
+          url: "https://www.project2.com",
+          description: "Description of project 2",
+          order: 2,
+          appear: false,
         },
       ],
     },
@@ -54,22 +95,86 @@ const defaultSections = [
   {
     id: "4",
     type: "education",
+    title: "Education",
     column: 1,
     order: 4,
+    appear: true,
     data: {
       items: [
         {
           id: "1",
-          title: "Design & Visual Arts",
-          subtitle: "Art Institute",
+          degree: "Design & Visual Arts",
+          school: "Art Institute",
+          where: "New York, NY",
           date: "2015 - 2019",
+          order: 1,
+          appear: true,
         },
       ],
     },
   },
   {
     id: "5",
+    type: "certifications",
+    title: "Certifications",
+    column: 1,
+    order: 5,
+    appear: true,
+    data: {
+      items: [
+        {
+          id: "1",
+          title: "SQL essentials",
+          where: "Oracle Database SQL Certified Associate Certification",
+          date: "2024",
+          description: "Certification in SQL essentials",
+          order: 1,
+          appear: true,
+        },
+        {
+          id: "2",
+          title: "Python for Data Analysis",
+          where: "DataCamp Certified Data Analyst",
+          date: "2023",
+          description:
+            "Certification in Python programming and data analysis techniques",
+          order: 2,
+          appear: true,
+        },
+        {
+          id: "3",
+          title: "Web Development Basics",
+          where: "FreeCodeCamp Frontend Developer Certification",
+          date: "2022",
+          description: "Comprehensive training in HTML, CSS, and JavaScript",
+          order: 3,
+          appear: true,
+        },
+        {
+          id: "4",
+          title: "Cloud Computing Fundamentals",
+          where: "AWS Certified Cloud Practitioner",
+          date: "2025",
+          description: "Certification in foundational cloud computing concepts",
+          order: 4,
+          appear: false,
+        },
+        {
+          id: "5",
+          title: "Digital Marketing Strategy",
+          where: "Google Digital Marketing Certification",
+          date: "2021",
+          description: "Training in SEO, SEM, and online marketing strategies",
+          order: 5,
+          appear: true,
+        },
+      ],
+    },
+  },
+  {
+    id: "6",
     type: "skills",
+    title: "Skills",
     column: 1,
     order: 5,
     data: {
@@ -78,11 +183,24 @@ const defaultSections = [
           id: "1",
           title: "Design",
           skills: ["Adobe Creative Suite", "UI/UX", "Branding"],
+          order: 1,
+          appear: true,
         },
       ],
     },
   },
-];
+  {
+    id: "7",
+    type: "summary",
+    title: "Summary",
+    column: 1,
+    order: 3,
+    appear: true,
+    data: {
+      text: "Creative designer with expertise in digital and print media.",
+    },
+  },
+] as SectionType[];
 
 const Skills = ({ id }: { id: number }) => {
   return <SectionList id={id}>Skills</SectionList>;
@@ -127,10 +245,10 @@ export const Modern = () => {
       return JSON.parse(savedItems) as SectionType[];
     } else {
       return [
-        { id: "1", type: "contact", order: 1, column: 1 },
-        { id: "2", type: "summary", order: 2, column: 1 },
-        { id: "3", type: "skills", order: 3, column: 1 },
-        { id: "4", type: "experiences", order: 4, column: 2 },
+        { id: "1", type: "contact", order: 1, column: 1, appear: true },
+        { id: "2", type: "summary", order: 2, column: 1, appear: true },
+        { id: "3", type: "skills", order: 3, column: 1, appear: true },
+        { id: "4", type: "experiences", order: 4, column: 2, appear: true },
       ];
     }
   });
