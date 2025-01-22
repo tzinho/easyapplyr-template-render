@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import {
   BookDashed,
   Contact,
@@ -8,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { Stepper } from "../_components/stepper";
+import { useSidebar } from "~/components/ui/sidebar";
 
 const steps = [
   {
@@ -51,6 +55,12 @@ const steps = [
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { setOpen } = useSidebar();
+
+  useEffect(() => {
+    setOpen(false);
+  }, []);
+
   return (
     <div className="mt-3 flex min-h-screen w-full flex-col items-center justify-between">
       <Stepper steps={steps} />

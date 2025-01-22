@@ -31,7 +31,7 @@ const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "https://github.com/shadcn.png",
   },
   teams: [
     {
@@ -52,22 +52,18 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Página inicial",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "Histórico",
-          url: "#",
+          title: "Curriculums",
+          url: "/",
         },
         {
           title: "Favoritos",
-          url: "#",
-        },
-        {
-          title: "Configurações",
-          url: "#",
+          url: "/",
         },
       ],
     },
@@ -147,11 +143,6 @@ const data = {
       name: "Vendas e Marketing",
       url: "#",
       icon: PieChart,
-    },
-    {
-      name: "Viagem",
-      url: "#",
-      icon: Map,
     },
   ],
 };
