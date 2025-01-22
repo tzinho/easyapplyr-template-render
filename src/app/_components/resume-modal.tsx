@@ -63,7 +63,7 @@ export const ResumeModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Card className="flex h-[290px] w-full max-w-[215.16px] cursor-pointer flex-col justify-between overflow-hidden border-dashed">
+        <Card className="flex h-[290px] w-full max-w-[240px] cursor-pointer flex-col justify-between overflow-hidden border-dashed">
           <CardContent className="m-auto flex h-full w-full items-center justify-center">
             <span className="my-auto text-muted-foreground">
               Criar novo curriculum

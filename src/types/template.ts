@@ -1,18 +1,23 @@
 export interface SectionType {
   id: string;
   type:
-    | "contact"
-    | "summary"
-    | "skills"
-    | "experiences"
-    | "education"
-    | "certifications"
-    | "courses"
-    | "projects"
-    | "involvements";
+  | "contact"
+  | "summary"
+  | "skills"
+  | "experiences"
+  | "education"
+  | "certifications"
+  | "courses"
+  | "projects"
+  | "involvements";
   order: number;
   disabled?: boolean;
+  appear: boolean;
+  title?: string;
   column?: 1 | 2;
+  data?: {
+    items?: ItemType[];
+  }
 }
 
 export interface ExperienceType {
@@ -28,7 +33,10 @@ export interface SkillType {
 }
 
 export interface ItemType {
+  id: string;
   order: number;
+  appear?: boolean;
+  [key: string]: string | number | boolean | undefined;
 }
 
 export interface Template {
