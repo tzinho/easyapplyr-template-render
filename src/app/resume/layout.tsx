@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   BookDashed,
   Contact,
@@ -10,8 +10,8 @@ import {
   Workflow,
 } from "lucide-react";
 
-import { Stepper } from "../_components/stepper";
 import { useSidebar } from "~/components/ui/sidebar";
+import { ResumeButtonGroup } from "~/components/resume-button-group";
 
 const steps = [
   {
@@ -52,10 +52,79 @@ const steps = [
   },
 ];
 
+const initialSections: any[] = [
+  {
+    id: "contact",
+    label: "Contato",
+    required: true,
+    removable: false,
+    added: true,
+  },
+  {
+    id: "experience",
+    label: "Experiência",
+    required: true,
+    removable: false,
+    added: true,
+  },
+  {
+    id: "education",
+    label: "Educação",
+    required: true,
+    removable: false,
+    added: true,
+  },
+  {
+    id: "summary",
+    label: "Sumário",
+    required: false,
+    removable: false,
+    added: true,
+  },
+  {
+    id: "courses",
+    label: "Cursos",
+    required: false,
+    removable: true,
+    added: false,
+  },
+  {
+    id: "projects",
+    label: "Projetos",
+    required: false,
+    removable: true,
+    added: false,
+  },
+  {
+    id: "skills",
+    label: "Habilidades",
+    required: false,
+    removable: true,
+    added: true,
+  },
+];
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const { setOpen } = useSidebar();
+
+  const [sections, setSections] = useState(initialSections);
+  const [currentSection, setCurrentSection] = useState("contact");
+
+  const handleNavigate = (sectionId: string) => {
+    setCurrentSection(sectionId);
+  };
+
+  const handleToggleSection = (sectionId: string) => {
+    setSections((prevSections) =>
+      prevSections.map((section) =>
+        section.id === sectionId
+          ? { ...section, added: !section.added }
+          : section,
+      ),
+    );
+  };
 
   useEffect(() => {
     setOpen(false);
@@ -63,7 +132,13 @@ export default function RootLayout({
 
   return (
     <div className="mt-3 flex min-h-screen w-full flex-col items-center justify-between">
-      <Stepper steps={steps} />
+      {/* <Stepper steps={steps} /> */}
+      <ResumeButtonGroup
+        sections={sections}
+        currentSection={currentSection}
+        onNavigate={handleNavigate}
+        onToggleSection={handleToggleSection}
+      />
       <div className="w-full flex-1 p-4">{children}</div>
     </div>
   );

@@ -16,9 +16,11 @@ const defaultSections = [
   {
     id: "1",
     type: "contact",
-    title: "Contact",
     column: 1,
     order: 1,
+    removable: true,
+    required: false,
+    added: true,
     data: {
       name: "Jane Smith",
       email: "jane@example.com",
@@ -28,6 +30,7 @@ const defaultSections = [
       country: "United States",
       state: "New York",
       city: "New York",
+      photo: "https://profileicon.com",
     },
   },
   {
@@ -36,6 +39,9 @@ const defaultSections = [
     title: "Experiences",
     column: 1,
     order: 2,
+    removable: true,
+    required: false,
+    added: true,
     data: {
       items: [
         {
@@ -69,6 +75,9 @@ const defaultSections = [
     appear: true,
     column: 2,
     order: 1,
+    removable: true,
+    required: false,
+    added: true,
     data: {
       items: [
         {
@@ -99,6 +108,9 @@ const defaultSections = [
     column: 1,
     order: 4,
     appear: true,
+    removable: true,
+    required: false,
+    added: true,
     data: {
       items: [
         {
@@ -120,6 +132,9 @@ const defaultSections = [
     column: 1,
     order: 5,
     appear: true,
+    removable: true,
+    required: false,
+    added: true,
     data: {
       items: [
         {
@@ -177,6 +192,9 @@ const defaultSections = [
     title: "Skills",
     column: 1,
     order: 5,
+    removable: true,
+    required: false,
+    added: true,
     data: {
       items: [
         {
@@ -196,6 +214,9 @@ const defaultSections = [
     column: 1,
     order: 3,
     appear: true,
+    removable: true,
+    required: false,
+    added: true,
     data: {
       text: "Creative designer with expertise in digital and print media.",
     },

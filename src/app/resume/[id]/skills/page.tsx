@@ -18,7 +18,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "~/components/ui/collapsible";
-
 import { type Experience } from "~/types/template";
 import { Textarea } from "~/components/form/textarea";
 
@@ -41,7 +40,7 @@ function SkillForm({ handleSubmit }: ExperienceFormProps<SkillSchema>) {
         className="w-full space-y-6"
       >
         <Textarea
-          placeholder="Technical Skills: Google Suite, Tableau"
+          placeholder="• Technical Skills: Google Suite, Tableau"
           name="text"
           label="Quais suas habilidades?"
         />
@@ -75,7 +74,7 @@ const SortableItems = ({ items, setItems }: SortableItemsProps<Experience>) => {
         <CollapsibleTrigger asChild>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex w-full items-center justify-between text-lg font-medium"
+            className="flex w-full items-center justify-between text-sm font-medium"
           >
             Suas habilidades
             {isOpen ? (

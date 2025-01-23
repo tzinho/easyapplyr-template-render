@@ -91,7 +91,7 @@ const SortableItems = ({ items, setItems }: SortableItemsProps<Experience>) => {
         <CollapsibleTrigger asChild>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex w-full items-center justify-between text-lg font-medium"
+            className="flex w-full items-center justify-between text-sm font-medium"
           >
             Suas experiências
             {isOpen ? (
@@ -107,7 +107,7 @@ const SortableItems = ({ items, setItems }: SortableItemsProps<Experience>) => {
               {items.map((item) => (
                 <div key={item.id} className="border-b pb-4 last:border-b-0">
                   <div>
-                    <div className="font-medium">{item.role}</div>
+                    <div className="text-sm font-medium">{item.role}</div>
                     <div className="text-sm text-muted-foreground">
                       {item.company}
                     </div>

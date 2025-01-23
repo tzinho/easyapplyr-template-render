@@ -1,23 +1,27 @@
 export interface SectionType {
   id: string;
   type:
-  | "contact"
-  | "summary"
-  | "skills"
-  | "experiences"
-  | "education"
-  | "certifications"
-  | "courses"
-  | "projects"
-  | "involvements";
+    | "contact"
+    | "summary"
+    | "skills"
+    | "experiences"
+    | "education"
+    | "certifications"
+    | "courses"
+    | "projects"
+    | "involvements";
   order: number;
   disabled?: boolean;
   appear: boolean;
   title?: string;
   column?: 1 | 2;
+  removable: boolean;
+  required: boolean;
+  added: boolean;
+  label?: string;
   data?: {
     items?: ItemType[];
-  }
+  };
 }
 
 export interface ExperienceType {
@@ -45,13 +49,6 @@ export interface Template {
   component: () => JSX.Element;
 }
 
-export interface Resume {
-  id: string;
-  title: string;
-  updatedAt: Date;
-  createdAt: Date;
-}
-
 export interface Skill {
   id: string;
   order: number;
@@ -67,4 +64,19 @@ export interface Experience {
   company: string;
   where: string;
   did: string;
+}
+
+export interface Resume {
+  id: string;
+  title: string;
+  updatedAt: Date;
+  createdAt: Date;
+  templateId: string;
+}
+
+export interface NavigationProps {
+  sections: SectionType[];
+  currentSection: string;
+  onNavigate: (sectionId: string) => void;
+  onToggleSection: (sectionId: string) => void;
 }
