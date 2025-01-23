@@ -1,58 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  BookDashed,
-  Contact,
-  Download,
-  Languages,
-  List,
-  Workflow,
-} from "lucide-react";
 
 import { useSidebar } from "~/components/ui/sidebar";
 import { ResumeButtonGroup } from "~/components/resume-button-group";
+import { api } from "~/trpc/react";
+import { useParams } from "next/navigation";
 
-const steps = [
-  {
-    label: "Contato",
-    description: "What's the best way for employers to reach you?",
-    icon: <Contact size={14} />,
-    href: "/contact",
-  },
-  {
-    label: "Educação",
-    description: "What's the best way for employers to reach you?",
-    icon: <Languages size={14} />,
-    href: "/education",
-  },
-  {
-    label: "Experiências",
-    description: "What's the best way for employers to reach you?",
-    icon: <BookDashed size={14} />,
-    href: "/experiences",
-  },
-  {
-    label: "Habilidades",
-    description: "What's the best way for employers to reach you?",
-    icon: <Workflow size={14} />,
-    href: "/skills",
-  },
-  {
-    label: "Sumário",
-    description: "What's the best way for employers to reach you?",
-    icon: <List size={14} />,
-    href: "/summary",
-  },
-  {
-    label: "Formatar & Download",
-    description: "What's the best way for employers to reach you?",
-    icon: <Download size={14} />,
-    href: "/format",
-  },
-];
+interface Section {
+  id: string;
+  label: string;
+  required: boolean;
+  removable: boolean;
+  added: boolean;
+}
 
-const initialSections: any[] = [
+const initialSections: Section[] = [
   {
     id: "contact",
     label: "Contato",
@@ -106,11 +69,16 @@ const initialSections: any[] = [
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{ children: React.ReactNode; params: any }>) {
   const { setOpen } = useSidebar();
+  const params = useParams<{ id: string }>();
 
-  const [sections, setSections] = useState(initialSections);
+  const [sections, setSections] = useState<Section[]>(initialSections);
   const [currentSection, setCurrentSection] = useState("contact");
+
+  const resume = api.resume.get.useQuery(params.id);
+
+  console.log("resume", resume.data);
 
   const handleNavigate = (sectionId: string) => {
     setCurrentSection(sectionId);
@@ -132,7 +100,6 @@ export default function RootLayout({
 
   return (
     <div className="mt-3 flex min-h-screen w-full flex-col items-center justify-between">
-      {/* <Stepper steps={steps} /> */}
       <ResumeButtonGroup
         sections={sections}
         currentSection={currentSection}

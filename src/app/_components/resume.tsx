@@ -64,10 +64,8 @@ interface CompactResumePreviewProps {
   onMove?: (destination: string) => void;
   onSearchableChange?: (isSearchable: boolean) => void;
   resume: Resume;
-  template: any
+  template: any;
 }
-
-
 
 export function CompactResumePreview({
   data,
@@ -77,7 +75,7 @@ export function CompactResumePreview({
   onMove,
   onSearchableChange,
   resume,
-  template: Template
+  template: Template,
 }: CompactResumePreviewProps) {
   const router = useRouter();
 
@@ -88,7 +86,13 @@ export function CompactResumePreview({
   return (
     <Card className="group relative flex h-[290px] w-[240px] flex-col overflow-hidden border border-gray-200 bg-white shadow-sm">
       <div className="relative flex-grow">
-        <Template data={data} />
+        {resume.templateId ? (
+          <Template data={data} />
+        ) : (
+          <div className="flex h-1/2 items-center justify-center">
+            Clique para começar a editar
+          </div>
+        )}
 
         <div className="invisible absolute inset-0 flex items-center justify-center gap-4 bg-gray-900/70 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
           <Button
@@ -118,7 +122,7 @@ export function CompactResumePreview({
       <div className="flex items-center justify-between border-t bg-white p-3">
         <div className="flex flex-col">
           <span className="max-w-[160px] truncate text-sm font-medium">
-            {data.resumeTitle}
+            {resume.title}
           </span>
           <span className="text-xs text-gray-500">
             Editado{" "}

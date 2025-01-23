@@ -25,11 +25,13 @@ export const resumes = createTable("resume", {
     .$defaultFn(() => crypto.randomUUID()),
   title: text("title").notNull(),
   experience: smallint("experience"),
+  templateId: text("templateId").references(() => templates.id),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt")
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
+  url: text("url"),
 });
 
 export const contacts = createTable("contact", {
@@ -38,6 +40,7 @@ export const contacts = createTable("contact", {
     .$defaultFn(() => crypto.randomUUID()),
   resumeId: text("resumeId")
     .notNull()
+    .unique()
     .references(() => resumes.id, { onDelete: "cascade" }),
   name: text("name"),
   email: text("email"),
@@ -107,6 +110,10 @@ export const educations = createTable("education", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
+  degree: text("degree"),
+  institution: text("institution"),
+  year: text("year"),
+  description: text("description"),
   appear: boolean("appear"),
   column: integer("column"),
   order: integer("order"),
@@ -248,6 +255,7 @@ export const resumeRelations = relations(resumes, ({ many, one }) => ({
   skills: many(skills),
   contact: one(contacts),
   languages: many(languages),
+  template: one(templates),
 }));
 
 export const templates = createTable("templates", {

@@ -51,4 +51,12 @@ export const resumeRouter = createTRPCRouter({
 
       return await ctx.db.insert(resumes).values(valuesToCopy).returning();
     }),
+
+  get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const resume = await ctx.db.query.resumes.findFirst({
+      where: eq(resumes.id, input)
+    });
+
+    return resume;
+  })
 });

@@ -61,3 +61,7 @@
 - **Start with a Minimal Viable Product (MVP):** Begin with a basic AI-powered feature (e.g., keyword extraction) and gradually expand its capabilities.
 - **Focus on User Experience:** Ensure that AI features are user-friendly and do not overwhelm users.
 - **Prioritize User Feedback:** Continuously gather and incorporate user feedback to improve the AI and overall user experience.
+
+**Resume considerations**
+
+- **Each Template has a default sections:** I need to find a way to define the default sections in each template and when my user changes the chosen template i need to copy the default sections to resume

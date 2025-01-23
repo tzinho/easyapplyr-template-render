@@ -3,9 +3,9 @@ import { z } from "zod";
 export const contactSchema = z.object({
   name: z.string().optional(),
   email: z.string().optional(),
-  phone: z.string().optional(),
-  linkedin: z.string().optional(),
   personal: z.string().optional(),
+  linkedin: z.string().optional(),
+  phone: z.string().optional(),
   country: z.string().optional(),
   state: z.string().optional(),
   city: z.string().optional(),
