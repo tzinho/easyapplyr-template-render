@@ -1,62 +1,82 @@
-import { Pencil, Trash2 } from "lucide-react";
+"use client";
 
+import { type PropsWithChildren } from "react";
+import {
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { ChevronsUpDown, Plus } from "lucide-react";
+
+import { api } from "~/trpc/react";
 import { Button } from "~/components/ui/button";
-import { type ItemType } from "./form";
+import { useFieldArray, useForm } from "react-hook-form";
 
-interface Item {
-  id: string;
-  name: string;
-  description: string;
+interface SortableItemProps extends PropsWithChildren {
+  id: number;
 }
 
-export const List = ({
-  fields,
-  handleEdit,
-  handleDelete,
-}: {
-  fields: Item[];
-  handleEdit: (item: ItemType) => void;
-  handleDelete: (item: ItemType) => void;
-}) => {
-  console.log("ff", fields);
+export const SortableItem = ({ id, children }: SortableItemProps) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
   return (
-    <div className="w-full border-r border-gray-200 p-6 md:w-1/2">
-      <div className="space-y-4">
-        {fields.map((item) => (
-          <div
-            key={item.id}
-            className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">{item.name}</h3>
-                <p className="mt-2 text-gray-700">{item.description}</p>
-              </div>
-              <div className="flex space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleEdit(item)}
-                >
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  onClick={() => handleDelete(item.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        ))}
-        {fields.length === 0 && (
-          <div className="py-8 text-center text-gray-500">
-            No items added yet. Use the form to add some!
-          </div>
-        )}
+    <div className="group flex justify-start gap-3 py-3" style={style}>
+      <div ref={setNodeRef} {...attributes} {...listeners}>
+        <ChevronsUpDown className="h-4 w-4 opacity-0 transition-opacity delay-150 duration-300 ease-in-out group-hover:opacity-100" />
       </div>
+      {children}
     </div>
+  );
+};
+
+export const List = () => {
+  const educations = api.education.list.useQuery();
+  const form = useForm();
+  const { fields, append, update } = useFieldArray({
+    control: form.control,
+    name: "fields",
+  });
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  if (educations.isLoading) return null;
+
+  return (
+    <DndContext sensors={sensors}>
+      <SortableContext
+        items={educations.data!.map((item) => item.order)}
+        strategy={verticalListSortingStrategy}
+      >
+        {educations.data!.map((education) => (
+          <SortableItem key={education.id} id={education.order}></SortableItem>
+        ))}
+      </SortableContext>
+      <Button>
+        <Plus />
+        Add education
+      </Button>
+    </DndContext>
   );
 };

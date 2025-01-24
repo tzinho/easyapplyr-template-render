@@ -115,8 +115,8 @@ export const educations = createTable("education", {
   year: text("year"),
   description: text("description"),
   appear: boolean("appear"),
-  column: integer("column"),
-  order: integer("order"),
+  column: integer("column"), // remove
+  order: integer("order").notNull(),
 });
 
 export const educationsRelations = relations(educations, ({ one }) => ({
