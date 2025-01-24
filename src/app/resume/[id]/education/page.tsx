@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import {
   type SubmitHandler,
   useFieldArray,
@@ -14,6 +13,7 @@ import { Input } from "~/components/form/input";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
 import { educations } from "~/server/db/schema";
+import Index from "./_components/form";
 
 const formSchema = z.object({
   institution: z.string().optional(),
@@ -99,13 +99,14 @@ export default function Education() {
 
   return (
     <div className="w-full">
-      <div className="flex w-full gap-10">
-        <Form {...form}>
+      <div className="w-full">
+        <Index />
+        {/* <Form {...form}>
           <div className="w-full flex-1">
             <List items={educations} />
           </div>
           <EducationForm />
-        </Form>
+        </Form> */}
       </div>
     </div>
   );
