@@ -73,6 +73,7 @@ export const List = () => {
           <SortableItem key={education.id} id={education.order}></SortableItem>
         ))}
       </SortableContext>
+
       <Button>
         <Plus />
         Add education

@@ -8,6 +8,7 @@ import { Form } from "~/components/ui/form";
 import { summarySchema, type SummarySchema } from "~/validators";
 import { Textarea } from "~/components/form/textarea";
 import { TemplateRender } from "~/app/_components/template-render";
+import { RichTextEditor } from "~/components/rich-text-editor/rich-text-editor";
 
 interface SummaryFormProps<T extends FieldValues> {
   handleSubmit: SubmitHandler<T>;
@@ -27,11 +28,13 @@ function SummaryForm({ handleSubmit }: SummaryFormProps<SummarySchema>) {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="w-full space-y-6"
       >
-        <Textarea
+        {/* <Textarea
           placeholder="Executivo global experiente em estágios iniciais com formação em economia e matemática pela Universidade de Wisconsin. Apaixonado por construir empresas inspiradoras que as pessoas amam, através de design, desenvolvimento, branding e a realização de grandes apostas."
           name="summary"
           label="Escreve seu sumário"
-        />
+        /> */}
+
+        <RichTextEditor name="summary" />
 
         <Button type="submit">Salvar</Button>
       </form>

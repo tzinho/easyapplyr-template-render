@@ -23,7 +23,7 @@ export const skillSchema = z.object({
 });
 
 export const summarySchema = z.object({
-  summary: z.string(),
+  summary: z.any(),
 });
 
 export type ContactSchema = z.infer<typeof contactSchema>;
