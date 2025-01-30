@@ -78,7 +78,7 @@ export default function RootLayout({
 
   const resume = api.resume.get.useQuery(params.id);
 
-  console.log("resume", resume.data);
+  // console.log("resume", resume.data);
 
   const handleNavigate = (sectionId: string) => {
     setCurrentSection(sectionId);

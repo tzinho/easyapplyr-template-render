@@ -23,8 +23,17 @@ export const skillSchema = z.object({
 });
 
 export const summarySchema = z.object({
-  summary: z.any(),
+  summary: z.string(),
 });
+
+export const educationSchema = z.object({
+  degree: z.string(),
+  institution: z.string().optional(),
+  year: z.number().optional(),
+  description: z.string().optional(),
+});
+
+export type EducationSchema = z.infer<typeof educationSchema>;
 
 export type ContactSchema = z.infer<typeof contactSchema>;
 export type ExperienceSchema = z.infer<typeof experienceSchema>;

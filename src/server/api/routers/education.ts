@@ -1,10 +1,31 @@
-import { asc, desc, eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { educations, resumes } from "~/server/db/schema";
 
 export const educationRouter = createTRPCRouter({
+  changeOrder: publicProcedure
+    .input(
+      z.array(
+        z.object({
+          id: z.string(),
+          order: z.number(),
+        }),
+      ),
+    )
+    .mutation(async ({ ctx, input }) => {
+      console.log("input", input);
+      await ctx.db.transaction(async (tx) => {
+        for (const update of input) {
+          await tx
+            .update(educations)
+            .set({ order: update.order })
+            .where(eq(educations.id, update.id));
+        }
+      });
+    }),
+
   create: publicProcedure
     .input(
       z.object({
