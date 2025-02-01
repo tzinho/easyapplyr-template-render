@@ -1,8 +1,8 @@
-import { asc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { educations, resumes } from "~/server/db/schema";
+import { educations } from "~/server/db/schema";
 
 export const educationRouter = createTRPCRouter({
   changeOrder: publicProcedure
@@ -15,7 +15,6 @@ export const educationRouter = createTRPCRouter({
       ),
     )
     .mutation(async ({ ctx, input }) => {
-      console.log("input", input);
       await ctx.db.transaction(async (tx) => {
         for (const update of input) {
           await tx
@@ -29,55 +28,70 @@ export const educationRouter = createTRPCRouter({
   create: publicProcedure
     .input(
       z.object({
-        title: z.string().min(3),
-        experience: z.coerce.number().optional(),
+        resumeId: z.string(),
+        degree: z.coerce.string().optional(),
+        institution: z.coerce.string().optional(),
+        description: z.coerce.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const maxOrder = await ctx.db
+        .select({ order: educations.order })
+        .from(educations)
+        .where(eq(educations.resumeId, input.resumeId))
+        .orderBy(desc(educations.order))
+        .limit(1);
+
       return await ctx.db
-        .insert(resumes)
+        .insert(educations)
         .values({
-          title: input.title,
-          experience: input.experience,
+          ...input,
+          order: maxOrder[0]?.order ? maxOrder[0].order + 1 : 0,
         })
         .returning();
     }),
 
   list: publicProcedure.query(async ({ ctx }) => {
-    const data = await ctx.db
+    const educationList = await ctx.db
       .select()
       .from(educations)
       .orderBy(asc(educations.order));
-    return data;
+    return educationList;
   }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    const data = await ctx.db
-      .delete(resumes)
-      .where(eq(resumes.id, input))
+    const education = await ctx.db
+      .delete(educations)
+      .where(eq(educations.id, input))
       .returning();
-    return data;
+    return education;
   }),
-
-  duplicate: publicProcedure
-    .input(z.string())
-    .mutation(async ({ ctx, input }) => {
-      const recordToCopy = await ctx.db.query.resumes.findFirst({
-        where: eq(resumes.id, input),
-      });
-
-      if (!recordToCopy) throw new Error("");
-
-      const { id, ...valuesToCopy } = recordToCopy;
-
-      return await ctx.db.insert(resumes).values(valuesToCopy).returning();
-    }),
 
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const resume = await ctx.db.query.resumes.findFirst({
-      where: eq(resumes.id, input),
+    const education = await ctx.db.query.educations.findFirst({
+      where: eq(educations.id, input),
     });
 
-    return resume;
+    return education;
   }),
+
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        degree: z.coerce.string().optional(),
+        institution: z.coerce.string().optional(),
+        description: z.coerce.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input;
+      const education = await ctx.db
+        .update(educations)
+        .set(data)
+        .where(eq(educations.id, id))
+        .returning();
+
+      return education;
+    }),
 });

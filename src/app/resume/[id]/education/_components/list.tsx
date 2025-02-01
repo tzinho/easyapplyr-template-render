@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type PropsWithChildren } from "react";
+import { useEffect, useState, type PropsWithChildren } from "react";
 import {
   closestCenter,
   DndContext,
@@ -26,6 +26,7 @@ import { toast } from "sonner";
 
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
+import { Button, buttonVariants } from "~/components/ui/button";
 
 interface SortableItemProps extends PropsWithChildren {
   id: number;
@@ -34,7 +35,6 @@ interface SortableItemProps extends PropsWithChildren {
 interface Experience {
   id: string;
   resumeId: string;
-  column: number | null;
   order: number;
   description: string | null;
   appear: boolean | null;
@@ -70,28 +70,32 @@ export const SortableItem = ({ id, children }: SortableItemProps) => {
         <ChevronsUpDown className="h-4 w-4 cursor-move opacity-0 transition-opacity delay-150 duration-300 ease-in-out group-hover:opacity-100" />
       </div>
 
-      <Link href="#">{children}</Link>
+      {children}
     </div>
   );
 };
 
 export const List = () => {
-  const [items, setItems] = React.useState<Experience[]>([]);
+  const [items, setItems] = useState<Experience[]>([]);
   const params = useParams<{ id: string }>();
   const educations = api.education.list.useQuery();
-  const utils = api.useUtils();
 
-  const educationOrderMutation = api.education.changeOrder.useMutation({
-    onSuccess: () => {
-      toast.success("Update the educations items with success!");
-      // void utils.education.list.invalidate();
-    },
-    onError: () => {
-      toast.error("Occured an error to update the order of items");
+  const educationDeleteMutation = api.education.delete.useMutation({
+    onSuccess() {
+      toast.success("Sucesso deletando o item");
     },
   });
 
-  React.useEffect(() => {
+  const educationOrderMutation = api.education.changeOrder.useMutation({
+    onSuccess: () => {
+      toast.success("Alterado a ordem dos itens com sucesso!");
+    },
+    onError: () => {
+      toast.error("Ocorreu um erro ao atualizar a ordem dos itens!");
+    },
+  });
+
+  useEffect(() => {
     if (educations.isSuccess) {
       setItems(educations.data);
     }
@@ -105,9 +109,12 @@ export const List = () => {
     }),
   );
 
-  if (educations.isLoading) return null;
+  const handleOnDelete = async (id: string) => {
+    setItems((items) => items.filter((item) => item.id !== id));
+    void educationDeleteMutation.mutateAsync(id);
+  };
 
-  // console.log("initialOrder", educations.data);
+  if (educations.isLoading) return null;
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
@@ -115,30 +122,19 @@ export const List = () => {
     if (!over) return;
 
     if (active.id !== over.id) {
-      setItems((items) => {
-        const oldIndex = items.findIndex((item) => item.order === active.id);
-        const newIndex = items.findIndex((item) => item.order === over.id);
+      const oldIndex = items.findIndex((item) => item.order === active.id);
+      const newIndex = items.findIndex((item) => item.order === over.id);
 
-        const newItems = arrayMove(items, oldIndex, newIndex).map(
-          (item, index) => ({
-            ...item,
-            order: index,
-          }),
-        );
+      const newItems = arrayMove(items, oldIndex, newIndex).map(
+        (item, index) => ({
+          ...item,
+          order: index,
+        }),
+      );
 
-        console.log("newItems", newItems);
+      setItems(newItems);
 
-        void educationOrderMutation.mutateAsync(newItems);
-
-        return newItems;
-      });
-
-      // const orderUpdates = items.map((item, index) => ({
-      //   id: item.id,
-      //   order: item.order,
-      // }));
-
-      // await educationOrderMutation.mutateAsync(items);
+      void educationOrderMutation.mutateAsync(newItems);
     }
   };
 
@@ -154,14 +150,22 @@ export const List = () => {
       >
         {items.map((education) => (
           <SortableItem key={education.id} id={education.order}>
-            {education.degree} - {education.id}
+            <Link href={`/resume/${params.id}/education/edit/${education.id}`}>
+              <p>{education.degree}</p>
+              <p>{education.institution}</p>
+            </Link>
+
+            <Button onClick={() => handleOnDelete(education.id)}>Delete</Button>
           </SortableItem>
         ))}
       </SortableContext>
 
-      <Link href={`/resume/${params.id}/education/create`}>
+      <Link
+        href={`/resume/${params.id}/education/create`}
+        className={cn(buttonVariants({ variant: "default" }))}
+      >
         <Plus />
-        Add education
+        Adicionar educação
       </Link>
     </DndContext>
   );

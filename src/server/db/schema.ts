@@ -115,7 +115,6 @@ export const educations = createTable("education", {
   year: text("year"),
   description: text("description"),
   appear: boolean("appear"),
-  column: integer("column"), // remove
   order: integer("order").notNull(),
 });
 
