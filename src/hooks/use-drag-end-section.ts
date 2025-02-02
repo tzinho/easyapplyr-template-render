@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
-import { useSensors, useSensor, PointerSensor, TouchSensor, KeyboardSensor, type DragEndEvent } from "@dnd-kit/core";
+import {
+  useSensors,
+  useSensor,
+  PointerSensor,
+  TouchSensor,
+  KeyboardSensor,
+  type DragEndEvent,
+} from "@dnd-kit/core";
 import { sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { useFormContext } from "react-hook-form";
 
 import { type SectionType } from "~/types/template";
 
-export function useDragEndOneColumn<T extends SectionType>({ type }: { type: string }) {
+export function useDragEndOneColumn<T extends SectionType>({
+  type,
+}: {
+  type: string;
+}) {
   const form = useFormContext();
 
-  const [items, setItems] = useState<T[]>(() => {
-    const savedItem = localStorage.getItem(type);
-    if (savedItem) {
-      return JSON.parse(savedItem) as T[];
-    } else {
-      return form.getValues(type) as T[];
-    }
-  });
-
-  useEffect(() => {
-    console.log(`Saving the order of ${type}`);
-    if (window && window !== undefined)
-      localStorage.setItem(type, JSON.stringify(items));
-  }, [items, type]);
+  const [items, setItems] = useState<T[]>(
+    (form.getValues("sections") as T[]).sort((a, b) => a.order - b.order),
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor),

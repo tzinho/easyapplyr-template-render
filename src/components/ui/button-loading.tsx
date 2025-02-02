@@ -1,5 +1,6 @@
 import { LoaderCircle } from "lucide-react";
 import { Button, type ButtonProps } from "./button";
+import { cn } from "~/lib/utils";
 
 interface ButtonLoadingProps extends ButtonProps {
   isLoading?: boolean;
@@ -9,13 +10,16 @@ export const ButtonLoading = ({
   isLoading,
   onClick,
   children,
+  className,
+  ...props
 }: ButtonLoadingProps) => {
   return (
     <Button
       onClick={onClick}
       disabled={isLoading}
       data-loading={isLoading}
-      className="group relative disabled:opacity-100"
+      className={cn("group relative disabled:opacity-100", className)}
+      {...props}
     >
       <span className="group-data-[loading=true]:text-transparent">
         {children}

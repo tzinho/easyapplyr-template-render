@@ -2,9 +2,9 @@ import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { educations } from "~/server/db/schema";
+import { courseworks } from "~/server/db/schema";
 
-export const educationRouter = createTRPCRouter({
+export const courseworksRouter = createTRPCRouter({
   changeOrder: publicProcedure
     .input(
       z.array(
@@ -18,9 +18,9 @@ export const educationRouter = createTRPCRouter({
       await ctx.db.transaction(async (tx) => {
         for (const update of input) {
           await tx
-            .update(educations)
+            .update(courseworks)
             .set({ order: update.order })
-            .where(eq(educations.id, update.id));
+            .where(eq(courseworks.id, update.id));
         }
       });
     }),
@@ -29,28 +29,25 @@ export const educationRouter = createTRPCRouter({
     .input(
       z.object({
         resumeId: z.string(),
-        degree: z.coerce.string().optional(),
-        institution: z.coerce.string().optional(),
-        description: z.coerce.string().optional(),
+        name: z.string(),
+        where: z.string().optional(),
+        when: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const maxOrder = await ctx.db
-        .select({ order: educations.order })
-        .from(educations)
-        .where(eq(educations.resumeId, input.resumeId))
-        .orderBy(desc(educations.order))
+        .select({ order: courseworks.order })
+        .from(courseworks)
+        .where(eq(courseworks.resumeId, input.resumeId))
+        .orderBy(desc(courseworks.order))
         .limit(1);
 
       return await ctx.db
-        .insert(educations)
+        .insert(courseworks)
         .values({
           ...input,
           appear: true,
-          order:
-            maxOrder[0]?.order !== undefined
-              ? Number(maxOrder[0]?.order) + 1
-              : 0,
+          order: Number(maxOrder[0]?.order) + 1 ?? 0,
         })
         .returning();
     }),
@@ -58,22 +55,22 @@ export const educationRouter = createTRPCRouter({
   list: publicProcedure.query(async ({ ctx }) => {
     const educationList = await ctx.db
       .select()
-      .from(educations)
-      .orderBy(asc(educations.order));
+      .from(courseworks)
+      .orderBy(asc(courseworks.order));
     return educationList;
   }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    const education = await ctx.db
-      .delete(educations)
-      .where(eq(educations.id, input))
+    const coursework = await ctx.db
+      .delete(courseworks)
+      .where(eq(courseworks.id, input))
       .returning();
-    return education;
+    return coursework;
   }),
 
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const education = await ctx.db.query.educations.findFirst({
-      where: eq(educations.id, input),
+      where: eq(courseworks.id, input),
     });
 
     return education;
@@ -83,19 +80,19 @@ export const educationRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.string(),
-        degree: z.coerce.string().optional(),
-        institution: z.coerce.string().optional(),
-        description: z.coerce.string().optional(),
+        name: z.string(),
+        where: z.string().optional(),
+        when: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
-      const education = await ctx.db
-        .update(educations)
+      const coursework = await ctx.db
+        .update(courseworks)
         .set(data)
-        .where(eq(educations.id, id))
+        .where(eq(courseworks.id, id))
         .returning();
 
-      return education;
+      return coursework;
     }),
 });

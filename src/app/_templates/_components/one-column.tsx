@@ -17,6 +17,8 @@ export const OneColumn = ({ renderSection }: OneColumnProps) => {
     type: "sections",
   });
 
+  console.log("sections", items);
+
   return (
     <DndContext
       collisionDetection={closestCorners}

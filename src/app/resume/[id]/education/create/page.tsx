@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { Input } from "~/components/form/input";
 import { Button } from "~/components/ui/button";
+import { ButtonLoading } from "~/components/ui/button-loading";
 import { Form } from "~/components/ui/form";
 import { api } from "~/trpc/react";
 import { educationSchema, type EducationSchema } from "~/validators";
@@ -15,6 +16,7 @@ export default function EducationCreate() {
   const utils = api.useUtils();
   const router = useRouter();
   const params = useParams<{ id: string }>();
+
   const educationCreateMutation = api.education.create.useMutation({
     onSuccess() {
       void utils.education.invalidate();
@@ -40,10 +42,15 @@ export default function EducationCreate() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleOnSubmit)}>
-        <Input name="degree" label="Degree" />
-        <Input name="institution" label="Institution" />
-        <Input name="description" label="Description" />
-        <Button type="submit">Salvar</Button>
+        <Input name="degree" label="Grau" />
+        <Input name="institution" label="Instituição" />
+        <Input name="description" label="Descrição" />
+        <ButtonLoading
+          type="submit"
+          isLoading={educationCreateMutation.isPending}
+        >
+          Salvar
+        </ButtonLoading>
       </form>
     </Form>
   );

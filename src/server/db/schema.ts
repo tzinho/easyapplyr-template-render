@@ -25,7 +25,7 @@ export const resumes = createTable("resume", {
     .$defaultFn(() => crypto.randomUUID()),
   title: text("title").notNull(),
   experience: smallint("experience"),
-  templateId: text("templateId").references(() => templates.id),
+  templateId: text("templateId"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt")
     .defaultNow()
@@ -50,13 +50,30 @@ export const contacts = createTable("contact", {
   country: text("country"),
   state: text("state"),
   city: text("city"),
-  column: integer("column"),
   order: integer("order"),
 });
 
 export const contactsRelations = relations(contacts, ({ one }) => ({
   resume: one(resumes, {
     fields: [contacts.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const summaries = createTable("summary", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  resumeId: text("resumeId")
+    .notNull()
+    .unique()
+    .references(() => resumes.id, { onDelete: "cascade" }),
+  text: text("text"),
+});
+
+export const summariesRelations = relations(summaries, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [summaries.resumeId],
     references: [resumes.id],
   }),
 }));
@@ -73,7 +90,6 @@ export const experiences = createTable("experience", {
   where: text("where"),
   did: text("did"),
   appear: boolean("appear"),
-  column: integer("column"),
   order: integer("order"),
 });
 
@@ -92,7 +108,6 @@ export const projects = createTable("project", {
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
   appear: boolean("appear"),
-  column: integer("column"),
   order: integer("order"),
 });
 
@@ -133,7 +148,6 @@ export const certifications = createTable("certification", {
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
   appear: boolean("appear"),
-  column: integer("column"),
   order: integer("order"),
 });
 
@@ -151,8 +165,10 @@ export const courseworks = createTable("coursework", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
+  name: text("string"),
+  where: text("string"),
+  when: text("string"),
   appear: boolean("appear"),
-  column: integer("column"),
   order: integer("order"),
 });
 
@@ -173,7 +189,6 @@ export const involvements = createTable("involvement", {
   role: text("role"),
   organization: text("organization"),
   appear: boolean("appear"),
-  column: integer("column"),
   order: integer("order"),
 });
 
@@ -193,33 +208,12 @@ export const skills = createTable("skill", {
     .references(() => resumes.id, { onDelete: "cascade" }),
   text: text("text"),
   appear: boolean("appear"),
-  column: integer("column"),
   order: integer("order"),
 });
 
 export const skillsRelations = relations(skills, ({ one }) => ({
   resume: one(resumes, {
     fields: [skills.resumeId],
-    references: [resumes.id],
-  }),
-}));
-
-export const summaries = createTable("summary", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  resumeId: text("resumeId")
-    .notNull()
-    .references(() => resumes.id, { onDelete: "cascade" }),
-  summary: text("summary"),
-  appear: boolean("appear"),
-  column: integer("column"),
-  order: integer("order"),
-});
-
-export const summaryRelations = relations(summaries, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [summaries.resumeId],
     references: [resumes.id],
   }),
 }));
@@ -233,13 +227,34 @@ export const languages = createTable("language", {
     .references(() => resumes.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   appear: boolean("appear"),
-  column: integer("column"),
   order: integer("order"),
 });
 
 export const languageRelations = relations(languages, ({ one }) => ({
   resume: one(resumes, {
     fields: [languages.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const sections = createTable("section", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  resumeId: text("resumeId")
+    .notNull()
+    .references(() => resumes.id, { onDelete: "cascade" }),
+  type: text("type"),
+  title: text("title"),
+  disabled: boolean("disabled"),
+  appear: boolean("appear"),
+  column: integer("column"),
+  order: integer("order"),
+});
+
+export const sectionsRelations = relations(sections, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [sections.resumeId],
     references: [resumes.id],
   }),
 }));
@@ -251,15 +266,9 @@ export const resumeRelations = relations(resumes, ({ many, one }) => ({
   certifications: many(certifications),
   courseworks: many(courseworks),
   involvements: many(involvements),
+  summary: one(summaries),
   skills: many(skills),
   contact: one(contacts),
+  sections: many(sections),
   languages: many(languages),
-  template: one(templates),
 }));
-
-export const templates = createTable("templates", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  name: text("name"),
-});

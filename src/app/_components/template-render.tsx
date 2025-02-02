@@ -5,41 +5,26 @@ import { useForm } from "react-hook-form";
 import { Simple } from "../_templates/simple";
 import { Form } from "~/components/ui/form";
 
-const defaultValues = {
-  summary: "I have experience creating a software ...",
-  contact: {
-    name: "George Turner",
-    phone: "(555) 132-2356",
-    email: "george@turner.com",
-    location: "New York City",
-  },
-  skills: [
-    { id: "1", title: "ReactJS", order: 1 },
-    { id: "2", title: "NodeJS", order: 2 },
-    { id: "3", title: "NextJS", order: 3 },
-  ],
-  experiences: [
-    { id: "1", title: "Web Developer", order: 1 },
-    { id: "2", title: "Tech Lead", order: 2 },
-  ],
-  sections: [
-    { id: "1", type: "contact", order: 1, disabled: true },
-    { id: "2", type: "summary", order: 2 },
-    { id: "3", type: "skills", order: 3 },
-    { id: "4", type: "experiences", order: 4 },
-  ],
-};
+interface TemplateRenderProps {
+  isPreview?: boolean;
+  defaultValues: Record<string, any>;
+}
 
-export const TemplateRender = () => {
+export const TemplateRender = ({
+  isPreview,
+  defaultValues,
+}: TemplateRenderProps) => {
   const form = useForm({
     mode: "onBlur",
-    defaultValues: defaultValues,
+    defaultValues,
   });
+
+  console.log("defaultValues", defaultValues);
 
   return (
     <Form {...form}>
       <form>
-        <Simple />
+        <Simple isPreview={isPreview} />
       </form>
     </Form>
   );

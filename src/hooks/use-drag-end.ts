@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { useSensors, useSensor, PointerSensor, TouchSensor, KeyboardSensor, type DragEndEvent } from "@dnd-kit/core";
+import {
+  useSensors,
+  useSensor,
+  PointerSensor,
+  TouchSensor,
+  KeyboardSensor,
+  type DragEndEvent,
+} from "@dnd-kit/core";
 import { sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { useFormContext } from "react-hook-form";
 
@@ -8,14 +15,9 @@ import { type ItemType } from "~/types/template";
 export function useDragEnd<T extends ItemType>({ type }: { type: string }) {
   const form = useFormContext();
 
-  const [items, setItems] = useState<T[]>(() => {
-    const savedItem = localStorage.getItem(type);
-    if (savedItem) {
-      return JSON.parse(savedItem) as T[];
-    } else {
-      return form.getValues(type) as T[];
-    }
-  });
+  const [items, setItems] = useState<T[]>(
+    (form.getValues(type) as T[]).sort((a, b) => a.order - b.order),
+  );
 
   useEffect(() => {
     console.log(`Saving the order of ${type}`);

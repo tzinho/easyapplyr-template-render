@@ -1,14 +1,14 @@
 import { z } from "zod";
 
 export const contactSchema = z.object({
-  name: z.string().optional(),
-  email: z.string().optional(),
-  personal: z.string().optional(),
-  linkedin: z.string().optional(),
-  phone: z.string().optional(),
-  country: z.string().optional(),
-  state: z.string().optional(),
-  city: z.string().optional(),
+  name: z.coerce.string().optional(),
+  email: z.coerce.string().optional(),
+  personal: z.coerce.string().optional(),
+  linkedin: z.coerce.string().optional(),
+  phone: z.coerce.string().optional(),
+  country: z.coerce.string().optional(),
+  state: z.coerce.string().optional(),
+  city: z.coerce.string().optional(),
 });
 
 export const experienceSchema = z.object({
@@ -23,7 +23,7 @@ export const skillSchema = z.object({
 });
 
 export const summarySchema = z.object({
-  summary: z.string(),
+  text: z.string(),
 });
 
 export const educationSchema = z.object({
@@ -33,8 +33,31 @@ export const educationSchema = z.object({
   description: z.string().optional(),
 });
 
-export type EducationSchema = z.infer<typeof educationSchema>;
+export const courseworkSchema = z.object({
+  name: z.string().optional(),
+  where: z.string().optional(),
+  when: z.string().optional(),
+});
 
+export const projectSchema = z.object({
+  title: z.string(),
+  organization: z.string(),
+  url: z.string().optional(),
+  startAt: z.date().optional(),
+  endAt: z.date().optional(),
+  description: z.string().optional(),
+});
+
+export const involvementSchema = z.object({
+  title: z.string(),
+  organization: z.string().optional(),
+  college: z.string().optional(),
+  did: z.string().optional(),
+});
+
+export type EducationSchema = z.infer<typeof educationSchema>;
+export type CourseWorkSchema = z.infer<typeof courseworkSchema>;
+export type ProjectSchema = z.infer<typeof projectSchema>;
 export type ContactSchema = z.infer<typeof contactSchema>;
 export type ExperienceSchema = z.infer<typeof experienceSchema>;
 export type SkillSchema = z.infer<typeof skillSchema>;

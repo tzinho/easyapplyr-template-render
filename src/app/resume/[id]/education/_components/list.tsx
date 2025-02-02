@@ -19,7 +19,7 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { ChevronsUpDown, Plus } from "lucide-react";
+import { ChevronsUpDown, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import { Button, buttonVariants } from "~/components/ui/button";
+import { ButtonLoading } from "~/components/ui/button-loading";
 
 interface SortableItemProps extends PropsWithChildren {
   id: number;
@@ -139,34 +140,48 @@ export const List = () => {
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={items.map((item) => item.order)}
-        strategy={verticalListSortingStrategy}
+    <div className="flex-1">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
       >
-        {items.map((education) => (
-          <SortableItem key={education.id} id={education.order}>
-            <Link href={`/resume/${params.id}/education/edit/${education.id}`}>
-              <p>{education.degree}</p>
-              <p>{education.institution}</p>
-            </Link>
+        <SortableContext
+          items={items.map((item) => item.order)}
+          strategy={verticalListSortingStrategy}
+        >
+          {items.map((education) => (
+            <SortableItem key={education.id} id={education.order}>
+              <div className="flex w-full items-center justify-between">
+                <Link
+                  href={`/resume/${params.id}/education/edit/${education.id}`}
+                >
+                  <p>{education.degree}</p>
+                  <p>{education.institution}</p>
+                </Link>
 
-            <Button onClick={() => handleOnDelete(education.id)}>Delete</Button>
-          </SortableItem>
-        ))}
-      </SortableContext>
+                <ButtonLoading
+                  onClick={() => handleOnDelete(education.id)}
+                  size="icon"
+                  variant="destructive"
+                  className="h-6 w-6"
+                  isLoading={educationDeleteMutation.isPending}
+                >
+                  <Trash className="h-2 w-2" />
+                </ButtonLoading>
+              </div>
+            </SortableItem>
+          ))}
+        </SortableContext>
 
-      <Link
-        href={`/resume/${params.id}/education/create`}
-        className={cn(buttonVariants({ variant: "default" }))}
-      >
-        <Plus />
-        Adicionar educação
-      </Link>
-    </DndContext>
+        <Link
+          href={`/resume/${params.id}/education/create`}
+          className={cn(buttonVariants({ variant: "default" }))}
+        >
+          <Plus />
+          Adicionar educação
+        </Link>
+      </DndContext>
+    </div>
   );
 };

@@ -51,13 +51,19 @@ export const ResumeModal = () => {
   });
 
   const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (d) => {
-    await createResumeMutation.mutateAsync(d, {
-      onSuccess: (resumes) => {
-        if (resumes.length > 0 && resumes[0]) {
-          router.push(`/resume/${(resumes[0] as { id: string }).id}/contact`);
-        }
+    await createResumeMutation.mutateAsync(
+      {
+        templateId: "1",
+        ...d,
       },
-    });
+      {
+        onSuccess: (resumes) => {
+          if (resumes.length > 0 && resumes[0]) {
+            router.push(`/resume/${(resumes[0] as { id: string }).id}/contact`);
+          }
+        },
+      },
+    );
   };
 
   return (

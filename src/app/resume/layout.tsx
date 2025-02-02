@@ -6,6 +6,7 @@ import { useSidebar } from "~/components/ui/sidebar";
 import { ResumeButtonGroup } from "~/components/resume-button-group";
 import { api } from "~/trpc/react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
 interface Section {
   id: string;
@@ -100,12 +101,6 @@ export default function RootLayout({
 
   return (
     <div className="mt-3 flex min-h-screen w-full flex-col items-center justify-between">
-      <ResumeButtonGroup
-        sections={sections}
-        currentSection={currentSection}
-        onNavigate={handleNavigate}
-        onToggleSection={handleToggleSection}
-      />
       <div className="w-full flex-1 p-4">{children}</div>
     </div>
   );

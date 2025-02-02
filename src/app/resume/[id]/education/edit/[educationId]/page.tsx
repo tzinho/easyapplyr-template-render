@@ -1,5 +1,6 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -11,7 +12,10 @@ import { Form } from "~/components/ui/form";
 import { api } from "~/trpc/react";
 
 const schema = z.object({
-  degree: z.string().optional(),
+  degree: z.coerce.string().optional(),
+  description: z.coerce.string().optional(),
+  institution: z.coerce.string().optional(),
+  year: z.coerce.string().optional(),
 });
 
 interface Experience {
@@ -27,7 +31,7 @@ interface Experience {
 
 const EducationForm = ({ data }: { data: Experience }) => {
   const router = useRouter();
-  const { id } = useParams<{ id: string; educationId: string }>();
+  const { id, educationId } = useParams<{ id: string; educationId: string }>();
   const utils = api.useUtils();
 
   const updateEducationMutation = api.education.update.useMutation({
@@ -43,10 +47,11 @@ const EducationForm = ({ data }: { data: Experience }) => {
 
   const form = useForm<z.infer<typeof schema>>({
     defaultValues: data,
+    resolver: zodResolver(schema),
   });
 
   const handleOnSubmit: SubmitHandler<z.infer<typeof schema>> = async (d) => {
-    await updateEducationMutation.mutateAsync(d);
+    await updateEducationMutation.mutateAsync({ id: educationId, ...d });
   };
 
   return (

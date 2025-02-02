@@ -7,7 +7,6 @@ import {
   Bot,
   Command,
   Frame,
-  Map,
   PieChart,
   Settings2,
   SquareTerminal,

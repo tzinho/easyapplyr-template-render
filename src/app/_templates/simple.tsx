@@ -19,6 +19,7 @@ import {
 } from "~/types/template";
 import { Item } from "./_components/item";
 import { useDragEnd } from "~/hooks/use-drag-end";
+import { educations } from "~/server/db/schema";
 
 const defaultSections = [
   {
@@ -158,15 +159,56 @@ const Experiences = ({ id }: { id: number }) => {
   );
 };
 
+interface EducationType {
+  id: string;
+  degree?: string;
+  order: number;
+  appear: boolean;
+  [key: string]: string | number | boolean | undefined;
+}
+
+const Education = ({ id, disabled }: { id: string; disabled?: boolean }) => {
+  const { sensors, handleDragEnd, items } = useDragEnd<EducationType>({
+    type: "educations",
+  });
+
+  return (
+    <SectionList id={id}>
+      <DndContext
+        collisionDetection={closestCorners}
+        onDragEnd={handleDragEnd}
+        sensors={sensors}
+      >
+        <h3>Educations</h3>
+
+        <SortableContext
+          items={items.map((item) => {
+            return { id: item.order };
+          })}
+          strategy={verticalListSortingStrategy}
+        >
+          {items.map((item) => {
+            return (
+              <Item key={item.id} id={item.order}>
+                <li className="list-disc">{item.degree}</li>
+              </Item>
+            );
+          })}
+        </SortableContext>
+      </DndContext>
+    </SectionList>
+  );
+};
+
 const Summary = ({ id, disabled }: { id: number; disabled?: boolean }) => {
-  const form = useFormContext<{ summary: string }>();
+  const form = useFormContext<{ summary: { text: string } }>();
 
   const summary = form.watch("summary");
 
   return (
     <Section id={id} disabled={disabled}>
       <h3>Summary</h3>
-      <p>{summary}</p>
+      <p>{summary.text}</p>
     </Section>
   );
 };
@@ -215,9 +257,23 @@ const Contact = ({ id, disabled }: { id: number; disabled?: boolean }) => {
   );
 };
 
-export const Simple = () => {
+interface TemplateProps {
+  isPreview?: boolean;
+}
+
+export const Simple = ({ isPreview }: TemplateProps) => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
+      case "education": {
+        return (
+          <Education
+            id={section.id}
+            disabled={section.disabled}
+            key={section.id}
+          />
+        );
+      }
+
       case "contact": {
         return (
           <Contact

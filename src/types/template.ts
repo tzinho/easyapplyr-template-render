@@ -28,12 +28,14 @@ export interface ExperienceType {
   id: string;
   title: string;
   order: number;
+  [key: string]: string | number | boolean | undefined;
 }
 
 export interface SkillType {
   id: string;
   title: string;
   order: number;
+  [key: string]: string | number | boolean | undefined;
 }
 
 export interface ItemType {
