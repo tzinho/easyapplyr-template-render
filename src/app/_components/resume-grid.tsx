@@ -52,8 +52,7 @@ const Template = ({ data }: TemplateProps) => {
 
 export const ResumeGrid = () => {
   const [selectedResume, setSelectedResume] = useState<Resume | null>(null);
-
-  const resumes = api.resume.list.useQuery();
+  const resumes = api.resumes.list.useQuery();
 
   return (
     <>

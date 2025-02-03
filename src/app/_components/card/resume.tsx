@@ -31,10 +31,10 @@ export const CardResume = ({ resume, setSelectedResume }: CardResumeProps) => {
   const { toast } = useToast();
   const utils = api.useUtils();
 
-  const duplicateResumeMutation = api.resume.duplicate.useMutation({
+  const duplicateResumeMutation = api.resumes.duplicate.useMutation({
     onSuccess: () => {
       toast({ title: "O curriculum foi duplicado com sucesso!" });
-      void utils.resume.list.invalidate();
+      void utils.resumes.list.invalidate();
     },
   });
 

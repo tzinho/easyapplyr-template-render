@@ -4,12 +4,13 @@ import { useForm } from "react-hook-form";
 
 import { Simple } from "../_templates/simple";
 import { Form } from "~/components/ui/form";
+import { type Resume } from "~/types/template";
 
-interface TemplateRenderProps {
-  data: Record<string, any>;
+interface TemplatePreviewProps {
+  data: Resume;
 }
 
-export const TemplateRender = ({ data }: TemplateRenderProps) => {
+export const TemplatePreview = ({ data }: TemplatePreviewProps) => {
   const form = useForm({
     mode: "onBlur",
     defaultValues: data,
@@ -17,9 +18,7 @@ export const TemplateRender = ({ data }: TemplateRenderProps) => {
 
   return (
     <Form {...form}>
-      <form>
-        <Simple />
-      </form>
+      <Simple />
     </Form>
   );
 };

@@ -1,26 +1,18 @@
-import "~/styles/globals.css";
-
+import { type PropsWithChildren } from "react";
 import { GeistSans } from "geist/font/sans";
-import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
 import { Toaster as Sonner } from "~/components/ui/sonner";
-
 import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
 import { AppSidebar } from "~/components/app-sidebar";
+export * from "./__metadata";
 
-export const metadata: Metadata = {
-  title: "Easyapplyr",
-  description: "The better A.I Resume Builder",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
-};
+import "~/styles/globals.css";
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html lang="pt-BR" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
           <SidebarProvider>

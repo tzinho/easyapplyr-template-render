@@ -1,23 +1,18 @@
-"use client";
-
-import { useParams } from "next/navigation";
-
-import { TemplateRender } from "~/app/_components/template-render";
-import { api } from "~/trpc/react";
+import { api } from "~/trpc/server";
 import { ContactForm } from "./_components/form";
 
-const Contact = () => {
-  const params = useParams<{ id: string }>();
+interface ContactProps {
+  params: Promise<{ id: string }>;
+}
 
-  const contact = api.contact.get.useQuery(params.id);
-
-  if (contact.isLoading) return <h1>Carregando ...</h1>;
+const Contact = async ({ params }: ContactProps) => {
+  const { id } = await params;
+  const data = await api.contact.get(id);
 
   return (
     <div className="w-full">
       <div className="flex w-full gap-10">
-        <ContactForm data={contact.data} />
-        {/* <TemplateRender /> */}
+        <ContactForm data={data} />
       </div>
     </div>
   );

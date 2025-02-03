@@ -19,7 +19,6 @@ import {
 } from "~/types/template";
 import { Item } from "./_components/item";
 import { useDragEnd } from "~/hooks/use-drag-end";
-import { educations } from "~/server/db/schema";
 
 const defaultSections = [
   {
@@ -257,11 +256,7 @@ const Contact = ({ id, disabled }: { id: number; disabled?: boolean }) => {
   );
 };
 
-interface TemplateProps {
-  isPreview?: boolean;
-}
-
-export const Simple = ({ isPreview }: TemplateProps) => {
+export const Simple = () => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "education": {

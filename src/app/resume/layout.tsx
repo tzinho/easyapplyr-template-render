@@ -77,7 +77,7 @@ export default function RootLayout({
   const [sections, setSections] = useState<Section[]>(initialSections);
   const [currentSection, setCurrentSection] = useState("contact");
 
-  const resume = api.resume.get.useQuery(params.id);
+  const resume = api.resumes.get.useQuery(params.id);
 
   // console.log("resume", resume.data);
 

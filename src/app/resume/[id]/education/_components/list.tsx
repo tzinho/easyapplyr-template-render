@@ -26,7 +26,7 @@ import { toast } from "sonner";
 
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
-import { Button, buttonVariants } from "~/components/ui/button";
+import { buttonVariants } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 
 interface SortableItemProps extends PropsWithChildren {
@@ -79,15 +79,15 @@ export const SortableItem = ({ id, children }: SortableItemProps) => {
 export const List = () => {
   const [items, setItems] = useState<Experience[]>([]);
   const params = useParams<{ id: string }>();
-  const educations = api.education.list.useQuery();
+  const educations = api.educations.list.useQuery();
 
-  const educationDeleteMutation = api.education.delete.useMutation({
+  const educationDeleteMutation = api.educations.delete.useMutation({
     onSuccess() {
       toast.success("Sucesso deletando o item");
     },
   });
 
-  const educationOrderMutation = api.education.changeOrder.useMutation({
+  const educationOrderMutation = api.educations.changeOrder.useMutation({
     onSuccess: () => {
       toast.success("Alterado a ordem dos itens com sucesso!");
     },

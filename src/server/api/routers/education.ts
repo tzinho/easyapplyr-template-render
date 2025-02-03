@@ -4,7 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { educations } from "~/server/db/schema";
 
-export const educationRouter = createTRPCRouter({
+export const educationsRouter = createTRPCRouter({
   changeOrder: publicProcedure
     .input(
       z.array(

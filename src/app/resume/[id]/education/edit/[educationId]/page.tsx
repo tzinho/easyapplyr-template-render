@@ -34,10 +34,10 @@ const EducationForm = ({ data }: { data: Experience }) => {
   const { id, educationId } = useParams<{ id: string; educationId: string }>();
   const utils = api.useUtils();
 
-  const updateEducationMutation = api.education.update.useMutation({
+  const updateEducationMutation = api.educations.update.useMutation({
     onSuccess: () => {
       toast.success("Educação salva com sucesso!");
-      void utils.education.invalidate();
+      void utils.educations.invalidate();
       router.push(`/resume/${id}/education`);
     },
     onError: (error) => {
@@ -68,7 +68,7 @@ const EducationForm = ({ data }: { data: Experience }) => {
 
 export default function EducationEdit() {
   const { id, educationId } = useParams<{ id: string; educationId: string }>();
-  const education = api.education.get.useQuery(educationId);
+  const education = api.educations.get.useQuery(educationId);
 
   if (education.isLoading) return null;
 

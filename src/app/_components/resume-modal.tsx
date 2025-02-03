@@ -28,14 +28,16 @@ export const ResumeModal = () => {
   const { toast } = useToast();
 
   const router = useRouter();
-  const createResumeMutation = api.resume.create.useMutation<{ id: string }[]>({
-    onSuccess: (resumes) => {
-      toast({ title: "Curriculum criado com sucesso!", description: "" });
-      if (resumes.length > 0 && resumes[0]) {
-        router.push(`/resume/${(resumes[0] as { id: string }).id}/contact`);
-      }
+  const createResumeMutation = api.resumes.create.useMutation<{ id: string }[]>(
+    {
+      onSuccess: (resumes) => {
+        toast({ title: "Curriculum criado com sucesso!", description: "" });
+        if (resumes.length > 0 && resumes[0]) {
+          router.push(`/resume/${(resumes[0] as { id: string }).id}/contact`);
+        }
+      },
     },
-  });
+  );
 
   const formSchema = z.object({
     title: z

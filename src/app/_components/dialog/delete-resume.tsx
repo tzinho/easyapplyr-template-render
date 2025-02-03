@@ -29,10 +29,10 @@ export const DeleteResume = ({
   const { toast } = useToast();
 
   const utils = api.useUtils();
-  const deleteItemMutation = api.resume.delete.useMutation({
+  const deleteItemMutation = api.resumes.delete.useMutation({
     onSuccess: () => {
       toast({ title: "Curriculum deletado com sucesso!" });
-      void utils.resume.list.invalidate();
+      void utils.resumes.list.invalidate();
     },
   });
 

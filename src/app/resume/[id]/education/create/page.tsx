@@ -17,9 +17,9 @@ export default function EducationCreate() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
 
-  const educationCreateMutation = api.education.create.useMutation({
+  const educationCreateMutation = api.educations.create.useMutation({
     onSuccess() {
-      void utils.education.invalidate();
+      void utils.educations.invalidate();
       toast.success("Education created with success!");
       router.push(`/resume/${params.id}/education`);
     },
