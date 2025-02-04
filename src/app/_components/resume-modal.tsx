@@ -1,7 +1,6 @@
 "use client";
 
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +22,7 @@ import { api } from "~/trpc/react";
 import { useToast } from "~/hooks/use-toast";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { Card, CardContent } from "~/components/ui/card";
+import { type ResumeSchema, resumeSchema } from "~/validators";
 
 export const ResumeModal = () => {
   const { toast } = useToast();
@@ -30,38 +30,29 @@ export const ResumeModal = () => {
   const router = useRouter();
   const createResumeMutation = api.resumes.create.useMutation<{ id: string }[]>(
     {
-      onSuccess: (resumes) => {
+      onSuccess: (resume) => {
         toast({ title: "Curriculum criado com sucesso!", description: "" });
-        if (resumes.length > 0 && resumes[0]) {
-          router.push(`/resume/${(resumes[0] as { id: string }).id}/contact`);
+        if (resume) {
+          router.push(`/resume/${resume.id}/contact`);
         }
       },
     },
   );
 
-  const formSchema = z.object({
-    title: z
-      .string({ required_error: "O título do curriculum é obrigatório" })
-      .min(3, {
-        message: "O título do curriculum deve possuir ao menos 3 caracteres!",
-      }),
-    experience: z.coerce.number().optional(),
+  const form = useForm<ResumeSchema>({
+    resolver: zodResolver(resumeSchema),
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  });
-
-  const handleSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (d) => {
+  const handleSubmit: SubmitHandler<ResumeSchema> = async (d) => {
     await createResumeMutation.mutateAsync(
       {
         templateId: "1",
         ...d,
       },
       {
-        onSuccess: (resumes) => {
-          if (resumes.length > 0 && resumes[0]) {
-            router.push(`/resume/${(resumes[0] as { id: string }).id}/contact`);
+        onSuccess: (resume) => {
+          if (resume) {
+            router.push(`/resume/${resume.id}/contact`);
           }
         },
       },

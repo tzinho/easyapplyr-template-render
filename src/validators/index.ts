@@ -55,6 +55,15 @@ export const involvementSchema = z.object({
   did: z.string().optional(),
 });
 
+export const resumeSchema = z.object({
+  title: z
+    .string({ required_error: "O título do curriculum é obrigatório" })
+    .min(3, {
+      message: "O título do curriculum deve possuir ao menos 3 caracteres!",
+    }),
+  experience: z.coerce.number().optional(),
+});
+
 export type EducationSchema = z.infer<typeof educationSchema>;
 export type CourseWorkSchema = z.infer<typeof courseworkSchema>;
 export type ProjectSchema = z.infer<typeof projectSchema>;
@@ -62,3 +71,4 @@ export type ContactSchema = z.infer<typeof contactSchema>;
 export type ExperienceSchema = z.infer<typeof experienceSchema>;
 export type SkillSchema = z.infer<typeof skillSchema>;
 export type SummarySchema = z.infer<typeof summarySchema>;
+export type ResumeSchema = z.infer<typeof resumeSchema>;

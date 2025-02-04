@@ -91,7 +91,7 @@ export const resumeRouter = createTRPCRouter({
           },
         ]);
 
-        return resume;
+        return resume[0];
       });
     }),
 
