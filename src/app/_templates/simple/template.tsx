@@ -9,90 +9,23 @@ import { closestCorners, DndContext } from "@dnd-kit/core";
 import { Linkedin, MapPin, Phone } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
-import { OneColumn } from "./_components/one-column";
-import { Section } from "./_components/section";
-import { SectionList } from "./_components/section-list";
 import {
   type SkillType,
   type ExperienceType,
   type SectionType,
 } from "~/types/template";
-import { Item } from "./_components/item";
 import { useDragEnd } from "~/hooks/use-drag-end";
+import { SectionList } from "../_components/section-list";
+import { Section } from "../_components/section";
+import { OneColumn } from "../_components/one-column";
+import { Item } from "../_components/item";
 
-const defaultSections = [
-  {
-    id: "1",
-    type: "contact",
-    column: 1,
-    order: 1,
-    data: {
-      name: "Jane Smith",
-      email: "jane@example.com",
-      phone: "(555) 987-6543",
-      location: "New York, NY",
-    },
-  },
-  {
-    id: "2",
-    type: "summary",
-    column: 1,
-    order: 2,
-    data: {
-      text: "Creative designer with expertise in digital and print media.",
-    },
-  },
-  {
-    id: "3",
-    type: "experience",
-    column: 1,
-    order: 3,
-    data: {
-      items: [
-        {
-          id: "1",
-          title: "Senior Designer",
-          subtitle: "Design Studio Inc.",
-          date: "2019 - Present",
-          description: "Leading brand identity projects for major clients",
-        },
-      ],
-    },
-  },
-  {
-    id: "4",
-    type: "education",
-    column: 1,
-    order: 4,
-    data: {
-      items: [
-        {
-          id: "1",
-          title: "Design & Visual Arts",
-          subtitle: "Art Institute",
-          date: "2015 - 2019",
-        },
-      ],
-    },
-  },
-  {
-    id: "5",
-    type: "skills",
-    column: 1,
-    order: 5,
-    data: {
-      items: [
-        {
-          id: "1",
-          title: "Design",
-          skills: ["Adobe Creative Suite", "UI/UX", "Branding"],
-        },
-      ],
-    },
-  },
-];
+interface SectionProps {
+  id: string | number;
+  disabled?: boolean;
+}
 
-const Skills = ({ id }: { id: number }) => {
+const Skills: React.FC<SectionProps> = ({ id }) => {
   const { sensors, handleDragEnd, items } = useDragEnd<SkillType>({
     type: "skills",
   });
@@ -125,13 +58,13 @@ const Skills = ({ id }: { id: number }) => {
   );
 };
 
-const Experiences = ({ id }: { id: number }) => {
+const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
   const { sensors, handleDragEnd, items } = useDragEnd<ExperienceType>({
     type: "experiences",
   });
 
   return (
-    <SectionList id={id}>
+    <SectionList id={id} disabled={disabled}>
       <DndContext
         collisionDetection={closestCorners}
         onDragEnd={handleDragEnd}
@@ -166,13 +99,13 @@ interface EducationType {
   [key: string]: string | number | boolean | undefined;
 }
 
-const Education = ({ id, disabled }: { id: string; disabled?: boolean }) => {
+const Education: React.FC<SectionProps> = ({ id, disabled }) => {
   const { sensors, handleDragEnd, items } = useDragEnd<EducationType>({
     type: "educations",
   });
 
   return (
-    <SectionList id={id}>
+    <SectionList id={id} disabled={disabled}>
       <DndContext
         collisionDetection={closestCorners}
         onDragEnd={handleDragEnd}
@@ -199,7 +132,7 @@ const Education = ({ id, disabled }: { id: string; disabled?: boolean }) => {
   );
 };
 
-const Summary = ({ id, disabled }: { id: number; disabled?: boolean }) => {
+const Summary: React.FC<SectionProps> = ({ id, disabled }) => {
   const form = useFormContext<{ summary: { text: string } }>();
 
   const summary = form.watch("summary");
@@ -207,7 +140,7 @@ const Summary = ({ id, disabled }: { id: number; disabled?: boolean }) => {
   return (
     <Section id={id} disabled={disabled}>
       <h3>Summary</h3>
-      <p>{summary.text}</p>
+      <p>{summary?.text}</p>
     </Section>
   );
 };
@@ -232,7 +165,7 @@ const Input = ({
   );
 };
 
-const Contact = ({ id, disabled }: { id: number; disabled?: boolean }) => {
+const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
   return (
     <Section id={id} disabled={disabled}>
       <h2 className="text-lg">
@@ -259,7 +192,7 @@ const Contact = ({ id, disabled }: { id: number; disabled?: boolean }) => {
 export const Simple = () => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
-      case "education": {
+      case "educations": {
         return (
           <Education
             id={section.id}

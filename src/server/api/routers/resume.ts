@@ -1,8 +1,14 @@
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
+import { templates } from "~/app/_templates";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { resumes, sections } from "~/server/db/schema";
+import { type Template } from "~/types/template";
+
+const getTemplate = (templateId: string): Template => {
+  return templates.find((template) => template.id === templateId)!;
+};
 
 export const resumeRouter = createTRPCRouter({
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
@@ -43,53 +49,16 @@ export const resumeRouter = createTRPCRouter({
           })
           .returning();
 
-        await tx.insert(sections).values([
-          {
-            type: "contact",
-            title: "",
-            order: 0,
-            disabled: true,
-            appear: true,
-            column: 1,
+        const defaultSections = getTemplate(
+          input.templateId,
+        ).defaultSections.map((section) => {
+          return {
+            ...section,
             resumeId: resume[0]!.id,
-          },
-          {
-            type: "summary",
-            title: "Summary",
-            order: 1,
-            disabled: true,
-            appear: true,
-            column: 1,
-            resumeId: resume[0]!.id,
-          },
-          {
-            type: "skills",
-            title: "Skills",
-            order: 2,
-            disabled: true,
-            appear: true,
-            column: 1,
-            resumeId: resume[0]!.id,
-          },
-          {
-            type: "experiences",
-            title: "Experiences",
-            order: 3,
-            disabled: true,
-            appear: true,
-            column: 1,
-            resumeId: resume[0]!.id,
-          },
-          {
-            type: "education",
-            title: "Educations",
-            order: 4,
-            disabled: true,
-            appear: true,
-            column: 1,
-            resumeId: resume[0]!.id,
-          },
-        ]);
+          };
+        });
+
+        await tx.insert(sections).values(defaultSections);
 
         return resume[0];
       });

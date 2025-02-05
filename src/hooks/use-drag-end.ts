@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   useSensors,
   useSensor,
@@ -18,12 +18,6 @@ export function useDragEnd<T extends ItemType>({ type }: { type: string }) {
   const [items, setItems] = useState<T[]>(
     (form.getValues(type) as T[]).sort((a, b) => a.order - b.order),
   );
-
-  useEffect(() => {
-    console.log(`Saving the order of ${type}`);
-    if (window && window !== undefined)
-      localStorage.setItem(type, JSON.stringify(items));
-  }, [items, type]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),

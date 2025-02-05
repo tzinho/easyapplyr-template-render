@@ -2,7 +2,7 @@ import { type PropsWithChildren } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 
 interface SectionProps extends PropsWithChildren {
-  id: number;
+  id: string | number;
   disabled?: boolean;
 }
 

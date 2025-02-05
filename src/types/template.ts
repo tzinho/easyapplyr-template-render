@@ -9,7 +9,8 @@ export interface SectionType {
     | "certifications"
     | "courses"
     | "projects"
-    | "involvements";
+    | "involvements"
+    | "educations";
   order: number;
   disabled?: boolean;
   appear: boolean;
@@ -17,9 +18,9 @@ export interface SectionType {
   column?: 1 | 2;
   removable: boolean;
   required: boolean;
-  added: boolean;
   label?: string;
   data?: {
+    text?: string;
     items?: ItemType[];
   };
 }
@@ -49,6 +50,7 @@ export interface Template {
   id: string;
   title: string;
   component: () => JSX.Element;
+  defaultSections: SectionType[];
 }
 
 export interface Skill {

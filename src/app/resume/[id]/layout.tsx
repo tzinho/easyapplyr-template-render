@@ -28,6 +28,9 @@ export default async function Layout({ children, params }: LayoutProps) {
         <Link href={`/resume/${id}/summary`}>
           <Button className="h-fit text-xs">Sumário</Button>
         </Link>
+        <Link href={`/resume/${id}/projects`}>
+          <Button className="h-fit text-xs">Projetos</Button>
+        </Link>
         <Link href={`/resume/${id}/format`}>
           <Button className="h-fit text-xs">Visualização</Button>
         </Link>
