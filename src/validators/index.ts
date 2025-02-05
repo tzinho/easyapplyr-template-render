@@ -62,6 +62,7 @@ export const resumeSchema = z.object({
       message: "O título do curriculum deve possuir ao menos 3 caracteres!",
     }),
   experience: z.coerce.number().optional(),
+  templateId: z.string(),
 });
 
 export type EducationSchema = z.infer<typeof educationSchema>;

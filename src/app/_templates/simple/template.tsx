@@ -13,6 +13,8 @@ import {
   type SkillType,
   type ExperienceType,
   type SectionType,
+  type Contact,
+  type Summary,
 } from "~/types/template";
 import { useDragEnd } from "~/hooks/use-drag-end";
 import { SectionList } from "../_components/section-list";
@@ -133,8 +135,7 @@ const Education: React.FC<SectionProps> = ({ id, disabled }) => {
 };
 
 const Summary: React.FC<SectionProps> = ({ id, disabled }) => {
-  const form = useFormContext<{ summary: { text: string } }>();
-
+  const form = useFormContext<{ summary: Summary }>();
   const summary = form.watch("summary");
 
   return (
@@ -145,51 +146,34 @@ const Summary: React.FC<SectionProps> = ({ id, disabled }) => {
   );
 };
 
-const Input = ({
-  name,
-  placeholder,
-}: {
-  name: string;
-  placeholder?: string;
-}) => {
-  const form = useFormContext();
-
-  return (
-    <input
-      contentEditable
-      suppressContentEditableWarning
-      className="focus:outline-none"
-      placeholder={placeholder}
-      {...form.register(name)}
-    />
-  );
-};
-
 const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
+  const form = useFormContext<{ contact: Contact }>();
+  const contact = form.watch("contact");
+
   return (
     <Section id={id} disabled={disabled}>
       <h2 className="text-lg">
-        <Input name="contact.name" />
+        <p>{contact.name}</p>
       </h2>
       <div className="flex">
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin size={12} />
-          <Input name="contact.location" />
+          <p>{contact.country}</p>
         </div>
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <Linkedin size={12} />
-          <Input name="contact.email" />
+          <p>{contact.email}</p>
         </div>
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <Phone size={12} />
-          <Input name="contact.phone" />
+          <p>{contact.phone}</p>
         </div>
       </div>
     </Section>
   );
 };
 
-export const Simple = () => {
+export const Template = () => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "educations": {

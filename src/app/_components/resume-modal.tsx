@@ -23,6 +23,7 @@ import { useToast } from "~/hooks/use-toast";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { Card, CardContent } from "~/components/ui/card";
 import { type ResumeSchema, resumeSchema } from "~/validators";
+import { templates } from "../_templates";
 
 export const ResumeModal = () => {
   const { toast } = useToast();
@@ -44,19 +45,13 @@ export const ResumeModal = () => {
   });
 
   const handleSubmit: SubmitHandler<ResumeSchema> = async (d) => {
-    await createResumeMutation.mutateAsync(
-      {
-        templateId: "1",
-        ...d,
+    await createResumeMutation.mutateAsync(d, {
+      onSuccess: (resume) => {
+        if (resume) {
+          router.push(`/resume/${resume.id}/contact`);
+        }
       },
-      {
-        onSuccess: (resume) => {
-          if (resume) {
-            router.push(`/resume/${resume.id}/contact`);
-          }
-        },
-      },
-    );
+    });
   };
 
   return (
@@ -84,6 +79,18 @@ export const ResumeModal = () => {
                 description="Insira um título pra que fique fácil você identificá-lo"
                 required
               />
+
+              <Select
+                name="templateId"
+                placeholder="Selecione o modelo"
+                label="Modelo"
+              >
+                {templates.map((template) => (
+                  <SelectItem value={template.id} key={template.id}>
+                    {template.title}
+                  </SelectItem>
+                ))}
+              </Select>
 
               <Select
                 name="experience"

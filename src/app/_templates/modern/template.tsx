@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { type DragEndEvent } from "@dnd-kit/core";
 
-import { Section } from "./_components/section";
-import { SectionList } from "./_components/section-list";
-import { type SectionType } from "~/types/template";
-import { TwoColumn } from "./_components/two-column";
+import { type Contact, type SectionType } from "~/types/template";
+import { SectionList } from "../_components/section-list";
+import { Section } from "../_components/section";
+import { TwoColumn } from "../_components/two-column";
+import { useFormContext } from "react-hook-form";
 
 const Skills = ({ id }: { id: number }) => {
   return <SectionList id={id}>Skills</SectionList>;
@@ -33,50 +34,32 @@ const Summary = ({ id }: { id: number }) => {
 };
 
 const Contact = ({ id }: { id: number }) => {
-  const data = {
-    name: "George Turner",
-    phone: "(555) 132-2356",
-    email: "george@turner.com",
-  };
+  const form = useFormContext();
+
+  const contact = form.watch("contact") as Contact;
 
   return (
     <Section id={id}>
-      <h2>{data.name}</h2>
-      <p>{data.phone}</p>
-      <p>{data.email}</p>
+      <h2>{contact.name}</h2>
+      <p>{contact.phone}</p>
+      <p>{contact.email}</p>
     </Section>
   );
 };
 
-export const Modern = () => {
-  const [sections, setSections] = useState<SectionType[]>(() => {
-    const savedItems = localStorage.getItem("items");
-    if (savedItems) {
-      return JSON.parse(savedItems) as SectionType[];
-    } else {
-      return [
-        { id: "1", type: "contact", order: 1, column: 1, appear: true },
-        { id: "2", type: "summary", order: 2, column: 1, appear: true },
-        { id: "3", type: "skills", order: 3, column: 1, appear: true },
-        { id: "4", type: "experiences", order: 4, column: 2, appear: true },
-      ];
-    }
-  });
-  const [column1Items, setColumn1Items] = useState(() => {
+export const Template = () => {
+  const [sections, setSections] = useState<SectionType[]>([]);
+  const [column1Items, setColumn1Items] = useState<SectionType[]>(() => {
     return sections
       .filter((item) => item.column === 1)
       .sort((a, b) => a.order - b.order);
   });
 
-  const [column2Items, setColumn2Items] = useState(() => {
+  const [column2Items, setColumn2Items] = useState<SectionType[]>(() => {
     return sections
       .filter((item) => item.column === 2)
       .sort((a, b) => a.order - b.order);
   });
-
-  useEffect(() => {
-    localStorage.setItem("items", JSON.stringify(sections));
-  }, [sections]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -152,10 +135,10 @@ export const Modern = () => {
         <div id="resume">
           <div className="flex">
             <div className="w-1/2 rounded-md border border-gray-200 p-4">
-              {/* ... */}
+              {column1Items.map((section) => renderSection(section))}
             </div>
             <div className="w-1/2 rounded-md border border-gray-200 p-4">
-              {/* ... */}
+              {column2Items.map((section) => renderSection(section))}
             </div>
           </div>
         </div>

@@ -84,3 +84,19 @@ export interface NavigationProps {
   onNavigate: (sectionId: string) => void;
   onToggleSection: (sectionId: string) => void;
 }
+
+export interface Contact {
+  name: string;
+  email?: string | null;
+  phone?: string | null;
+  linkedin?: string | null;
+  personal?: string | null;
+  country?: string | null;
+  state?: string | null;
+  city?: string | null;
+  order?: string | null;
+}
+
+export interface Summary {
+  text: string;
+}

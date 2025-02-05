@@ -1,14 +1,9 @@
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
-import { templates } from "~/app/_templates";
+import { getTemplate } from "~/lib/templates";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { resumes, sections } from "~/server/db/schema";
-import { type Template } from "~/types/template";
-
-const getTemplate = (templateId: string): Template => {
-  return templates.find((template) => template.id === templateId)!;
-};
 
 export const resumeRouter = createTRPCRouter({
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
@@ -49,9 +44,9 @@ export const resumeRouter = createTRPCRouter({
           })
           .returning();
 
-        const defaultSections = getTemplate(
-          input.templateId,
-        ).defaultSections.map((section) => {
+        const template = getTemplate(input.templateId);
+
+        const defaultSections = template.defaultSections.map((section) => {
           return {
             ...section,
             resumeId: resume[0]!.id,
