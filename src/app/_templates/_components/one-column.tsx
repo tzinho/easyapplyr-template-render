@@ -13,9 +13,9 @@ interface OneColumnProps {
 }
 
 export const OneColumn = ({ renderSection }: OneColumnProps) => {
-  const { sensors, handleDragEnd, items } = useDragEndOneColumn<SectionType>({
-    type: "sections",
-  });
+  const { sensors, handleDragEnd, items } = useDragEndOneColumn<SectionType>();
+
+  console.log("[items]: ", items);
 
   return (
     <DndContext
@@ -23,12 +23,7 @@ export const OneColumn = ({ renderSection }: OneColumnProps) => {
       onDragEnd={handleDragEnd}
       sensors={sensors}
     >
-      <SortableContext
-        items={items.map((item) => {
-          return { id: item.order };
-        })}
-        strategy={verticalListSortingStrategy}
-      >
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
         <div id="resume">{items.map(renderSection)}</div>
       </SortableContext>
     </DndContext>

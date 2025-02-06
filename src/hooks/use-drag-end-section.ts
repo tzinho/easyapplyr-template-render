@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   useSensors,
   useSensor,
@@ -12,14 +12,8 @@ import { useFormContext } from "react-hook-form";
 
 import { type SectionType } from "~/types/template";
 
-export function useDragEndOneColumn<T extends SectionType>({
-  type,
-}: {
-  type: string;
-}) {
+export function useDragEndOneColumn<T extends SectionType>() {
   const form = useFormContext();
-
-  console.log("form", form.getValues());
 
   const [items, setItems] = useState<T[]>(
     (form.getValues("sections") as T[]).sort((a, b) => a.order - b.order),
@@ -35,18 +29,21 @@ export function useDragEndOneColumn<T extends SectionType>({
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    console.log("[handleDragEnd]: ", { active, over });
 
     if (!over) return;
     if (active.id === over.id) return;
 
-    const item = items.find((item) => item.order === over.id);
+    const item = items.find((item) => item.id === over.id);
 
     if (item?.disabled) return;
 
-    const actual = items.findIndex((item) => item.order === active.id);
-    const next = items.findIndex((item) => item.order === over.id);
+    const actual = items.findIndex((item) => item.id === active.id);
+    const next = items.findIndex((item) => item.id === over.id);
 
-    setItems(arrayMove(items, actual, next));
+    const newItems = arrayMove(items, actual, next);
+    console.log("[newItems]: ", newItems);
+    setItems(newItems);
   };
 
   return { items, sensors, handleDragEnd };

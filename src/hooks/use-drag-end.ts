@@ -36,7 +36,9 @@ export function useDragEnd<T extends ItemType>({ type }: { type: string }) {
     const actual = items.findIndex((item) => item.order === active.id);
     const next = items.findIndex((item) => item.order === over.id);
 
-    setItems(arrayMove(items, actual, next));
+    const newItems = arrayMove(items, actual, next);
+
+    setItems(newItems);
   };
 
   return { items, sensors, handleDragEnd };

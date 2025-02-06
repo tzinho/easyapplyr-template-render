@@ -3,7 +3,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 interface ItemProps extends PropsWithChildren {
-  id: number;
+  id: number | string;
 }
 
 export const Item = ({ id, children }: ItemProps) => {

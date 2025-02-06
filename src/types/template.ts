@@ -102,6 +102,14 @@ export interface Contact {
   order?: string | null;
 }
 
+export interface EducationType {
+  id: string;
+  degree?: string;
+  order: number;
+  appear: boolean;
+  [key: string]: string | number | boolean | undefined;
+}
+
 export interface Summary {
   text: string;
 }

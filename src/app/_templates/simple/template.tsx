@@ -16,6 +16,7 @@ import {
   type Contact,
   type Summary,
   type SectionProps,
+  type EducationType,
 } from "~/types/template";
 import { useDragEnd } from "~/hooks/use-drag-end";
 import { SectionList } from "../_components/section-list";
@@ -88,14 +89,6 @@ const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
     </SectionList>
   );
 };
-
-interface EducationType {
-  id: string;
-  degree?: string;
-  order: number;
-  appear: boolean;
-  [key: string]: string | number | boolean | undefined;
-}
 
 const Education: React.FC<SectionProps> = ({ id, disabled }) => {
   const { sensors, handleDragEnd, items } = useDragEnd<EducationType>({
@@ -185,7 +178,7 @@ export const Template = () => {
       case "contact": {
         return (
           <Contact
-            id={section.order}
+            id={section.id}
             key={section.id}
             disabled={section.disabled}
           />
@@ -195,7 +188,7 @@ export const Template = () => {
       case "summary": {
         return (
           <Summary
-            id={section.order}
+            id={section.id}
             key={section.id}
             disabled={section.disabled}
           />
@@ -203,11 +196,11 @@ export const Template = () => {
       }
 
       case "experiences": {
-        return <Experiences id={section.order} key={section.id} />;
+        return <Experiences id={section.id} key={section.id} />;
       }
 
       case "skills": {
-        return <Skills id={section.order} key={section.id} />;
+        return <Skills id={section.id} key={section.id} />;
       }
 
       default:
