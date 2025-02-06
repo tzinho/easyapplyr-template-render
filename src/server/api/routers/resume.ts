@@ -6,6 +6,40 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { resumes, sections } from "~/server/db/schema";
 
 export const resumeRouter = createTRPCRouter({
+  changeTemplate: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        templateId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const template = getTemplate(input.templateId);
+
+      return await ctx.db.transaction(async (tx) => {
+        const resume = await tx
+          .update(resumes)
+          .set({
+            templateId: input.templateId,
+          })
+          .where(eq(resumes.id, input.id))
+          .returning();
+
+        await tx.delete(sections).where(eq(sections.resumeId, input.id));
+
+        const defaultSections = template.defaultSections.map((section) => {
+          return {
+            ...section,
+            resumeId: resume[0]!.id,
+          };
+        });
+
+        await tx.insert(sections).values(defaultSections);
+
+        return resume;
+      });
+    }),
+
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const data = await ctx.db.query.resumes.findFirst({
       with: {
@@ -68,11 +102,16 @@ export const resumeRouter = createTRPCRouter({
   }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    const data = await ctx.db
-      .delete(resumes)
-      .where(eq(resumes.id, input))
-      .returning();
-    return data;
+    return await ctx.db.transaction(async (tx) => {
+      // await tx.delete(sections).where(eq(sections.resumeId, input));
+
+      const data = await tx
+        .delete(resumes)
+        .where(eq(resumes.id, input))
+        .returning();
+
+      return data;
+    });
   }),
 
   duplicate: publicProcedure

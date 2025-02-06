@@ -59,7 +59,6 @@ export const ResumeGrid = () => {
       {resumes?.data?.map((resume) => (
         <CompactResumePreview
           key={resume.id}
-          data={fakeUserData}
           resume={resume}
           onDelete={setSelectedResume}
           lastEdited="two hours ago"

@@ -26,37 +26,11 @@ import { Switch } from "~/components/ui/switch";
 import { Card } from "~/components/ui/card";
 import { type Resume } from "~/types/template";
 import { useRouter } from "next/navigation";
-import { getTemplate } from "~/lib/templates";
-
-interface ResumeData {
-  header: {
-    fullName: string;
-    title: string;
-    email: string;
-    phone: string;
-    location: string;
-  };
-  summary: string;
-  experience: Array<{
-    company: string;
-    position: string;
-    startDate: string;
-    endDate: string;
-    description: string;
-  }>;
-  education: Array<{
-    institution: string;
-    degree: string;
-    startDate: string;
-    endDate: string;
-  }>;
-  isLocked?: boolean;
-  resumeTitle: string;
-  isSearchable?: boolean;
-}
+import { data } from "tailwindcss/defaultTheme";
+import { TemplatePreview } from "./template-preview";
+import { api } from "~/trpc/react";
 
 interface CompactResumePreviewProps {
-  data: ResumeData;
   lastEdited?: string;
   onDelete: (resume: Resume) => void;
   onDuplicate: () => void;
@@ -67,7 +41,6 @@ interface CompactResumePreviewProps {
 }
 
 export function CompactResumePreview({
-  data,
   onDelete,
   onDuplicate,
   onReview,
@@ -76,20 +49,21 @@ export function CompactResumePreview({
   resume,
 }: CompactResumePreviewProps) {
   const router = useRouter();
+  const data = api.resumes.get.useQuery(resume.id);
 
   const onEdit = (resume: Resume) => {
     router.push(`/resume/${resume.id}/contact`);
   };
 
-  const Template = getTemplate(resume.templateId).component;
+  if (data.isLoading) return null;
 
-  console.log("templateId", resume.templateId);
-  console.log("Template", Template);
+  console.log("[templateId]: ", resume.templateId);
+  console.log("[data]: ", data.data);
 
   return (
     <Card className="group relative flex h-[290px] w-[240px] flex-col overflow-hidden border border-gray-200 bg-white shadow-sm">
       <div className="relative flex-grow">
-        <Template />
+        <TemplatePreview templateId={resume.templateId} data={data.data} />
 
         <div className="invisible absolute inset-0 flex items-center justify-center gap-4 bg-gray-900/70 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
           <Button
@@ -169,6 +143,7 @@ export function CompactResumePreview({
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
             </DropdownMenuSub>
+            <DropdownMenuSeparator />
             <DropdownMenuItem
               onSelect={() => onDelete(resume)}
               className="text-red-600"
@@ -176,14 +151,6 @@ export function CompactResumePreview({
               <Trash className="mr-2 h-4 w-4" />
               Deletar
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <div className="flex items-center justify-between px-2 py-1.5">
-              <span className="text-sm">Searchable</span>
-              <Switch
-                checked={data.isSearchable}
-                onCheckedChange={onSearchableChange}
-              />
-            </div>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

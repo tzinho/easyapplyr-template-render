@@ -7,42 +7,51 @@ import {
 } from "@dnd-kit/sortable";
 import { type DragEndEvent } from "@dnd-kit/core";
 
-import { type Contact, type SectionType } from "~/types/template";
+import {
+  type SectionProps,
+  type Contact,
+  type SectionType,
+} from "~/types/template";
 import { SectionList } from "../_components/section-list";
 import { Section } from "../_components/section";
 import { TwoColumn } from "../_components/two-column";
 import { useFormContext } from "react-hook-form";
 
-const Skills = ({ id }: { id: number }) => {
-  return <SectionList id={id}>Skills</SectionList>;
+const Skills: React.FC<SectionProps> = ({ id, disabled }) => {
+  return (
+    <SectionList id={id} disabled={disabled}>
+      Skills
+    </SectionList>
+  );
 };
 
-const Experiences = ({ id }: { id: number }) => {
+const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
   return (
-    <SectionList id={id}>
+    <SectionList id={id} disabled={disabled}>
       <h3>Experiences</h3>
     </SectionList>
   );
 };
 
-const Summary = ({ id }: { id: number }) => {
+const Summary: React.FC<SectionProps> = ({ id, disabled }) => {
   return (
-    <Section id={id}>
+    <Section id={id} disabled={disabled}>
       <h3>Summary</h3>
     </Section>
   );
 };
 
-const Contact = ({ id }: { id: number }) => {
+const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
   const form = useFormContext();
 
   const contact = form.watch("contact") as Contact;
 
+  console.log("[contact]: ", contact);
   return (
-    <Section id={id}>
-      <h2>{contact.name}</h2>
-      <p>{contact.phone}</p>
-      <p>{contact.email}</p>
+    <Section id={id} disabled={disabled}>
+      <h2>{contact?.name}</h2>
+      <p>{contact?.phone}</p>
+      <p>{contact?.email}</p>
     </Section>
   );
 };

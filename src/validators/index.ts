@@ -1,14 +1,14 @@
 import { z } from "zod";
 
 export const contactSchema = z.object({
-  name: z.coerce.string().optional(),
-  email: z.coerce.string().optional(),
-  personal: z.coerce.string().optional(),
-  linkedin: z.coerce.string().optional(),
-  phone: z.coerce.string().optional(),
-  country: z.coerce.string().optional(),
-  state: z.coerce.string().optional(),
-  city: z.coerce.string().optional(),
+  name: z.string().optional(),
+  email: z.string().optional(),
+  personal: z.string().optional(),
+  linkedin: z.string().optional(),
+  phone: z.string().optional(),
+  country: z.string().optional(),
+  state: z.string().optional(),
+  city: z.string().optional(),
 });
 
 export const experienceSchema = z.object({

@@ -15,17 +15,13 @@ import {
   type SectionType,
   type Contact,
   type Summary,
+  type SectionProps,
 } from "~/types/template";
 import { useDragEnd } from "~/hooks/use-drag-end";
 import { SectionList } from "../_components/section-list";
 import { Section } from "../_components/section";
 import { OneColumn } from "../_components/one-column";
 import { Item } from "../_components/item";
-
-interface SectionProps {
-  id: string | number;
-  disabled?: boolean;
-}
 
 const Skills: React.FC<SectionProps> = ({ id }) => {
   const { sensors, handleDragEnd, items } = useDragEnd<SkillType>({
@@ -153,20 +149,20 @@ const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
   return (
     <Section id={id} disabled={disabled}>
       <h2 className="text-lg">
-        <p>{contact.name}</p>
+        <p>{contact?.name}</p>
       </h2>
       <div className="flex">
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin size={12} />
-          <p>{contact.country}</p>
+          <p>{contact?.country}</p>
         </div>
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <Linkedin size={12} />
-          <p>{contact.email}</p>
+          <p>{contact?.email}</p>
         </div>
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <Phone size={12} />
-          <p>{contact.phone}</p>
+          <p>{contact?.phone}</p>
         </div>
       </div>
     </Section>

@@ -19,6 +19,8 @@ export function useDragEndOneColumn<T extends SectionType>({
 }) {
   const form = useFormContext();
 
+  console.log("form", form.getValues());
+
   const [items, setItems] = useState<T[]>(
     (form.getValues("sections") as T[]).sort((a, b) => a.order - b.order),
   );

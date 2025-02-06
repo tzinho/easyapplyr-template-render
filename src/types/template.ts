@@ -85,6 +85,11 @@ export interface NavigationProps {
   onToggleSection: (sectionId: string) => void;
 }
 
+export interface SectionProps {
+  id: string | number;
+  disabled?: boolean;
+}
+
 export interface Contact {
   name: string;
   email?: string | null;

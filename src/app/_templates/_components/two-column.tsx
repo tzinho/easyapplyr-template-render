@@ -16,6 +16,10 @@ interface TwoColumnProps extends PropsWithChildren {
 }
 
 export const TwoColumn = ({ handleDragEnd, children }: TwoColumnProps) => {
+  // const { sensors, handleDragEnd, items } = useDragEndOneColumn<SectionType>({
+  //   type: "sections",
+  // });
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),

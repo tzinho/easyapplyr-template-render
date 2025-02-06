@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 
-import { Simple } from "../_templates/simple";
+import { Template } from "../_templates/simple";
 import { Form } from "~/components/ui/form";
 
 interface TemplateRenderProps {
@@ -18,7 +18,7 @@ export const TemplateRender = ({ data }: TemplateRenderProps) => {
   return (
     <Form {...form}>
       <form>
-        <Simple />
+        <Template />
       </form>
     </Form>
   );
