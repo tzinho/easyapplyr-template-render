@@ -1,4 +1,4 @@
-export interface SectionType {
+export interface Section {
   id: string;
   type:
     | "contact"
@@ -25,14 +25,14 @@ export interface SectionType {
   };
 }
 
-export interface ExperienceType {
+export interface Experience {
   id: string;
   title: string;
   order: number;
   [key: string]: string | number | boolean | undefined;
 }
 
-export interface SkillType {
+export interface Skill {
   id: string;
   title: string;
   order: number;
@@ -50,7 +50,7 @@ export interface Template {
   id: string;
   title: string;
   component: ({ resumeId }: { resumeId: string }) => JSX.Element;
-  defaultSections: SectionType[];
+  defaultSections: Section[];
 }
 
 export interface Skill {
@@ -79,7 +79,7 @@ export interface Resume {
 }
 
 export interface NavigationProps {
-  sections: SectionType[];
+  sections: Section[];
   currentSection: string;
   onNavigate: (sectionId: string) => void;
   onToggleSection: (sectionId: string) => void;
@@ -102,7 +102,7 @@ export interface Contact {
   order?: string | null;
 }
 
-export interface EducationType {
+export interface Education {
   id: string;
   degree?: string;
   order: number;

@@ -1,119 +1,79 @@
 "use client";
 
 import React from "react";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { closestCorners, DndContext } from "@dnd-kit/core";
 import { Linkedin, MapPin, Phone } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
 import {
-  type SkillType,
-  type ExperienceType,
-  type SectionType,
   type Contact,
   type Summary,
   type SectionProps,
-  type EducationType,
+  type Section as SectionType,
 } from "~/types/template";
-import { useDragEnd } from "~/hooks/use-drag-end";
 import { SectionList } from "../_components/section-list";
 import { Section } from "../_components/section";
 import { OneColumn } from "../_components/one-column";
 import { Item } from "../_components/item";
 
-const Skills: React.FC<SectionProps> = ({ id }) => {
-  const { sensors, handleDragEnd, items } = useDragEnd<SkillType>({
-    type: "skills",
-  });
-
+const Skills: React.FC<SectionProps> = ({ id, disabled }) => {
   return (
-    <SectionList id={id}>
-      <DndContext
-        collisionDetection={closestCorners}
-        onDragEnd={handleDragEnd}
-        sensors={sensors}
-      >
-        <h3>Skills</h3>
-
-        <SortableContext
-          items={items.map((item) => {
-            return { id: item.order };
-          })}
-          strategy={verticalListSortingStrategy}
-        >
-          {items.map((item) => {
-            return (
-              <Item key={item.id} id={item.order}>
-                <li className="list-disc">{item.title}</li>
-              </Item>
-            );
-          })}
-        </SortableContext>
-      </DndContext>
+    <SectionList
+      id={id}
+      disabled={disabled}
+      type="skills"
+      render={(items) => {
+        return items.map((item) => {
+          return (
+            <Item key={item.id} id={item.order}>
+              <li className="list-disc">{item.title}</li>
+            </Item>
+          );
+        });
+      }}
+    >
+      <h3>Skills</h3>
     </SectionList>
   );
 };
 
 const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
-  const { sensors, handleDragEnd, items } = useDragEnd<ExperienceType>({
-    type: "experiences",
-  });
-
   return (
-    <SectionList id={id} disabled={disabled}>
-      <DndContext
-        collisionDetection={closestCorners}
-        onDragEnd={handleDragEnd}
-        sensors={sensors}
-      >
-        <h3>Experiences</h3>
-
-        <SortableContext
-          items={items.map((item) => {
-            return { id: item.order };
-          })}
-          strategy={verticalListSortingStrategy}
-        >
-          {items.map((item) => {
-            return (
-              <Item key={item.id} id={item.order}>
-                <li className="list-disc">{item.title}</li>
-              </Item>
-            );
-          })}
-        </SortableContext>
-      </DndContext>
+    <SectionList
+      id={id}
+      disabled={disabled}
+      type="experiences"
+      render={(items) => {
+        return items.map((item) => {
+          return (
+            <Item key={item.id} id={item.order}>
+              <li className="list-disc">{item.title}</li>
+            </Item>
+          );
+        });
+      }}
+    >
+      <h3>Experiences</h3>
     </SectionList>
   );
 };
 
 const Education: React.FC<SectionProps> = ({ id, disabled }) => {
-  const { sensors, handleDragEnd, items } = useDragEnd<EducationType>({
-    type: "educations",
-  });
-
   return (
-    <SectionList id={id} disabled={disabled}>
-      <DndContext
-        collisionDetection={closestCorners}
-        onDragEnd={handleDragEnd}
-        sensors={sensors}
-      >
-        <h3>Educations</h3>
-
-        <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          {items.map((item) => {
-            return (
-              <Item key={item.id} id={item.id}>
-                <li className="list-disc">{item.degree}</li>
-              </Item>
-            );
-          })}
-        </SortableContext>
-      </DndContext>
+    <SectionList
+      id={id}
+      disabled={disabled}
+      type="educations"
+      render={(items) => {
+        return items.map((item) => {
+          return (
+            <Item key={item.id} id={item.id}>
+              <li className="list-disc">{item.degree}</li>
+            </Item>
+          );
+        });
+      }}
+    >
+      <h3>Educations</h3>
     </SectionList>
   );
 };

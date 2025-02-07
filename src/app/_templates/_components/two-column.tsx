@@ -1,15 +1,16 @@
-import { type ReactNode, type PropsWithChildren } from "react";
-import { closestCorners, DndContext } from "@dnd-kit/core";
-import { useDragEndTwoColumn } from "~/hooks/use-drag-end-two-column";
-import { type SectionType } from "~/types/template";
+"use client";
 
-import React from "react";
+import { type ReactNode } from "react";
+import { closestCorners, DndContext } from "@dnd-kit/core";
 import {
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+
+import { useDragEndTwoColumn } from "~/hooks/use-drag-end-two-column";
+import { type Section as SectionType } from "~/types/template";
 
 interface SortableSectionProps {
   section: SectionType;
@@ -48,11 +49,11 @@ export const SortableSection: React.FC<SortableSectionProps> = ({
   );
 };
 
-interface OneColumnProps {
+interface TwoColumnProps {
   renderSection: (section: SectionType) => ReactNode;
 }
 
-export const TwoColumn = ({ renderSection }: OneColumnProps) => {
+export const TwoColumn = ({ renderSection }: TwoColumnProps) => {
   const { sensors, handleDragEnd, column1Items, column2Items } =
     useDragEndTwoColumn<SectionType>();
 
@@ -65,9 +66,7 @@ export const TwoColumn = ({ renderSection }: OneColumnProps) => {
       <div className="grid grid-cols-2 gap-4" id="resume">
         <div>
           <SortableContext
-            items={column1Items.map((item) => {
-              return { id: item.id };
-            })}
+            items={column1Items}
             strategy={verticalListSortingStrategy}
           >
             {column1Items.map((section) => renderSection(section))}
@@ -75,9 +74,7 @@ export const TwoColumn = ({ renderSection }: OneColumnProps) => {
         </div>
         <div>
           <SortableContext
-            items={column2Items.map((item) => {
-              return { id: item.id };
-            })}
+            items={column2Items}
             strategy={verticalListSortingStrategy}
           >
             {column2Items.map((section) => renderSection(section))}

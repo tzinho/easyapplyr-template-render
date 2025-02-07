@@ -22,36 +22,29 @@ import {
   DropdownMenuSubContent,
   DropdownMenuPortal,
 } from "~/components/ui/dropdown-menu";
-import { Switch } from "~/components/ui/switch";
 import { Card } from "~/components/ui/card";
 import { type Resume } from "~/types/template";
 import { useRouter } from "next/navigation";
-import { data } from "tailwindcss/defaultTheme";
 import { TemplatePreview } from "./template-preview";
 import { api } from "~/trpc/react";
 
-interface CompactResumePreviewProps {
-  lastEdited?: string;
+interface ResumePreviewProps {
   onDelete: (resume: Resume) => void;
   onDuplicate: () => void;
-  onReview?: () => void;
   onMove?: (destination: string) => void;
-  onSearchableChange?: (isSearchable: boolean) => void;
   resume: Resume;
 }
 
-export function CompactResumePreview({
+export const ResumePreview = ({
   onDelete,
   onDuplicate,
-  onReview,
   onMove,
-  onSearchableChange,
   resume,
-}: CompactResumePreviewProps) {
+}: ResumePreviewProps) => {
   const router = useRouter();
   const data = api.resumes.get.useQuery(resume.id);
 
-  const onEdit = (resume: Resume) => {
+  const handleOnEdit = (resume: Resume) => {
     router.push(`/resume/${resume.id}/contact`);
   };
 
@@ -67,23 +60,23 @@ export function CompactResumePreview({
 
         <div className="invisible absolute inset-0 flex items-center justify-center gap-4 bg-gray-900/70 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
           <Button
-            onClick={() => onEdit(resume)}
+            onClick={() => handleOnEdit(resume)}
             size="icon"
-            className="h-12 w-12 rounded-full bg-blue-500 transition-colors hover:bg-blue-600"
+            className="h-9 w-9 rounded-full bg-blue-500 transition-colors hover:bg-blue-600"
           >
             <Settings className="h-6 w-6" />
           </Button>
           <Button
             onClick={() => onDelete(resume)}
             size="icon"
-            className="h-12 w-12 rounded-full bg-red-500 transition-colors hover:bg-red-600"
+            className="h-9 w-9 rounded-full bg-red-500 transition-colors hover:bg-red-600"
           >
             <Trash className="h-6 w-6" />
           </Button>
           <Button
             onClick={onDuplicate}
             size="icon"
-            className="h-12 w-12 rounded-full bg-blue-500 transition-colors hover:bg-blue-600"
+            className="h-9 w-9 rounded-full bg-blue-500 transition-colors hover:bg-blue-600"
           >
             <Copy className="h-6 w-6" />
           </Button>
@@ -115,17 +108,13 @@ export function CompactResumePreview({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem onSelect={() => onEdit(resume)}>
+            <DropdownMenuItem onSelect={() => handleOnEdit(resume)}>
               <Settings className="mr-2 h-4 w-4" />
               Editar
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={onDuplicate}>
               <Copy className="mr-2 h-4 w-4" />
               Duplicar
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={onReview}>
-              <ChevronRight className="mr-2 h-4 w-4" />
-              Review
             </DropdownMenuItem>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
@@ -156,4 +145,4 @@ export function CompactResumePreview({
       </div>
     </Card>
   );
-}
+};

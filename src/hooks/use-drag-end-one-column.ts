@@ -9,10 +9,10 @@ import {
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { useFormContext } from "react-hook-form";
-
-import { type SectionType } from "~/types/template";
-import { api } from "~/trpc/react";
 import { toast } from "sonner";
+
+import { type Section as SectionType } from "~/types/template";
+import { api } from "~/trpc/react";
 
 export function useDragEndOneColumn<T extends SectionType>({
   resumeId,
@@ -53,7 +53,7 @@ export function useDragEndOneColumn<T extends SectionType>({
     const next = items.findIndex((item) => item.id === over.id);
 
     const newItems = arrayMove(items, actual, next);
-    // console.log("[newItems]: ", newItems);
+
     const updateItems = newItems
       .map((section, order) => {
         return { ...section, order };
@@ -66,6 +66,7 @@ export function useDragEndOneColumn<T extends SectionType>({
       resumeId,
       sections: updateItems,
     });
+
     console.log("[updateItems]: ", updateItems);
     setItems(newItems);
   };

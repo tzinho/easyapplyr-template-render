@@ -4,7 +4,6 @@ import { getTemplate } from "~/lib/templates";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { resumes, sections } from "~/server/db/schema";
-import { type SectionType } from "~/types/template";
 
 export const resumeRouter = createTRPCRouter({
   updateSections: publicProcedure
@@ -20,7 +19,6 @@ export const resumeRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      console.log("input", input);
       return await ctx.db.transaction(async (tx) => {
         for (const update of input.sections) {
           await tx
@@ -98,14 +96,7 @@ export const resumeRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.transaction(async (tx) => {
-        const resume = await tx
-          .insert(resumes)
-          .values({
-            title: input.title,
-            templateId: input.templateId,
-            experience: input.experience,
-          })
-          .returning();
+        const resume = await tx.insert(resumes).values(input).returning();
 
         const template = getTemplate(input.templateId);
 
@@ -132,8 +123,6 @@ export const resumeRouter = createTRPCRouter({
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     return await ctx.db.transaction(async (tx) => {
-      // await tx.delete(sections).where(eq(sections.resumeId, input));
-
       const data = await tx
         .delete(resumes)
         .where(eq(resumes.id, input))

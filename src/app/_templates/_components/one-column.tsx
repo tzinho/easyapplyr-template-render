@@ -1,3 +1,5 @@
+"use client";
+
 import { type ReactNode } from "react";
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import {
@@ -5,8 +7,8 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { useDragEndOneColumn } from "~/hooks/use-drag-end-section";
-import { type SectionType } from "~/types/template";
+import { type Section as SectionType } from "~/types/template";
+import { useDragEndOneColumn } from "~/hooks/use-drag-end-one-column";
 
 interface OneColumnProps {
   resumeId: string;
