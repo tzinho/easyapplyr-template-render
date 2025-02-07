@@ -4,8 +4,32 @@ import { getTemplate } from "~/lib/templates";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { resumes, sections } from "~/server/db/schema";
+import { type SectionType } from "~/types/template";
 
 export const resumeRouter = createTRPCRouter({
+  updateSections: publicProcedure
+    .input(
+      z.object({
+        resumeId: z.string(),
+        sections: z.array(
+          z.object({
+            id: z.string(),
+            order: z.number(),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      console.log("input", input);
+      return await ctx.db.transaction(async (tx) => {
+        for (const update of input.sections) {
+          await tx
+            .update(sections)
+            .set({ order: update.order })
+            .where(eq(sections.id, update.id));
+        }
+      });
+    }),
   changeTemplate: publicProcedure
     .input(
       z.object({
@@ -25,16 +49,21 @@ export const resumeRouter = createTRPCRouter({
           .where(eq(resumes.id, input.id))
           .returning();
 
-        await tx.delete(sections).where(eq(sections.resumeId, input.id));
+        const templateSections = await tx
+          .select()
+          .from(sections)
+          .where(eq(sections.resumeId, resume[0]!.id));
 
-        const defaultSections = template.defaultSections.map((section) => {
-          return {
-            ...section,
-            resumeId: resume[0]!.id,
-          };
-        });
+        for (const update of templateSections) {
+          const otherSection = template.defaultSections.find(
+            (section) => section.type === update.type,
+          )!;
 
-        await tx.insert(sections).values(defaultSections);
+          await tx
+            .update(sections)
+            .set({ order: otherSection.order, column: otherSection.column })
+            .where(eq(sections.id, update.id));
+        }
 
         return resume;
       });

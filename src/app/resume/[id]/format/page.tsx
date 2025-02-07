@@ -13,7 +13,7 @@ export default async function Format({ params }: FormatProps) {
 
   return (
     <>
-      <TemplatePreview data={data} templateId={data.templateId} />
+      <TemplatePreview data={data} templateId={data.templateId} resumeId={id} />
       <ChooseTemplate excludeTemplateId={data.templateId} resumeId={id} />
     </>
   );

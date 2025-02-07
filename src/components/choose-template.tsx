@@ -1,5 +1,11 @@
 "use client";
 
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Button } from "~/components/ui/button";
 import {
   Sheet,
@@ -15,13 +21,8 @@ import { Select } from "./form/select";
 import { templates } from "~/app/_templates";
 import { SelectItem } from "./ui/select";
 import { Form } from "./ui/form";
-import { type SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "~/trpc/react";
 import { ButtonLoading } from "./ui/button-loading";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 interface ChooseTemplateProps {
   excludeTemplateId?: string;
@@ -39,8 +40,8 @@ export const ChooseTemplate = ({
 
   const changeTemplateMutation = api.resumes.changeTemplate.useMutation({
     onSuccess() {
-      toast.success("Modelo alterado com sucesso!");
       router.refresh();
+      toast.success("Modelo alterado com sucesso!");
     },
   });
 

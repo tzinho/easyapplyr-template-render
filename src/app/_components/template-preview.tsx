@@ -8,10 +8,15 @@ import { getTemplate } from "~/lib/templates";
 
 interface TemplatePreviewProps {
   data: Resume;
+  resumeId: string;
   templateId: string;
 }
 
-export const TemplatePreview = ({ data, templateId }: TemplatePreviewProps) => {
+export const TemplatePreview = ({
+  data,
+  resumeId,
+  templateId,
+}: TemplatePreviewProps) => {
   const form = useForm({
     mode: "onBlur",
     defaultValues: data,
@@ -21,7 +26,9 @@ export const TemplatePreview = ({ data, templateId }: TemplatePreviewProps) => {
 
   return (
     <Form {...form}>
-      <Template />
+      <div className="flex-1">
+        <Template resumeId={resumeId} />
+      </div>
     </Form>
   );
 };

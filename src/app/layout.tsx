@@ -4,8 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { TRPCReactProvider } from "~/trpc/react";
 import { Toaster } from "~/components/ui/toaster";
 import { Toaster as Sonner } from "~/components/ui/sonner";
-import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
-import { AppSidebar } from "~/components/app-sidebar";
+
 export * from "./__metadata";
 
 import "~/styles/globals.css";
@@ -15,13 +14,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
     <html lang="pt-BR" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <main className="flex-1">
-              <SidebarTrigger />
-              {children}
-            </main>
-          </SidebarProvider>
+          <main className="flex-1 bg-slate-50">{children}</main>
         </TRPCReactProvider>
         <Toaster />
         <Sonner />

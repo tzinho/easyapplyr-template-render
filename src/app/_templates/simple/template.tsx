@@ -104,15 +104,10 @@ const Education: React.FC<SectionProps> = ({ id, disabled }) => {
       >
         <h3>Educations</h3>
 
-        <SortableContext
-          items={items.map((item) => {
-            return { id: item.order };
-          })}
-          strategy={verticalListSortingStrategy}
-        >
+        <SortableContext items={items} strategy={verticalListSortingStrategy}>
           {items.map((item) => {
             return (
-              <Item key={item.id} id={item.order}>
+              <Item key={item.id} id={item.id}>
                 <li className="list-disc">{item.degree}</li>
               </Item>
             );
@@ -162,7 +157,7 @@ const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
   );
 };
 
-export const Template = () => {
+export const Template = ({ resumeId }: { resumeId: string }) => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "educations": {
@@ -208,5 +203,5 @@ export const Template = () => {
     }
   };
 
-  return <OneColumn renderSection={renderSection} />;
+  return <OneColumn renderSection={renderSection} resumeId={resumeId} />;
 };

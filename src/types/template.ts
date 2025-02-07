@@ -49,7 +49,7 @@ export interface ItemType {
 export interface Template {
   id: string;
   title: string;
-  component: () => JSX.Element;
+  component: ({ resumeId }: { resumeId: string }) => JSX.Element;
   defaultSections: SectionType[];
 }
 
