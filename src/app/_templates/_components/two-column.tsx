@@ -1,67 +1,37 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { closestCorners, DndContext } from "@dnd-kit/core";
+import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
 import {
   SortableContext,
-  useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 
 import { useDragEndTwoColumn } from "~/hooks/use-drag-end-two-column";
 import { type Section as SectionType } from "~/types/template";
 
-interface SortableSectionProps {
-  section: SectionType;
-  renderContent: () => React.ReactNode;
-}
-
-export const SortableSection: React.FC<SortableSectionProps> = ({
-  section,
-  renderContent,
-}) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: section.id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
-  return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className="cursor-move rounded border bg-gray-50 p-4"
-      {...attributes}
-      {...listeners}
-    >
-      {renderContent()}
-    </div>
-  );
-};
-
 interface TwoColumnProps {
+  resumeId: string;
   renderSection: (section: SectionType) => ReactNode;
 }
 
-export const TwoColumn = ({ renderSection }: TwoColumnProps) => {
-  const { sensors, handleDragEnd, column1Items, column2Items } =
-    useDragEndTwoColumn<SectionType>();
+export const TwoColumn = ({ renderSection, resumeId }: TwoColumnProps) => {
+  const {
+    sensors,
+    handleDragStart,
+    handleDragEnd,
+    column1Items,
+    column2Items,
+    activeId,
+    sections,
+  } = useDragEndTwoColumn<SectionType>({ resumeId });
 
   return (
     <DndContext
-      collisionDetection={closestCorners}
-      onDragEnd={handleDragEnd}
+      collisionDetection={closestCenter}
       sensors={sensors}
+      onDragEnd={handleDragEnd}
+      onDragStart={handleDragStart}
     >
       <div className="grid grid-cols-2 gap-4" id="resume">
         <div>
@@ -81,6 +51,15 @@ export const TwoColumn = ({ renderSection }: TwoColumnProps) => {
           </SortableContext>
         </div>
       </div>
+      <DragOverlay>
+        {activeId ? (
+          <div className="rounded border-2 border-primary bg-white p-4 shadow-lg">
+            <h4 className="mb-2 font-medium capitalize">
+              {sections.find((s) => s.id === activeId)?.type}
+            </h4>
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 };

@@ -7,8 +7,14 @@ interface SectionProps extends PropsWithChildren {
 }
 
 export const Section = ({ id, disabled, children }: SectionProps) => {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id, disabled });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id, disabled });
 
   const style = {
     transform: transform
@@ -16,10 +22,17 @@ export const Section = ({ id, disabled, children }: SectionProps) => {
       : undefined,
     transition,
     cursor: disabled ? "not-allowed" : "grab",
+    opacity: isDragging ? 0.5 : 1,
   };
 
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="cursor-move rounded border bg-gray-50 p-4"
+    >
       {children}
     </div>
   );

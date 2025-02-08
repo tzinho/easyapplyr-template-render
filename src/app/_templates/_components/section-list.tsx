@@ -33,12 +33,7 @@ export function SectionList<T extends ItemType>({
         onDragEnd={handleDragEnd}
         sensors={sensors}
       >
-        <SortableContext
-          items={items.map((item) => {
-            return { id: item.order };
-          })}
-          strategy={verticalListSortingStrategy}
-        >
+        <SortableContext items={items} strategy={verticalListSortingStrategy}>
           {children}
           {render(items)}
         </SortableContext>

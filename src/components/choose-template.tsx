@@ -59,7 +59,7 @@ export const ChooseTemplate = ({
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Alterar modelo</Button>
+        <Button className="mt-3 w-full">Alterar modelo</Button>
       </SheetTrigger>
       <SheetContent>
         <Form {...form}>

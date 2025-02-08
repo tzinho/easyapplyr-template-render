@@ -176,7 +176,7 @@ export const List = () => {
 
         <Link
           href={`/resume/${params.id}/education/create`}
-          className={cn(buttonVariants({ variant: "default" }))}
+          className={cn(buttonVariants({ variant: "default" }), "h-6")}
         >
           <Plus />
           Adicionar educação

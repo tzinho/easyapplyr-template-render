@@ -37,23 +37,22 @@ const Education: React.FC<SectionProps> = ({ id, disabled }) => {
 
 const Skills: React.FC<SectionProps> = ({ id, disabled }) => {
   return (
-    <div>
+    <SectionList
+      id={id}
+      disabled={disabled}
+      type="skills"
+      render={(items) => {
+        return items.map((item) => {
+          return (
+            <Item key={item.id} id={item.order}>
+              <li className="list-disc">{item.title}</li>
+            </Item>
+          );
+        });
+      }}
+    >
       <h3>Skills</h3>
-      <SectionList
-        id={id}
-        disabled={disabled}
-        type="skills"
-        render={(items) => {
-          return items.map((item) => {
-            return (
-              <Item key={item.id} id={item.order}>
-                <li className="list-disc">{item.title}</li>
-              </Item>
-            );
-          });
-        }}
-      ></SectionList>
-    </div>
+    </SectionList>
   );
 };
 
@@ -99,27 +98,57 @@ const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
   );
 };
 
-export const Template = () => {
+export const Template = ({ resumeId }: { resumeId: string }) => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "contact": {
-        return <Contact id={section.order} key={section.id} />;
+        return (
+          <Contact
+            id={section.id}
+            key={section.id}
+            disabled={section.disabled}
+          />
+        );
       }
 
       case "summary": {
-        return <Summary id={section.order} key={section.id} />;
+        return (
+          <Summary
+            id={section.id}
+            key={section.id}
+            disabled={section.disabled}
+          />
+        );
       }
 
       case "experiences": {
-        return <Experiences id={section.order} key={section.id} />;
+        return (
+          <Experiences
+            id={section.id}
+            key={section.id}
+            disabled={section.disabled}
+          />
+        );
       }
 
       case "skills": {
-        return <Skills id={section.order} key={section.id} />;
+        return (
+          <Skills
+            id={section.id}
+            key={section.id}
+            disabled={section.disabled}
+          />
+        );
       }
 
       case "educations": {
-        return <Education id={section.order} key={section.id} />;
+        return (
+          <Education
+            id={section.id}
+            key={section.id}
+            disabled={section.disabled}
+          />
+        );
       }
 
       default:
@@ -127,5 +156,5 @@ export const Template = () => {
     }
   };
 
-  return <TwoColumn renderSection={renderSection} />;
+  return <TwoColumn renderSection={renderSection} resumeId={resumeId} />;
 };

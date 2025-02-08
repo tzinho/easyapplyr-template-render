@@ -99,7 +99,7 @@ const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
       <h2 className="text-lg">
         <p>{contact?.name}</p>
       </h2>
-      <div className="flex">
+      <div className="flex items-center gap-3">
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin size={12} />
           <p>{contact?.country}</p>

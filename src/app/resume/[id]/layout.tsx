@@ -28,11 +28,11 @@ export default async function Layout({ children, params }: LayoutProps) {
 
   return (
     <div>
-      {links.map((item) => {
+      {/* {links.map((item) => {
         if (useSections?.includes(item.type)) {
           return item.label;
         }
-      })}
+      })} */}
       <div className="flex items-center justify-center gap-5">
         <Link href={`/resume/${id}/contact`}>
           <Button className="h-6 text-xs">Contato</Button>

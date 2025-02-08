@@ -3,9 +3,36 @@ import { z } from "zod";
 import { getTemplate } from "~/lib/templates";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { resumes, sections } from "~/server/db/schema";
+import { educations, resumes, sections } from "~/server/db/schema";
+
+const itemsTypes = {
+  educations: educations,
+};
 
 export const resumeRouter = createTRPCRouter({
+  updateItems: publicProcedure
+    .input(
+      z.object({
+        type: z.enum(["educations"]),
+        items: z.array(
+          z.object({
+            id: z.string(),
+            order: z.number(),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.transaction(async (tx) => {
+        const table = itemsTypes[input.type];
+        for (const update of input.items) {
+          await tx
+            .update(table)
+            .set({ order: update.order })
+            .where(eq(table.id, update.id));
+        }
+      });
+    }),
   updateSections: publicProcedure
     .input(
       z.object({

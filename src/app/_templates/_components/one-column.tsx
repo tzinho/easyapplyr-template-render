@@ -20,8 +20,6 @@ export const OneColumn = ({ resumeId, renderSection }: OneColumnProps) => {
     resumeId,
   });
 
-  console.log("[items]: ", items);
-
   return (
     <DndContext
       collisionDetection={closestCorners}
