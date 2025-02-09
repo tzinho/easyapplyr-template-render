@@ -50,9 +50,6 @@ export const ResumePreview = ({
 
   if (data.isLoading) return null;
 
-  console.log("[templateId]: ", resume.templateId);
-  console.log("[data]: ", data.data);
-
   return (
     <Card className="group relative flex h-[290px] w-[240px] flex-col overflow-hidden border border-gray-200 bg-white shadow-sm">
       <div className="relative flex-grow">

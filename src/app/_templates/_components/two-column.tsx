@@ -15,7 +15,7 @@ interface TwoColumnProps {
   renderSection: (section: SectionType) => ReactNode;
 }
 
-export const TwoColumn = ({ renderSection, resumeId }: TwoColumnProps) => {
+export const TwoColumn = ({ renderSection }: TwoColumnProps) => {
   const {
     sensors,
     handleDragStart,
@@ -24,7 +24,7 @@ export const TwoColumn = ({ renderSection, resumeId }: TwoColumnProps) => {
     column2Items,
     activeId,
     sections,
-  } = useDragEndTwoColumn<SectionType>({ resumeId });
+  } = useDragEndTwoColumn<SectionType>();
 
   return (
     <DndContext
@@ -55,7 +55,7 @@ export const TwoColumn = ({ renderSection, resumeId }: TwoColumnProps) => {
         {activeId ? (
           <div className="rounded border-2 border-primary bg-white p-4 shadow-lg">
             <h4 className="mb-2 font-medium capitalize">
-              {sections.find((s) => s.id === activeId)?.type}
+              {renderSection(sections.find((s) => s.id === activeId)!)}
             </h4>
           </div>
         ) : null}

@@ -14,7 +14,7 @@ const Education = async ({ params }: EducationProps) => {
   return (
     <div className="flex justify-between gap-10">
       <List />
-      <TemplatePreview templateId={data.templateId} data={data} />
+      <TemplatePreview templateId={data.templateId} data={data} resumeId={id} />
     </div>
   );
 };

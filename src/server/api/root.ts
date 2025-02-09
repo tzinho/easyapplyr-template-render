@@ -6,6 +6,7 @@ import { summaryRouter } from "./routers/summary";
 import { skillsRouter } from "./routers/skills";
 import { courseworksRouter } from "./routers/courseworks";
 import { projectsRouter } from "./routers/projects";
+import { experiencesRouter } from "./routers/experiences";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   resumes: resumeRouter,
   contact: contactRouter,
   educations: educationsRouter,
+  experiences: experiencesRouter,
   summary: summaryRouter,
   skills: skillsRouter,
   projects: projectsRouter,

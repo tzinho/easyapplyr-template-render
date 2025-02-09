@@ -17,6 +17,7 @@ export const TemplatePreview = ({
   resumeId,
   templateId,
 }: TemplatePreviewProps) => {
+  console.log("[TemplatePreview]: ", data?.skills);
   const form = useForm({
     mode: "onBlur",
     defaultValues: data,

@@ -5,35 +5,36 @@ import { useParams, useRouter } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { Input } from "~/components/form/input";
+import { Textarea } from "~/components/form/textarea";
 import { Button } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { Form } from "~/components/ui/form";
 import { api } from "~/trpc/react";
-import { educationSchema, type EducationSchema } from "~/validators";
+import { skillSchema, type SkillSchema } from "~/validators";
 
-export default function EducationCreate() {
+export default function SkillsCreate() {
   const utils = api.useUtils();
   const router = useRouter();
   const params = useParams<{ id: string }>();
 
-  const educationCreateMutation = api.educations.create.useMutation({
+  const SkillsCreateMutation = api.skills.create.useMutation({
     onSuccess() {
-      void utils.educations.invalidate();
-      toast.success("Educação criada com sucesso!");
-      router.push(`/resume/${params.id}/education`);
+      void utils.skills.invalidate();
+      toast.success("Habilidade criada com sucesso!");
+      router.push(`/resume/${params.id}/skills`);
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
-  const form = useForm<EducationSchema>({
-    resolver: zodResolver(educationSchema),
+  const form = useForm<SkillSchema>({
+    resolver: zodResolver(skillSchema),
   });
 
-  const handleOnSubmit: SubmitHandler<EducationSchema> = async (values) => {
-    await educationCreateMutation.mutateAsync({
+  const handleOnSubmit: SubmitHandler<SkillSchema> = async (values) => {
+    console.log("d", values);
+    await SkillsCreateMutation.mutateAsync({
       ...values,
       resumeId: params.id,
     });
@@ -46,16 +47,14 @@ export default function EducationCreate() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleOnSubmit)}>
-        <Input name="degree" label="Grau" />
-        <Input name="institution" label="Instituição" />
-        <Input name="description" label="Descrição" />
+        <Textarea name="text" label="Habilidade" />
         <div className="flex justify-end gap-3">
           <Button type="button" variant="destructive" onClick={handleOnClick}>
             Cancelar
           </Button>
           <ButtonLoading
             type="submit"
-            isLoading={educationCreateMutation.isPending}
+            isLoading={SkillsCreateMutation.isPending}
           >
             Salvar
           </ButtonLoading>

@@ -23,7 +23,7 @@ export const skillSchema = z.object({
 });
 
 export const summarySchema = z.object({
-  text: z.string(),
+  text: z.string({ message: "O sumário é obrigatório" }),
 });
 
 export const educationSchema = z.object({

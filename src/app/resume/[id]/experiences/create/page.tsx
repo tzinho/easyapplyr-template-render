@@ -10,30 +10,30 @@ import { Button } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { Form } from "~/components/ui/form";
 import { api } from "~/trpc/react";
-import { educationSchema, type EducationSchema } from "~/validators";
+import { experienceSchema, type ExperienceSchema } from "~/validators";
 
-export default function EducationCreate() {
+export default function ExperienceCreate() {
   const utils = api.useUtils();
   const router = useRouter();
   const params = useParams<{ id: string }>();
 
-  const educationCreateMutation = api.educations.create.useMutation({
+  const experienceCreateMutation = api.experiences.create.useMutation({
     onSuccess() {
-      void utils.educations.invalidate();
-      toast.success("Educação criada com sucesso!");
-      router.push(`/resume/${params.id}/education`);
+      void utils.experiences.invalidate();
+      toast.success("Experiência criada com sucesso!");
+      router.push(`/resume/${params.id}/experiences`);
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
-  const form = useForm<EducationSchema>({
-    resolver: zodResolver(educationSchema),
+  const form = useForm<ExperienceSchema>({
+    resolver: zodResolver(experienceSchema),
   });
 
-  const handleOnSubmit: SubmitHandler<EducationSchema> = async (values) => {
-    await educationCreateMutation.mutateAsync({
+  const handleOnSubmit: SubmitHandler<ExperienceSchema> = async (values) => {
+    await experienceCreateMutation.mutateAsync({
       ...values,
       resumeId: params.id,
     });
@@ -46,16 +46,15 @@ export default function EducationCreate() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleOnSubmit)}>
-        <Input name="degree" label="Grau" />
-        <Input name="institution" label="Instituição" />
-        <Input name="description" label="Descrição" />
+        <Input name="role" label="Função" />
+        <Input name="company" label="Empresa" />
         <div className="flex justify-end gap-3">
           <Button type="button" variant="destructive" onClick={handleOnClick}>
             Cancelar
           </Button>
           <ButtonLoading
             type="submit"
-            isLoading={educationCreateMutation.isPending}
+            isLoading={experienceCreateMutation.isPending}
           >
             Salvar
           </ButtonLoading>

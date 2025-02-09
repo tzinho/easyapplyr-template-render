@@ -41,18 +41,28 @@ export const experiencesRouter = createTRPCRouter({
         .values({
           ...input,
           appear: true,
-          order: (maxOrder[0]?.order ?? -1) + 1,
+          order:
+            maxOrder[0]?.order !== undefined
+              ? Number(maxOrder[0]?.order) + 1
+              : 0,
         })
         .returning();
     }),
 
-  list: publicProcedure.query(async ({ ctx }) => {
-    const educationList = await ctx.db
-      .select()
-      .from(experiences)
-      .orderBy(asc(experiences.order));
-    return educationList;
-  }),
+  list: publicProcedure
+    .input(
+      z.object({
+        resumeId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const experiencesList = await ctx.db
+        .select()
+        .from(experiences)
+        .where(eq(experiences.resumeId, input.resumeId))
+        .orderBy(asc(experiences.order));
+      return experiencesList;
+    }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     const experience = await ctx.db
@@ -63,11 +73,11 @@ export const experiencesRouter = createTRPCRouter({
   }),
 
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const education = await ctx.db.query.educations.findFirst({
+    const experience = await ctx.db.query.experiences.findFirst({
       where: eq(experiences.id, input),
     });
 
-    return education;
+    return experience;
   }),
 
   update: publicProcedure

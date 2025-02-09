@@ -6,6 +6,7 @@ import {
   TouchSensor,
   KeyboardSensor,
   type DragEndEvent,
+  type DragStartEvent,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { useFormContext } from "react-hook-form";
@@ -20,6 +21,8 @@ export function useDragEndOneColumn<T extends SectionType>({
   resumeId: string;
 }) {
   const form = useFormContext();
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const sections = form.getValues("sections") as T[];
 
   const updateSectionOneColumn = api.resumes.updateSections.useMutation({
     onSuccess() {
@@ -28,7 +31,7 @@ export function useDragEndOneColumn<T extends SectionType>({
   });
 
   const [items, setItems] = useState<T[]>(
-    (form.getValues("sections") as T[]).sort((a, b) => a.order - b.order),
+    sections.sort((a, b) => a.order - b.order),
   );
 
   const sensors = useSensors(
@@ -38,6 +41,15 @@ export function useDragEndOneColumn<T extends SectionType>({
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
+
+  const handleDragStart = (event: DragStartEvent) => {
+    const sectionId = event.active.id as string;
+    const section = sections.find((s) => s.id === sectionId);
+
+    if (!section) return;
+
+    setActiveId(event.active.id as string);
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -67,9 +79,8 @@ export function useDragEndOneColumn<T extends SectionType>({
       sections: updateItems,
     });
 
-    console.log("[updateItems]: ", updateItems);
     setItems(newItems);
   };
 
-  return { items, sensors, handleDragEnd };
+  return { items, sensors, activeId, sections, handleDragStart, handleDragEnd };
 }

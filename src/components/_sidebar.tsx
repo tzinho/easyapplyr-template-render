@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { toast } from "sonner";
 
 export type ResumeSection = {
   id: string;
@@ -130,7 +131,7 @@ export const ResumeSidebar = ({
     );
 
     if (sectionToRemove?.isRequired) {
-      console.log("Cannot remove required section");
+      toast.error("Cannot remove required section");
       return;
     }
 

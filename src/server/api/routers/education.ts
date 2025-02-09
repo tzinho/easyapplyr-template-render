@@ -55,13 +55,20 @@ export const educationsRouter = createTRPCRouter({
         .returning();
     }),
 
-  list: publicProcedure.query(async ({ ctx }) => {
-    const educationList = await ctx.db
-      .select()
-      .from(educations)
-      .orderBy(asc(educations.order));
-    return educationList;
-  }),
+  list: publicProcedure
+    .input(
+      z.object({
+        resumeId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const educationList = await ctx.db
+        .select()
+        .from(educations)
+        .where(eq(educations.resumeId, input.resumeId))
+        .orderBy(asc(educations.order));
+      return educationList;
+    }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     const education = await ctx.db

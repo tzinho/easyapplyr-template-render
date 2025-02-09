@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { closestCorners, DndContext } from "@dnd-kit/core";
+import { closestCorners, DndContext, DragOverlay } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -16,13 +16,15 @@ interface OneColumnProps {
 }
 
 export const OneColumn = ({ resumeId, renderSection }: OneColumnProps) => {
-  const { sensors, handleDragEnd, items } = useDragEndOneColumn<SectionType>({
-    resumeId,
-  });
+  const { sensors, handleDragStart, handleDragEnd, items, activeId, sections } =
+    useDragEndOneColumn<SectionType>({
+      resumeId,
+    });
 
   return (
     <DndContext
       collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       sensors={sensors}
     >
@@ -31,6 +33,14 @@ export const OneColumn = ({ resumeId, renderSection }: OneColumnProps) => {
           {items.map(renderSection)}
         </div>
       </SortableContext>
+
+      <DragOverlay>
+        {activeId ? (
+          <div className="rounded border-2 border-primary bg-white shadow-lg">
+            {renderSection(sections.find((s) => s.id === activeId)!)}
+          </div>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 };

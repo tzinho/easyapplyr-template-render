@@ -25,7 +25,7 @@ export const resumes = createTable("resume", {
     .$defaultFn(() => crypto.randomUUID()),
   title: text("title").notNull(),
   experience: smallint("experience"),
-  templateId: text("templateId"),
+  templateId: text("templateId").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt")
     .defaultNow()
@@ -208,9 +208,9 @@ export const skills = createTable("skill", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
-  text: text("text"),
-  appear: boolean("appear"),
-  order: integer("order"),
+  text: text("text").notNull(),
+  appear: boolean("appear").notNull(),
+  order: integer("order").notNull(),
 });
 
 export const skillsRelations = relations(skills, ({ one }) => ({

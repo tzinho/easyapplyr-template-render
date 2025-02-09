@@ -25,7 +25,7 @@ const Skills: React.FC<SectionProps> = ({ id, disabled }) => {
         return items.map((item) => {
           return (
             <Item key={item.id} id={item.order}>
-              <li className="list-disc">{item.title}</li>
+              <li className="list-disc">{item.text}</li>
             </Item>
           );
         });

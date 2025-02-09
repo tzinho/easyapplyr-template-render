@@ -45,9 +45,7 @@ export function useDragEnd<T extends ItemType>({
     if (active.id === over.id) return;
 
     const actual = items.findIndex((item) => item.id === active.id);
-    console.log("[actual]: ", actual);
     const next = items.findIndex((item) => item.id === over.id);
-    console.log("[next]: ", next);
 
     const newItems = arrayMove(items, actual, next);
 
@@ -58,8 +56,6 @@ export function useDragEnd<T extends ItemType>({
       .filter((section) => {
         return [active.id, over.id].includes(section.id);
       });
-
-    console.log("[updateItems]: ", updateItems);
 
     void updateSectionItems.mutateAsync({ items: updateItems, type });
 

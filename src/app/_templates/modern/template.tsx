@@ -8,6 +8,7 @@ import {
   type Contact,
   type Education,
   type Section as SectionType,
+  type Summary,
 } from "~/types/template";
 import { Section } from "../_components/section";
 import { TwoColumn } from "../_components/two-column";
@@ -45,7 +46,7 @@ const Skills: React.FC<SectionProps> = ({ id, disabled }) => {
         return items.map((item) => {
           return (
             <Item key={item.id} id={item.order}>
-              <li className="list-disc">{item.title}</li>
+              <li className="list-disc">{item.text}</li>
             </Item>
           );
         });
@@ -66,7 +67,7 @@ const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
         return items.map((item) => {
           return (
             <Item key={item.id} id={item.order}>
-              <li className="list-disc">{item.title}</li>
+              <li className="list-disc">{item.company}</li>
             </Item>
           );
         });
@@ -78,9 +79,13 @@ const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
 };
 
 const Summary: React.FC<SectionProps> = ({ id, disabled }) => {
+  const form = useFormContext<{ summary: Summary }>();
+  const summary = form.watch("summary");
+
   return (
     <Section id={id} disabled={disabled}>
       <h3>Summary</h3>
+      <p>{summary.text}</p>
     </Section>
   );
 };

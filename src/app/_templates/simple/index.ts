@@ -6,7 +6,7 @@ export const defaultSections = [
     title: "",
     column: 1,
     order: 0,
-    disabled: false,
+    disabled: true,
     appear: true,
     required: true,
     removable: false,

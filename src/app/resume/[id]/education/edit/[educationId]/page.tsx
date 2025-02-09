@@ -1,35 +1,23 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { type InferSelectModel } from "drizzle-orm";
 import { useParams, useRouter } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
 import { Input } from "~/components/form/input";
 import { Button } from "~/components/ui/button";
 import { Form } from "~/components/ui/form";
+import { type educations } from "~/server/db/schema";
 import { api } from "~/trpc/react";
+import { educationSchema, type EducationSchema } from "~/validators";
 
-const schema = z.object({
-  degree: z.coerce.string().optional(),
-  description: z.coerce.string().optional(),
-  institution: z.coerce.string().optional(),
-  year: z.coerce.string().optional(),
-});
-
-interface Experience {
-  id: string;
-  resumeId: string;
-  degree: string | null;
-  description: string | null;
-  institution: string | null;
-  year: string | null;
-  appear: boolean | null;
-  order: number;
-}
-
-const EducationForm = ({ data }: { data: Experience }) => {
+const EducationForm = ({
+  data,
+}: {
+  data: InferSelectModel<typeof educations>;
+}) => {
   const router = useRouter();
   const { id, educationId } = useParams<{ id: string; educationId: string }>();
   const utils = api.useUtils();
@@ -45,12 +33,12 @@ const EducationForm = ({ data }: { data: Experience }) => {
     },
   });
 
-  const form = useForm<z.infer<typeof schema>>({
+  const form = useForm<EducationSchema>({
     defaultValues: data,
-    resolver: zodResolver(schema),
+    resolver: zodResolver(educationSchema),
   });
 
-  const handleOnSubmit: SubmitHandler<z.infer<typeof schema>> = async (d) => {
+  const handleOnSubmit: SubmitHandler<EducationSchema> = async (d) => {
     await updateEducationMutation.mutateAsync({ id: educationId, ...d });
   };
 
@@ -67,15 +55,14 @@ const EducationForm = ({ data }: { data: Experience }) => {
 };
 
 export default function EducationEdit() {
-  const { id, educationId } = useParams<{ id: string; educationId: string }>();
+  const { educationId } = useParams<{ id: string; educationId: string }>();
   const education = api.educations.get.useQuery(educationId);
 
   if (education.isLoading) return null;
 
   return (
     <div>
-      <pre>{JSON.stringify(education.data, null, 2)}</pre>
-      <EducationForm data={education.data} />
+      <EducationForm data={education.data!} />
     </div>
   );
 }

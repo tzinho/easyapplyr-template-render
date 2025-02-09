@@ -86,7 +86,11 @@ export const resumeRouter = createTRPCRouter({
 
           await tx
             .update(sections)
-            .set({ order: otherSection.order, column: otherSection.column })
+            .set({
+              order: otherSection.order,
+              column: otherSection.column,
+              disabled: otherSection.disabled,
+            })
             .where(eq(sections.id, update.id));
         }
 
@@ -168,6 +172,7 @@ export const resumeRouter = createTRPCRouter({
 
       if (!recordToCopy) throw new Error("");
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { id, ...valuesToCopy } = recordToCopy;
 
       return await ctx.db.insert(resumes).values(valuesToCopy).returning();

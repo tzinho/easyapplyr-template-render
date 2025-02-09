@@ -15,7 +15,7 @@ export const skillsRouter = createTRPCRouter({
       ),
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.transaction(async (tx) => {
+      return await ctx.db.transaction(async (tx) => {
         for (const update of input) {
           await tx
             .update(skills)
@@ -29,13 +29,11 @@ export const skillsRouter = createTRPCRouter({
     .input(
       z.object({
         resumeId: z.string(),
-        role: z.string().optional(),
-        company: z.string().optional(),
-        where: z.string().optional(),
-        did: z.string().optional(),
+        text: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      console.log("[skill]: ", input);
       const maxOrder = await ctx.db
         .select({ order: skills.order })
         .from(skills)
@@ -43,23 +41,41 @@ export const skillsRouter = createTRPCRouter({
         .orderBy(desc(skills.order))
         .limit(1);
 
+      console.log("[maxOrder]: ", maxOrder);
+      console.log("[item]: ", {
+        ...input,
+        appear: true,
+        order:
+          maxOrder[0]?.order !== undefined ? Number(maxOrder[0]?.order) + 1 : 0,
+      });
+
       return await ctx.db
         .insert(skills)
         .values({
           ...input,
           appear: true,
-          order: Number(maxOrder[0]?.order) + 1 ?? 0,
+          order:
+            maxOrder[0]?.order !== undefined
+              ? Number(maxOrder[0]?.order) + 1
+              : 0,
         })
         .returning();
     }),
 
-  list: publicProcedure.query(async ({ ctx }) => {
-    const educationList = await ctx.db
-      .select()
-      .from(skills)
-      .orderBy(asc(skills.order));
-    return educationList;
-  }),
+  list: publicProcedure
+    .input(
+      z.object({
+        resumeId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const skillsList = await ctx.db
+        .select()
+        .from(skills)
+        .where(eq(skills.resumeId, input.resumeId))
+        .orderBy(asc(skills.order));
+      return skillsList;
+    }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     const skill = await ctx.db
@@ -70,11 +86,11 @@ export const skillsRouter = createTRPCRouter({
   }),
 
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const education = await ctx.db.query.educations.findFirst({
+    const skill = await ctx.db.query.skills.findFirst({
       where: eq(skills.id, input),
     });
 
-    return education;
+    return skill;
   }),
 
   update: publicProcedure

@@ -22,8 +22,6 @@ export const summaryRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { resumeId, ...rest } = input;
 
-      console.log("input", input);
-
       try {
         const data = await ctx.db
           .insert(summaries)

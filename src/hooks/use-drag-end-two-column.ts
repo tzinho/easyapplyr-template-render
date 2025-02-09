@@ -15,11 +15,7 @@ import { useFormContext } from "react-hook-form";
 import { type Section as SectionType } from "~/types/template";
 import { toast } from "sonner";
 
-export function useDragEndTwoColumn<T extends SectionType>({
-  resumeId,
-}: {
-  resumeId: string;
-}) {
+export function useDragEndTwoColumn<T extends SectionType>() {
   const form = useFormContext();
   const sections = form.watch("sections") as T[];
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -51,13 +47,13 @@ export function useDragEndTwoColumn<T extends SectionType>({
     const sectionsInColumn = sections.filter(
       (s) => s.column === section.column,
     );
+
     if (sectionsInColumn.length === 1) {
-      toast.error("Cannot move the only section from a column");
+      toast.error("Você não pode mover a última seção numa coluna!");
       return;
     }
 
     setActiveId(event.active.id as string);
-    console.log("[sectionId]: ", sectionId);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -75,12 +71,14 @@ export function useDragEndTwoColumn<T extends SectionType>({
 
     if (!activeSection || !overSection) return;
 
+    if (overSection.disabled) return;
+
     const sectionsInColumn = sections.filter(
       (s) => s.column === activeSection.column,
     );
 
     if (sectionsInColumn.length === 1) {
-      toast.error("Cannot move the only section from a column");
+      toast.error("Você não pode remover a última seção em uma coluna!");
       setActiveId(null);
       return;
     }
@@ -90,7 +88,7 @@ export function useDragEndTwoColumn<T extends SectionType>({
         (s) => s.column === activeSection.column,
       );
       if (sourceSections.length === 1) {
-        toast.error("Cannot leave a column empty");
+        toast.error("Não é possível deixar uma coluna vazia");
         setActiveId(null);
         return;
       }
@@ -118,7 +116,7 @@ export function useDragEndTwoColumn<T extends SectionType>({
 
       const finalSections = [...column1Items, ...column2Items];
       form.setValue("sections", finalSections);
-      toast.success("Section order updated!");
+      toast.success("Seções atualizadas com sucesso!");
     } else {
       console.log("[same columns]");
       const oldIndex = sections.findIndex((s) => s.id === active.id);
@@ -136,7 +134,7 @@ export function useDragEndTwoColumn<T extends SectionType>({
 
       const finalSections = [...column1Items, ...column2Items];
       form.setValue("sections", finalSections);
-      toast.success("Section order updated!");
+      toast.success("Seções atualizadas com sucesso!");
     }
   };
 

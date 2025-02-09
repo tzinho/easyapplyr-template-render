@@ -28,20 +28,25 @@ import { buttonVariants } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { SortableItem } from "~/app/_components/sortable-item";
 import { type InferSelectModel } from "drizzle-orm";
-import { type educations } from "~/server/db/schema";
+import { type experiences } from "~/server/db/schema";
 
 export const List = () => {
-  const [items, setItems] = useState<InferSelectModel<typeof educations>[]>([]);
   const params = useParams<{ id: string }>();
-  const educationsList = api.educations.list.useQuery({ resumeId: params.id });
+  const [items, setItems] = useState<InferSelectModel<typeof experiences>[]>(
+    [],
+  );
 
-  const educationDeleteMutation = api.educations.delete.useMutation({
+  const experiencesList = api.experiences.list.useQuery({
+    resumeId: params.id,
+  });
+
+  const experienceDeleteMutation = api.educations.delete.useMutation({
     onSuccess() {
       toast.success("Sucesso deletando o item");
     },
   });
 
-  const educationOrderMutation = api.educations.changeOrder.useMutation({
+  const experienceOrderMutation = api.experiences.changeOrder.useMutation({
     onSuccess: () => {
       toast.success("Alterado a ordem dos itens com sucesso!");
     },
@@ -51,10 +56,10 @@ export const List = () => {
   });
 
   useEffect(() => {
-    if (educationsList.isSuccess) {
-      setItems(educationsList.data);
+    if (experiencesList.isSuccess) {
+      setItems(experiencesList.data);
     }
-  }, [educationsList.isSuccess, educationsList.data]);
+  }, [experiencesList.isSuccess, experiencesList.data]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -66,10 +71,10 @@ export const List = () => {
 
   const handleOnDelete = async (id: string) => {
     setItems((items) => items.filter((item) => item.id !== id));
-    void educationDeleteMutation.mutateAsync(id);
+    void experienceDeleteMutation.mutateAsync(id);
   };
 
-  if (educationsList.isLoading) return <h1>Carregando...</h1>;
+  if (experiencesList.isLoading) return <h1>Carregando...</h1>;
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
@@ -89,7 +94,7 @@ export const List = () => {
 
       setItems(newItems);
 
-      void educationOrderMutation.mutateAsync(newItems);
+      void experienceOrderMutation.mutateAsync(newItems);
     }
   };
 
@@ -104,22 +109,22 @@ export const List = () => {
           items={items.map((item) => item.id)}
           strategy={verticalListSortingStrategy}
         >
-          {items.map((education) => (
-            <SortableItem key={education.id} id={education.id}>
+          {items.map((experience) => (
+            <SortableItem key={experience.id} id={experience.id}>
               <div className="flex w-full items-center justify-between rounded-md border p-3">
                 <Link
-                  href={`/resume/${params.id}/education/edit/${education.id}`}
+                  href={`/resume/${params.id}/experiences/edit/${experience.id}`}
                 >
-                  <p>{education.degree}</p>
-                  <p>{education.institution}</p>
+                  <p>{experience.role}</p>
+                  <p>{experience.company}</p>
                 </Link>
 
                 <ButtonLoading
-                  onClick={() => handleOnDelete(education.id)}
+                  onClick={() => handleOnDelete(experience.id)}
                   size="icon"
                   variant="destructive"
                   className="h-6 w-6"
-                  isLoading={educationDeleteMutation.isPending}
+                  isLoading={experienceDeleteMutation.isPending}
                 >
                   <Trash className="h-2 w-2" />
                 </ButtonLoading>
@@ -129,11 +134,11 @@ export const List = () => {
         </SortableContext>
 
         <Link
-          href={`/resume/${params.id}/education/create`}
+          href={`/resume/${params.id}/experiences/create`}
           className={cn(buttonVariants({ variant: "default" }), "h-6")}
         >
           <Plus />
-          Adicionar educação
+          Adicionar experiência
         </Link>
       </DndContext>
     </div>
