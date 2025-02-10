@@ -9,20 +9,19 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
-import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
 import { type Section as SectionType } from "~/types/template";
 import { api } from "~/trpc/react";
+import { type Resume } from "~/stores/resume-store";
+import { sections } from "~/server/db/schema";
 
 export function useDragEndOneColumn<T extends SectionType>({
-  resumeId,
+  resumeTemplate,
 }: {
-  resumeId: string;
+  resumeTemplate: Resume;
 }) {
-  const form = useFormContext();
   const [activeId, setActiveId] = useState<string | null>(null);
-  const sections = form.getValues("sections") as T[];
 
   const updateSectionOneColumn = api.resumes.updateSections.useMutation({
     onSuccess() {
@@ -30,9 +29,13 @@ export function useDragEndOneColumn<T extends SectionType>({
     },
   });
 
+  console.log("[resumeTemplate]: ", resumeTemplate);
+
   const [items, setItems] = useState<T[]>(
-    sections.sort((a, b) => a.order - b.order),
+    resumeTemplate?.sections?.sort((a, b) => a.order - b.order),
   );
+
+  console.log("[items]: ", items);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -75,12 +78,12 @@ export function useDragEndOneColumn<T extends SectionType>({
       });
 
     void updateSectionOneColumn.mutateAsync({
-      resumeId,
+      resumeId: resumeTemplate.id,
       sections: updateItems,
     });
 
     setItems(newItems);
   };
 
-  return { items, sensors, activeId, sections, handleDragStart, handleDragEnd };
+  return { items, sensors, activeId, handleDragStart, handleDragEnd };
 }

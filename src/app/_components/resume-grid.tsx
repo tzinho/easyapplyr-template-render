@@ -2,30 +2,33 @@
 
 import { useState } from "react";
 
-import { type Resume } from "~/types/template";
 import { api } from "~/trpc/react";
 import { DeleteResume } from "./dialog/delete-resume";
 import { ResumePreview } from "./resume";
+import { type ResumeActions } from "~/stores/resume-store";
 
-export const ResumeGrid = () => {
-  const [selectedResume, setSelectedResume] = useState<Resume | null>(null);
-  const resumes = api.resumes.list.useQuery();
+export const ResumeTemplates = () => {
+  const [selectedResumeTemplate, setSelectedResumeTemplate] =
+    useState<ResumeActions | null>(null);
+  const resumesTemplates = api.resumes.list.useQuery();
+
+  if (resumesTemplates.isLoading) return null;
 
   return (
     <>
-      {resumes?.data?.map((resume) => (
+      {resumesTemplates?.data?.map((resumeTemplate) => (
         <ResumePreview
-          key={resume.id}
-          resume={resume}
-          onDelete={setSelectedResume}
+          key={resumeTemplate.id}
+          resumeTemplate={resumeTemplate}
+          onDelete={setSelectedResumeTemplate}
           onDuplicate={() => console.log("duplicate")}
         />
       ))}
 
       <DeleteResume
-        open={!!selectedResume}
-        onOpenChange={() => setSelectedResume(null)}
-        resume={selectedResume}
+        open={!!selectedResumeTemplate}
+        onOpenChange={() => setSelectedResumeTemplate(null)}
+        resume={selectedResumeTemplate}
       />
     </>
   );

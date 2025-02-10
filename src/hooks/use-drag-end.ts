@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   useSensors,
   useSensor,
@@ -13,11 +12,14 @@ import { toast } from "sonner";
 import { type Section, type ItemType } from "~/types/template";
 import { api } from "~/trpc/react";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { type Resume } from "~/stores/resume-store";
 
 export function useDragEnd<T extends ItemType>({
   type,
+  resumeTemplate,
 }: {
   type: Section["type"];
+  resumeTemplate: Resume;
 }) {
   const { resume, setResume } = useResumeStore((state) => state);
 
@@ -57,8 +59,6 @@ export function useDragEnd<T extends ItemType>({
       .filter((section) => {
         return [active.id, over.id].includes(section.id);
       });
-
-    console.log("result: ", { ...resume, [type]: newItems });
 
     void updateSectionItems.mutateAsync({ items: updateItems, type });
 

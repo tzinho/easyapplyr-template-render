@@ -5,14 +5,14 @@ import { TemplatePreview } from "~/app/_components/template-preview";
 import { useResumeStore } from "~/providers/resume-store-provider";
 
 const Summary = () => {
-  const { resume } = useResumeStore((state) => state);
+  const { resume: resumeTemplate } = useResumeStore((state) => state);
 
-  if (!resume) return null;
+  if (!resumeTemplate) return null;
 
   return (
     <div className="flex justify-between gap-10">
-      <SummaryForm data={resume.summary} />
-      <TemplatePreview data={resume} isPreview />
+      <SummaryForm data={resumeTemplate.summary} />
+      <TemplatePreview resumeTemplate={resumeTemplate} isPreview={true} />
     </div>
   );
 };

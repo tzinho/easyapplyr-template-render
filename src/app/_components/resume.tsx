@@ -26,47 +26,43 @@ import { Card } from "~/components/ui/card";
 import { type Resume } from "~/types/template";
 import { useRouter } from "next/navigation";
 import { TemplatePreview } from "./template-preview";
-import { api } from "~/trpc/react";
 
 interface ResumePreviewProps {
   onDelete: (resume: Resume) => void;
   onDuplicate: () => void;
   onMove?: (destination: string) => void;
-  resume: Resume;
+  resumeTemplate: Resume;
 }
 
 export const ResumePreview = ({
   onDelete,
   onDuplicate,
   onMove,
-  resume,
+  resumeTemplate,
 }: ResumePreviewProps) => {
   const router = useRouter();
-  const data = api.resumes.get.useQuery(resume.id);
 
-  const handleOnEdit = (resume: Resume) => {
-    router.push(`/resume/${resume.id}/contact`);
+  const handleOnEdit = (resumeTemplate: Resume) => {
+    router.push(`/resume/${resumeTemplate.id}/contact`);
   };
 
-  if (data.isLoading) return null;
-
   return (
-    <Card className="group relative flex h-[290px] w-[240px] flex-col overflow-hidden border border-gray-200 bg-white shadow-sm">
-      <div className="relative flex-grow">
+    <Card className="group relative h-[290px] w-[215.16px] cursor-pointer transition-all duration-300 hover:shadow-lg">
+      <div className="absolute inset-0 overflow-hidden rounded-lg bg-white p-3">
         <div>
-          <TemplatePreview templateId={resume.templateId} data={data.data} />
+          <TemplatePreview resumeTemplate={resumeTemplate} isPreview={true} />
         </div>
 
         <div className="invisible absolute inset-0 flex items-center justify-center gap-4 bg-gray-900/70 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
           <Button
-            onClick={() => handleOnEdit(resume)}
+            onClick={() => handleOnEdit(resumeTemplate)}
             size="icon"
             className="h-9 w-9 rounded-full bg-blue-500 transition-colors hover:bg-blue-600"
           >
             <Settings className="h-6 w-6" />
           </Button>
           <Button
-            onClick={() => onDelete(resume)}
+            onClick={() => onDelete(resumeTemplate)}
             size="icon"
             className="h-9 w-9 rounded-full bg-red-500 transition-colors hover:bg-red-600"
           >
@@ -85,11 +81,11 @@ export const ResumePreview = ({
       <div className="flex items-center justify-between border-t bg-white p-3">
         <div className="flex flex-col">
           <span className="max-w-[160px] truncate text-sm font-medium">
-            {resume.title}
+            {resumeTemplate.title}
           </span>
           <span className="text-xs text-gray-500">
             Editado{" "}
-            {formatDistance(new Date(resume.updatedAt), new Date(), {
+            {formatDistance(new Date(resumeTemplate.updatedAt), new Date(), {
               addSuffix: true,
               locale: ptBR,
             })}
@@ -107,7 +103,7 @@ export const ResumePreview = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem onSelect={() => handleOnEdit(resume)}>
+            <DropdownMenuItem onSelect={() => handleOnEdit(resumeTemplate)}>
               <Settings className="mr-2 h-4 w-4" />
               Editar
             </DropdownMenuItem>
@@ -133,7 +129,7 @@ export const ResumePreview = ({
             </DropdownMenuSub>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onSelect={() => onDelete(resume)}
+              onSelect={() => onDelete(resumeTemplate)}
               className="text-red-600"
             >
               <Trash className="mr-2 h-4 w-4" />

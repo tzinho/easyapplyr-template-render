@@ -1,3 +1,5 @@
+import { type Resume } from "~/stores/resume-store";
+
 export interface Section {
   id: string;
   type:
@@ -70,7 +72,7 @@ export interface Experience {
   did: string;
 }
 
-export interface Resume {
+export interface ResumeType {
   id: string;
   title: string;
   updatedAt: Date;
@@ -86,8 +88,8 @@ export interface NavigationProps {
 }
 
 export interface SectionProps {
-  id: string | number;
-  disabled?: boolean;
+  section: Section;
+  resumeTemplate: Resume;
 }
 
 export interface Contact {

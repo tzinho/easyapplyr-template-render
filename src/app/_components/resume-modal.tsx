@@ -26,16 +26,14 @@ import { type ResumeSchema, resumeSchema } from "~/validators";
 import { templates } from "../_templates";
 
 export const ResumeModal = () => {
+  const router = useRouter();
   const { toast } = useToast();
 
-  const router = useRouter();
   const createResumeMutation = api.resumes.create.useMutation<{ id: string }[]>(
     {
       onSuccess: (resume) => {
         toast({ title: "Curriculum criado com sucesso!", description: "" });
-        if (resume) {
-          router.push(`/resume/${resume.id}/contact`);
-        }
+        if (resume) router.push(`/resume/${resume.id}/contact`);
       },
     },
   );

@@ -1,5 +1,4 @@
 import { type PropsWithChildren, type ReactNode } from "react";
-
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -23,8 +22,12 @@ export function SectionList<T extends ItemType>({
   type,
   children,
   render,
+  resumeTemplate,
 }: SectionListProps<T>) {
-  const { sensors, handleDragEnd, items } = useDragEnd<T>({ type });
+  const { sensors, handleDragEnd, items } = useDragEnd<T>({
+    resumeTemplate,
+    type,
+  });
 
   return (
     <Section id={id} disabled={disabled}>

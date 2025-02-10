@@ -9,16 +9,21 @@ import {
 
 import { type Section as SectionType } from "~/types/template";
 import { useDragEndOneColumn } from "~/hooks/use-drag-end-one-column";
+import { type Resume } from "~/stores/resume-store";
+import { sections } from "~/server/db/schema";
 
 interface OneColumnProps {
-  resumeId: string;
+  resumeTemplate: Resume;
   renderSection: (section: SectionType) => ReactNode;
 }
 
-export const OneColumn = ({ resumeId, renderSection }: OneColumnProps) => {
-  const { sensors, handleDragStart, handleDragEnd, items, activeId, sections } =
+export const OneColumn = ({
+  resumeTemplate,
+  renderSection,
+}: OneColumnProps) => {
+  const { sensors, handleDragStart, handleDragEnd, items, activeId } =
     useDragEndOneColumn<SectionType>({
-      resumeId,
+      resumeTemplate,
     });
 
   return (
@@ -37,7 +42,7 @@ export const OneColumn = ({ resumeId, renderSection }: OneColumnProps) => {
       <DragOverlay>
         {activeId ? (
           <div className="rounded border-2 border-primary bg-white shadow-lg">
-            {renderSection(sections.find((s) => s.id === activeId)!)}
+            {renderSection(sections.find((s) => s.id === activeId))}
           </div>
         ) : null}
       </DragOverlay>

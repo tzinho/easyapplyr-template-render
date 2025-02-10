@@ -2,6 +2,7 @@ import { createStore } from "zustand/vanilla";
 import { type InferSelectModel } from "drizzle-orm";
 
 import {
+  type sections,
   type contacts,
   type resumes,
   type skills,
@@ -12,6 +13,7 @@ export type Resume = InferSelectModel<typeof resumes> & {
   contact: InferSelectModel<typeof contacts>;
   summary: InferSelectModel<typeof summaries>;
   skills: InferSelectModel<typeof skills>;
+  sections: InferSelectModel<typeof sections>;
 };
 
 export type ResumeState = {

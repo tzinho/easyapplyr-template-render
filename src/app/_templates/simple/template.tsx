@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Linkedin, MapPin, Phone } from "lucide-react";
-import { useFormContext } from "react-hook-form";
 
 import {
   type Contact,
@@ -14,12 +13,13 @@ import { SectionList } from "../_components/section-list";
 import { Section } from "../_components/section";
 import { OneColumn } from "../_components/one-column";
 import { Item } from "../_components/item";
+import { type Resume } from "~/stores/resume-store";
 
-const Skills: React.FC<SectionProps> = ({ id, disabled }) => {
+const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <SectionList
-      id={id}
-      disabled={disabled}
+      id={section.id}
+      disabled={section.disabled}
       type="skills"
       render={(items) => {
         return items.map((item) => {
@@ -31,111 +31,93 @@ const Skills: React.FC<SectionProps> = ({ id, disabled }) => {
         });
       }}
     >
-      <h3>Skills</h3>
+      <h3>{section.title}</h3>
     </SectionList>
   );
 };
 
-const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
+const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <SectionList
-      id={id}
-      disabled={disabled}
+      id={section.id}
+      disabled={section.disabled}
       type="experiences"
-      render={(items) => {
-        return items.map((item) => {
+      render={(items) =>
+        items.map((item) => {
           return (
             <Item key={item.id} id={item.order}>
               <li className="list-disc">{item.title}</li>
             </Item>
           );
-        });
-      }}
+        })
+      }
     >
-      <h3>Experiences</h3>
+      <h3>{section.title}</h3>
     </SectionList>
   );
 };
 
-const Education: React.FC<SectionProps> = ({ id, disabled }) => {
+const Education: React.FC<SectionProps> = ({ section }) => {
   return (
     <SectionList
-      id={id}
-      disabled={disabled}
+      id={section.id}
+      disabled={section.disabled}
       type="educations"
       render={(items) => {
-        return items.map((item) => {
-          return (
-            <Item key={item.id} id={item.id}>
-              <li className="list-disc">{item.degree}</li>
-            </Item>
-          );
-        });
+        return items.map((item) => (
+          <Item key={item.id} id={item.id}>
+            <li className="list-disc">{item.degree}</li>
+          </Item>
+        ));
       }}
     >
-      <h3>Educations</h3>
+      <h3>{section.title}</h3>
     </SectionList>
   );
 };
 
-const Summary: React.FC<SectionProps> = ({ id, disabled }) => {
-  const form = useFormContext<{ summary: Summary }>();
-  const summary = form.watch("summary");
-
+const Summary: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
-    <Section id={id} disabled={disabled}>
-      <h3>Summary</h3>
-      <p>{summary?.text}</p>
+    <Section id={section.id} disabled={section.disabled}>
+      <h3>{section.title}</h3>
+      <p>{resumeTemplate?.summary?.text}</p>
     </Section>
   );
 };
 
-const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
-  const form = useFormContext<{ contact: Contact }>();
-  const contact = form.watch("contact");
-
+const Contact: React.FC<SectionProps> = ({ section, resumeTemplate }) => {
   return (
-    <Section id={id} disabled={disabled}>
+    <Section id={section.id} disabled={section.disabled}>
       <h2 className="text-lg">
-        <p>{contact?.name}</p>
+        <p>{resumeTemplate?.contact?.name}</p>
       </h2>
       <div className="flex items-center gap-3">
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <MapPin size={12} />
-          <p>{contact?.country}</p>
+          <p>{resumeTemplate?.contact?.country}</p>
         </div>
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <Linkedin size={12} />
-          <p>{contact?.email}</p>
+          <p>{resumeTemplate?.contact?.email}</p>
         </div>
         <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
           <Phone size={12} />
-          <p>{contact?.phone}</p>
+          <p>{resumeTemplate?.contact?.phone}</p>
         </div>
       </div>
     </Section>
   );
 };
 
-export const Template = ({ resumeId }: { resumeId: string }) => {
+export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
-      case "educations": {
-        return (
-          <Education
-            id={section.id}
-            disabled={section.disabled}
-            key={section.id}
-          />
-        );
-      }
-
       case "contact": {
         return (
           <Contact
-            id={section.id}
+            resumeTemplate={resumeTemplate}
+            section={section}
             key={section.id}
-            disabled={section.disabled}
           />
         );
       }
@@ -143,19 +125,35 @@ export const Template = ({ resumeId }: { resumeId: string }) => {
       case "summary": {
         return (
           <Summary
-            id={section.id}
+            resumeTemplate={resumeTemplate}
             key={section.id}
-            disabled={section.disabled}
+            section={section}
           />
         );
       }
 
-      case "experiences": {
-        return <Experiences id={section.id} key={section.id} />;
-      }
+      // case "educations": {
+      //   return <Education section={section} key={section.id} />;
+      // }
+
+      // case "experiences": {
+      //   return (
+      //     <Experiences
+      //       resumeTemplate={resumeTemplate}
+      //       key={section.id}
+      //       section={section}
+      //     />
+      //   );
+      // }
 
       case "skills": {
-        return <Skills id={section.id} key={section.id} />;
+        return (
+          <Skills
+            resumeTemplate={resumeTemplate}
+            section={section}
+            key={section.id}
+          />
+        );
       }
 
       default:
@@ -163,5 +161,7 @@ export const Template = ({ resumeId }: { resumeId: string }) => {
     }
   };
 
-  return <OneColumn renderSection={renderSection} resumeId={resumeId} />;
+  return (
+    <OneColumn renderSection={renderSection} resumeTemplate={resumeTemplate} />
+  );
 };

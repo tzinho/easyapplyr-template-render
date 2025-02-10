@@ -145,10 +145,21 @@ export const resumeRouter = createTRPCRouter({
     }),
 
   list: publicProcedure.query(async ({ ctx }) => {
-    const data = await ctx.db
-      .select()
-      .from(resumes)
-      .orderBy(desc(resumes.updatedAt));
+    const data = await ctx.db.query.resumes.findMany({
+      with: {
+        contact: true,
+        educations: true,
+        projects: true,
+        experiences: true,
+        courseworks: true,
+        involvements: true,
+        skills: true,
+        languages: true,
+        summary: true,
+        sections: true,
+      },
+    });
+
     return data;
   }),
 
