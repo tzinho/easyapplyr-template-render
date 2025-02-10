@@ -8,21 +8,18 @@ import {
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
-import { useFormContext } from "react-hook-form";
+import { toast } from "sonner";
 
 import { type Section, type ItemType } from "~/types/template";
 import { api } from "~/trpc/react";
-import { toast } from "sonner";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
 export function useDragEnd<T extends ItemType>({
   type,
 }: {
   type: Section["type"];
 }) {
-  const form = useFormContext();
-  const [items, setItems] = useState<T[]>(
-    (form.getValues(type) as T[]).sort((a, b) => a.order - b.order),
-  );
+  const { resume, setResume } = useResumeStore((state) => state);
 
   const updateSectionItems = api.resumes.updateItems.useMutation({
     onSuccess() {
@@ -44,10 +41,14 @@ export function useDragEnd<T extends ItemType>({
     if (!over) return;
     if (active.id === over.id) return;
 
-    const actual = items.findIndex((item) => item.id === active.id);
-    const next = items.findIndex((item) => item.id === over.id);
+    const actual = (resume?.[type] as T[])?.findIndex(
+      (item) => item.id === active.id,
+    );
+    const next = (resume?.[type] as T[])?.findIndex(
+      (item) => item.id === over.id,
+    );
 
-    const newItems = arrayMove(items, actual, next);
+    const newItems = arrayMove(resume?.[type], actual, next);
 
     const updateItems = newItems
       .map((section, order) => {
@@ -57,10 +58,13 @@ export function useDragEnd<T extends ItemType>({
         return [active.id, over.id].includes(section.id);
       });
 
+    console.log("result: ", { ...resume, [type]: newItems });
+
     void updateSectionItems.mutateAsync({ items: updateItems, type });
 
-    setItems(newItems);
+    setResume({ ...resume, [type]: newItems });
+    // setItems(newItems);
   };
 
-  return { items, sensors, handleDragEnd };
+  return { items: resume?.[type], sensors, handleDragEnd };
 }

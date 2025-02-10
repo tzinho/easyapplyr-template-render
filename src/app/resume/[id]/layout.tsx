@@ -1,53 +1,29 @@
-import { type PropsWithChildren } from "react";
+"use client";
+
+import { useEffect, type PropsWithChildren } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 import { Button } from "~/components/ui/button";
-import { api } from "~/trpc/server";
+import { api } from "~/trpc/react";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
-interface LayoutProps extends PropsWithChildren {
-  params: Promise<{ id: string }>;
-}
+export default function Layout({ children }: PropsWithChildren) {
+  const { id } = useParams<{ id: string }>();
+  const { setResume } = useResumeStore((state) => state);
 
-export default async function Layout({ children, params }: LayoutProps) {
-  const { id } = await params;
+  const resume = api.resumes.get.useQuery(id);
 
-  const resume = await api.resumes.get(id);
+  useEffect(() => {
+    if (resume.data) setResume(resume.data);
+  }, [resume.isLoading, resume.data, setResume]);
 
-  const links = [
-    { label: "contato", type: "contact", link: `/resume/${id}/contact` },
-    {
-      label: "educações",
-      type: "educations",
-      link: `/resume/${id}/educations`,
-    },
-    {
-      label: "experiências",
-      type: "experiences",
-      link: `/resume/${id}/experiences`,
-    },
-    { label: "habilidades", type: "skills", link: `/resume/${id}/skills` },
-    { label: "projetos", type: "projects", link: `/resume/${id}/projects` },
-    { label: "sumário", type: "summary", link: `/resume/${id}/summary` },
-  ];
-
-  const useSections = resume?.sections
-    .filter((section) => section.appear)
-    .map((section) => section.type);
-
-  const unusedSections = resume?.sections
-    .filter((section) => !section.appear)
-    .map((section) => section.type);
-
-  console.log("[useSections]: ", useSections);
-  console.log("[unusedSections]: ", unusedSections);
+  if (resume.isLoading) {
+    return <h1>Carregando...</h1>;
+  }
 
   return (
     <div>
-      {/* {links.map((item) => {
-        if (useSections?.includes(item.type)) {
-          return item.label;
-        }
-      })} */}
       <div className="mb-5 flex items-center justify-center gap-5">
         <Link href={`/resume/${id}/contact`}>
           <Button className="h-6 text-xs">Contato</Button>

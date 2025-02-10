@@ -1,16 +1,20 @@
-import { type Resume } from "~/types/template";
-import { api } from "~/trpc/server";
+"use client";
+
 import { SummaryForm } from "./_components/form";
+import { TemplatePreview } from "~/app/_components/template-preview";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
-interface SummaryProps {
-  params: Promise<{ id: string }>;
-}
+const Summary = () => {
+  const { resume } = useResumeStore((state) => state);
 
-const Summary = async ({ params }: SummaryProps) => {
-  const { id } = await params;
-  const data = (await api.resumes.get(id)) as Resume;
+  if (!resume) return null;
 
-  return <SummaryForm data={data.summary} />;
+  return (
+    <div className="flex justify-between gap-10">
+      <SummaryForm data={resume.summary} />
+      <TemplatePreview data={resume} isPreview />
+    </div>
+  );
 };
 
 export default Summary;

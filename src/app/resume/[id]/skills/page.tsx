@@ -1,17 +1,14 @@
-import { type Resume } from "~/types/template";
-import { api } from "~/trpc/server";
+"use client";
 
 import { Body } from "./_components/body";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
-interface SkillsProps {
-  params: Promise<{ id: string }>;
-}
+const Skills = () => {
+  const { resume } = useResumeStore((state) => state);
 
-const Skills = async ({ params }: SkillsProps) => {
-  const { id } = await params;
-  const data = (await api.resumes.get(id)) as Resume;
+  if (!resume) return null;
 
-  return <Body resumeId={id} data={data} />;
+  return <Body resume={resume} />;
 };
 
 export default Skills;

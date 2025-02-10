@@ -53,7 +53,9 @@ export const ResumePreview = ({
   return (
     <Card className="group relative flex h-[290px] w-[240px] flex-col overflow-hidden border border-gray-200 bg-white shadow-sm">
       <div className="relative flex-grow">
-        <TemplatePreview templateId={resume.templateId} data={data.data} />
+        <div>
+          <TemplatePreview templateId={resume.templateId} data={data.data} />
+        </div>
 
         <div className="invisible absolute inset-0 flex items-center justify-center gap-4 bg-gray-900/70 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
           <Button

@@ -1,20 +1,18 @@
+"use client";
+
 import { TemplatePreview } from "~/app/_components/template-preview";
 import { List } from "./_components/list";
-import { api } from "~/trpc/server";
-import { type Resume } from "~/types/template";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
-interface EducationProps {
-  params: Promise<{ id: string }>;
-}
+const Education = () => {
+  const { resume } = useResumeStore((state) => state);
 
-const Education = async ({ params }: EducationProps) => {
-  const { id } = await params;
-  const data = (await api.resumes.get(id)) as Resume;
+  if (!resume) return null;
 
   return (
     <div className="flex justify-between gap-10">
       <List />
-      <TemplatePreview templateId={data.templateId} data={data} resumeId={id} />
+      <TemplatePreview data={resume} isPreview />
     </div>
   );
 };

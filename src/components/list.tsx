@@ -21,7 +21,7 @@ import { SortableItem } from "~/app/_components/sortable-item";
 import { type ItemType } from "~/types/template";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface ListProps<T = ItemType> {
+interface ListProps<T = any> {
   onUpdate: (value: T[]) => Promise<void>;
   initialItems: T[];
   renderItem: (item: T) => ReactNode;

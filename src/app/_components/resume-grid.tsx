@@ -18,7 +18,7 @@ export const ResumeGrid = () => {
           key={resume.id}
           resume={resume}
           onDelete={setSelectedResume}
-          lastEdited="two hours ago"
+          onDuplicate={() => console.log("duplicate")}
         />
       ))}
 

@@ -14,6 +14,7 @@ import { Section } from "../_components/section";
 import { TwoColumn } from "../_components/two-column";
 import { Item } from "../_components/item";
 import { SectionList } from "../_components/section-list";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
 const Education: React.FC<SectionProps> = ({ id, disabled }) => {
   return (
@@ -79,26 +80,24 @@ const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
 };
 
 const Summary: React.FC<SectionProps> = ({ id, disabled }) => {
-  const form = useFormContext<{ summary: Summary }>();
-  const summary = form.watch("summary");
+  const { resume } = useResumeStore((state) => state);
 
   return (
     <Section id={id} disabled={disabled}>
       <h3>Summary</h3>
-      <p>{summary.text}</p>
+      <p>{resume?.summary?.text}</p>
     </Section>
   );
 };
 
 const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
-  const form = useFormContext();
-  const contact = form.watch("contact") as Contact;
+  const { resume } = useResumeStore((state) => state);
 
   return (
     <Section id={id} disabled={disabled}>
-      <h2>{contact?.name}</h2>
-      <p>{contact?.phone}</p>
-      <p>{contact?.email}</p>
+      <h2>{resume?.contact?.name}</h2>
+      <p>{resume?.contact?.phone}</p>
+      <p>{resume?.contact?.email}</p>
     </Section>
   );
 };

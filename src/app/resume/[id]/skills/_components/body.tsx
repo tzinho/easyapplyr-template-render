@@ -2,34 +2,34 @@
 
 import Link from "next/link";
 import { type InferSelectModel } from "drizzle-orm";
-import { Plus, Trash } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { TemplatePreview } from "~/app/_components/template-preview";
 import { List } from "~/components/list";
 import { api } from "~/trpc/react";
-import { ButtonLoading } from "~/components/ui/button-loading";
-import { type resumes, type skills } from "~/server/db/schema";
+import { type skills, type resumes } from "~/server/db/schema";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+import { ButtonLoading } from "~/components/ui/button-loading";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
 interface BodyProps {
-  data: InferSelectModel<typeof resumes> & {
-    skills: InferSelectModel<typeof skills>[];
+  resume: InferSelectModel<typeof resumes> & {
+    skills: InferSelectModel<typeof skills>;
   };
-  resumeId: string;
 }
 
-export const Body = ({ data, resumeId }: BodyProps) => {
-  console.log("[data]: ", data?.skills);
-  const utils = api.useUtils();
+export const Body = ({ resume }: BodyProps) => {
+  const { resume: previousValues, setResume } = useResumeStore(
+    (state) => state,
+  );
+  console.log("[body]: ", resume);
+
   const skillsOrderMutation = api.skills.changeOrder.useMutation({
-    onSuccess: async () => {
-      utils.resumes.get.setData(resumeId, (old) => {
-        console.log("old", old);
-        return { ...old, skills: [] };
-      });
-      // await utils.invalidate();
+    onSuccess: async (_, variables) => {
+      console.log("[variables]: ", variables);
+      setResume({ ...previousValues, skills: variables });
       toast.success("Alterado a ordem dos itens com sucesso!");
     },
     onError: () =>
@@ -44,7 +44,7 @@ export const Body = ({ data, resumeId }: BodyProps) => {
     <div className="flex justify-between gap-10">
       <div className="flex flex-1 flex-col">
         <List<InferSelectModel<typeof skills>>
-          initialItems={data.skills}
+          initialItems={resume.skills}
           renderItem={(item) => {
             return (
               <div className="flex w-full items-center justify-between rounded-md border p-3">
@@ -56,7 +56,7 @@ export const Body = ({ data, resumeId }: BodyProps) => {
                   className="h-6 w-6"
                   isLoading={skillsDeleteMutation.isPending}
                 >
-                  <Trash className="h-2 w-2" />
+                  <Trash2 className="h-2 w-2" />
                 </ButtonLoading>
               </div>
             );
@@ -65,7 +65,7 @@ export const Body = ({ data, resumeId }: BodyProps) => {
         />
 
         <Link
-          href={`/resume/${resumeId}/skills/create`}
+          href={`/resume/${resume.id}/skills/create`}
           className={cn(buttonVariants({ variant: "default" }), "h-6")}
         >
           <Plus />
@@ -73,11 +73,7 @@ export const Body = ({ data, resumeId }: BodyProps) => {
         </Link>
       </div>
 
-      <TemplatePreview
-        templateId={data.templateId}
-        data={data}
-        resumeId={resumeId}
-      />
+      <TemplatePreview data={resume} isPreview />
     </div>
   );
 };

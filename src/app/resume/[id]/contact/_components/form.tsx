@@ -1,18 +1,27 @@
 "use client";
 
-import { Button } from "~/components/ui/button";
-import { Form } from "~/components/ui/form";
-import { Input } from "~/components/form/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type ContactSchema, contactSchema } from "~/validators";
 import { toast } from "sonner";
-import { api } from "~/trpc/react";
 import { useParams } from "next/navigation";
-import { ButtonLoading } from "~/components/ui/button-loading";
+import { type InferSelectModel } from "drizzle-orm";
 
-export const ContactForm = ({ data }: any) => {
+import { Form } from "~/components/ui/form";
+import { Input } from "~/components/form/input";
+import { type ContactSchema, contactSchema } from "~/validators";
+import { api } from "~/trpc/react";
+import { ButtonLoading } from "~/components/ui/button-loading";
+import { type contacts } from "~/server/db/schema";
+import { useResumeStore } from "~/providers/resume-store-provider";
+
+interface ContactFormProps {
+  data: InferSelectModel<typeof contacts>;
+}
+
+export const ContactForm = ({ data }: ContactFormProps) => {
   const params = useParams<{ id: string }>();
+
+  const { resume, setResume } = useResumeStore((state) => state);
 
   const form = useForm<ContactSchema>({
     resolver: zodResolver(contactSchema),
@@ -20,7 +29,10 @@ export const ContactForm = ({ data }: any) => {
   });
 
   const updateContactMutation = api.contact.create.useMutation({
-    onSuccess: () => toast.success("Mudanças salvas com sucesso!"),
+    onSuccess(_, variables) {
+      setResume({ ...resume, contact: { ...resume?.contact, ...variables } });
+      toast.success("Mudanças salvas com sucesso!");
+    },
     onError() {
       toast.error("Ocorreu um erro ao tentar salvar as mudanças! ");
     },
@@ -32,16 +44,14 @@ export const ContactForm = ({ data }: any) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
         <div className="flex w-full flex-col gap-3 md:flex-row">
           <Input name="name" label="Nome Completo" placeholder="Thiago Luiz" />
-
           <Input name="email" label="Email" placeholder="thiago@luiz.com" />
         </div>
 
         <div className="flex w-full flex-col gap-3 md:flex-row">
           <Input name="phone" label="Telefone" placeholder="(11) 96065-7707" />
-
           <Input
             name="linkedin"
             label="Linkedin"
@@ -55,7 +65,6 @@ export const ContactForm = ({ data }: any) => {
             label="Site"
             placeholder="https://www.thiagoluiz.com"
           />
-
           <Input name="country" label="País" placeholder="Brasil" />
         </div>
 
