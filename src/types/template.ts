@@ -7,12 +7,11 @@ export interface Section {
     | "summary"
     | "skills"
     | "experiences"
-    | "education"
+    | "educations"
     | "certifications"
-    | "courses"
+    | "courseworks"
     | "projects"
-    | "involvements"
-    | "educations";
+    | "involvements";
   order: number;
   disabled?: boolean;
   appear: boolean;
@@ -51,7 +50,7 @@ export interface ItemType {
 export interface Template {
   id: string;
   title: string;
-  component: ({ resumeId }: { resumeId: string }) => JSX.Element;
+  component: ({ resumeTemplate }: { resumeTemplate: Resume }) => JSX.Element;
   defaultSections: Section[];
 }
 

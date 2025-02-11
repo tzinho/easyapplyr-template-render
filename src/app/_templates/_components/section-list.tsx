@@ -26,21 +26,26 @@ export function SectionList<T extends ItemType>({
   render,
   resumeTemplate,
 }: SectionListProps<T>) {
-  const { sensors, handleDragEnd, items } = useDragEnd<T>({
+  const { sensors, handleDragStart, handleDragEnd, items } = useDragEnd<T>({
     resumeTemplate,
     type,
   });
+
+  if (type === "skills") {
+    console.log("[SectionList]: ", items);
+  }
 
   return (
     <Section id={id} disabled={disabled}>
       <DndContext
         collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         sensors={sensors}
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           {children}
-          {render(items)}
+          {render(items.filter((item) => item.appear))}
         </SortableContext>
       </DndContext>
     </Section>

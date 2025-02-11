@@ -25,7 +25,7 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       render={(items) => {
         return items.map((item) => {
           return (
-            <Item key={item.id} id={item.order}>
+            <Item key={item.id} id={item.id}>
               <li className="list-disc">{item.text}</li>
             </Item>
           );
@@ -47,7 +47,7 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       render={(items) =>
         items.map((item) => {
           return (
-            <Item key={item.id} id={item.order}>
+            <Item key={item.id} id={item.id}>
               <li className="list-disc">{item.role}</li>
             </Item>
           );

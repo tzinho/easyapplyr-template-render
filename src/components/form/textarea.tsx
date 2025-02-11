@@ -11,7 +11,7 @@ import {
 } from "../ui/form";
 import { TextareaUL } from "react-textarea-list";
 
-interface TextareaProps {
+interface TextareaProps extends React.ComponentProps<"textarea"> {
   name: string;
   placeholder?: string;
   required?: boolean;
@@ -25,6 +25,7 @@ export const Textarea = ({
   placeholder,
   description,
   required,
+  ...props
 }: TextareaProps) => {
   const { control } = useFormContext();
 
@@ -38,7 +39,7 @@ export const Textarea = ({
             {label} {required && <span className="text-red-500">*</span>}
           </FormLabel>
           <FormControl>
-            <TextareaShadcn placeholder={placeholder} {...field} />
+            <TextareaShadcn placeholder={placeholder} {...field} {...props} />
           </FormControl>
           <FormDescription>{description}</FormDescription>
           <FormMessage />

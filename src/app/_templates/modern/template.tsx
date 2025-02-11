@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useFormContext } from "react-hook-form";
 
 import {
   type SectionProps,
@@ -14,13 +13,14 @@ import { Section } from "../_components/section";
 import { TwoColumn } from "../_components/two-column";
 import { Item } from "../_components/item";
 import { SectionList } from "../_components/section-list";
-import { useResumeStore } from "~/providers/resume-store-provider";
+import { type Resume } from "~/stores/resume-store";
 
-const Education: React.FC<SectionProps> = ({ id, disabled }) => {
+const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <SectionList
-      id={id}
-      disabled={disabled}
+      id={section.id}
+      disabled={section.disabled}
+      resumeTemplate={resumeTemplate}
       type="educations"
       render={(items) => {
         return items.map((item) => {
@@ -37,11 +37,12 @@ const Education: React.FC<SectionProps> = ({ id, disabled }) => {
   );
 };
 
-const Skills: React.FC<SectionProps> = ({ id, disabled }) => {
+const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <SectionList
-      id={id}
-      disabled={disabled}
+      id={section.id}
+      disabled={section.disabled}
+      resumeTemplate={resumeTemplate}
       type="skills"
       render={(items) => {
         return items.map((item) => {
@@ -58,11 +59,12 @@ const Skills: React.FC<SectionProps> = ({ id, disabled }) => {
   );
 };
 
-const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
+const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <SectionList
-      id={id}
-      disabled={disabled}
+      id={section.id}
+      disabled={section.disabled}
+      resumeTemplate={resumeTemplate}
       type="experiences"
       render={(items) => {
         return items.map((item) => {
@@ -79,80 +81,48 @@ const Experiences: React.FC<SectionProps> = ({ id, disabled }) => {
   );
 };
 
-const Summary: React.FC<SectionProps> = ({ id, disabled }) => {
-  const { resume } = useResumeStore((state) => state);
-
+const Summary: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
-    <Section id={id} disabled={disabled}>
+    <Section id={section.id} disabled={section.disabled}>
       <h3>Summary</h3>
-      <p>{resume?.summary?.text}</p>
+      <p>{resumeTemplate?.summary?.text}</p>
     </Section>
   );
 };
 
-const Contact: React.FC<SectionProps> = ({ id, disabled }) => {
-  const { resume } = useResumeStore((state) => state);
-
+const Contact: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
-    <Section id={id} disabled={disabled}>
-      <h2>{resume?.contact?.name}</h2>
-      <p>{resume?.contact?.phone}</p>
-      <p>{resume?.contact?.email}</p>
+    <Section id={section.id} disabled={section.disabled}>
+      <h2>{resumeTemplate?.contact?.name}</h2>
+      <p>{resumeTemplate?.contact?.phone}</p>
+      <p>{resumeTemplate?.contact?.email}</p>
     </Section>
   );
 };
 
-export const Template = ({ resumeId }: { resumeId: string }) => {
+export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "contact": {
-        return (
-          <Contact
-            id={section.id}
-            key={section.id}
-            disabled={section.disabled}
-          />
-        );
+        return <Contact resumeTemplate={resumeTemplate} section={section} />;
       }
 
       case "summary": {
-        return (
-          <Summary
-            id={section.id}
-            key={section.id}
-            disabled={section.disabled}
-          />
-        );
+        return <Summary resumeTemplate={resumeTemplate} section={section} />;
       }
 
       case "experiences": {
         return (
-          <Experiences
-            id={section.id}
-            key={section.id}
-            disabled={section.disabled}
-          />
+          <Experiences resumeTemplate={resumeTemplate} section={section} />
         );
       }
 
       case "skills": {
-        return (
-          <Skills
-            id={section.id}
-            key={section.id}
-            disabled={section.disabled}
-          />
-        );
+        return <Skills resumeTemplate={resumeTemplate} section={section} />;
       }
 
       case "educations": {
-        return (
-          <Education
-            id={section.id}
-            key={section.id}
-            disabled={section.disabled}
-          />
-        );
+        return <Education resumeTemplate={resumeTemplate} section={section} />;
       }
 
       default:
@@ -160,5 +130,7 @@ export const Template = ({ resumeId }: { resumeId: string }) => {
     }
   };
 
-  return <TwoColumn renderSection={renderSection} resumeId={resumeId} />;
+  return (
+    <TwoColumn resumeTemplate={resumeTemplate} renderSection={renderSection} />
+  );
 };

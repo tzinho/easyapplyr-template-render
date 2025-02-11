@@ -1,35 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { type InferSelectModel } from "drizzle-orm";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { TemplatePreview } from "~/app/_components/template-preview";
 import { List } from "~/components/list";
 import { api } from "~/trpc/react";
-import { type skills, type resumes } from "~/server/db/schema";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
-import { ButtonLoading } from "~/components/ui/button-loading";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { type Skill } from "~/stores/resume-store";
 
-interface BodyProps {
-  resume: InferSelectModel<typeof resumes> & {
-    skills: InferSelectModel<typeof skills>;
-  };
-}
-
-export const Body = ({ resume: resumeTemplate }: BodyProps) => {
-  const { resume: previousValues, setResume } = useResumeStore(
-    (state) => state,
-  );
-  console.log("[body]: ", resumeTemplate);
+export const Body = () => {
+  const { resumeTemplate, setResumeTemplate, deleteSkillTemplate } =
+    useResumeStore((state) => state);
 
   const skillsOrderMutation = api.skills.changeOrder.useMutation({
     onSuccess: async (_, variables) => {
-      console.log("[variables]: ", variables);
-      setResume({ ...previousValues, skills: variables });
+      setResumeTemplate({ ...resumeTemplate, skills: variables });
       toast.success("Alterado a ordem dos itens com sucesso!");
     },
     onError: () =>
@@ -37,31 +26,28 @@ export const Body = ({ resume: resumeTemplate }: BodyProps) => {
   });
 
   const skillsDeleteMutation = api.skills.delete.useMutation({
-    onSuccess: () => toast.success("Sucesso deletando o item"),
+    onSuccess: (data, variables) => {
+      deleteSkillTemplate(variables);
+      toast.success("Sucesso deletando o item");
+    },
   });
+
+  if (!resumeTemplate) return <h1>Carregando...</h1>;
 
   return (
     <div className="flex justify-between gap-10">
       <div className="flex flex-1 flex-col">
-        <List<InferSelectModel<typeof skills>>
+        <List<Skill>
           initialItems={resumeTemplate.skills}
           renderItem={(item) => {
             return (
               <div className="flex w-full items-center justify-between rounded-md border p-3">
                 <p>{item.text}</p>
-                <ButtonLoading
-                  onClick={() => skillsDeleteMutation.mutateAsync(item.id)}
-                  size="icon"
-                  variant="destructive"
-                  className="h-6 w-6"
-                  isLoading={skillsDeleteMutation.isPending}
-                >
-                  <Trash2 className="h-2 w-2" />
-                </ButtonLoading>
               </div>
             );
           }}
           onUpdate={skillsOrderMutation.mutateAsync}
+          onDelete={(id) => skillsDeleteMutation.mutateAsync(id)}
         />
 
         <Link

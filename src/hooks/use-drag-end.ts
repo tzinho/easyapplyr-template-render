@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   useSensors,
   useSensor,
@@ -5,27 +8,29 @@ import {
   TouchSensor,
   KeyboardSensor,
   type DragEndEvent,
+  type DragStartEvent,
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { toast } from "sonner";
 
 import { type Section, type ItemType } from "~/types/template";
 import { api } from "~/trpc/react";
-import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Resume } from "~/stores/resume-store";
-import { useState } from "react";
 
 export function useDragEnd<T extends ItemType>({
   type,
   resumeTemplate,
 }: {
-  type: Section["type"];
+  type: Exclude<Section["type"], "contact" | "summary">;
   resumeTemplate: Resume;
 }) {
   const [items, setItems] = useState(
-    resumeTemplate?.[type]?.sort((a, b) => a.order - b.order),
+    resumeTemplate[type]?.sort((a, b) => a.order - b.order),
   );
-  // const { resume, setResume } = useResumeStore((state) => state);
+
+  if (type === "skills") {
+    console.log("[useDragEnd]: ", items);
+  }
 
   const updateSectionItems = api.resumes.updateItems.useMutation({
     onSuccess() {
@@ -41,18 +46,26 @@ export function useDragEnd<T extends ItemType>({
     }),
   );
 
+  const handleDragStart = (event: DragStartEvent) => {
+    console.log("[handleDragStart]: ", event.active.id);
+    // const sectionId = event.active.id as string;
+    // const section = resumeTemplate?.sections?.find((s) => s.id === sectionId);
+
+    // if (!section) return;
+
+    // setActiveId(event.active.id as string);
+  };
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over) return;
     if (active.id === over.id) return;
 
-    const actual = (resumeTemplate?.[type] as T[])?.findIndex(
+    const actual = resumeTemplate[type]?.findIndex(
       (item) => item.id === active.id,
     );
-    const next = (resumeTemplate?.[type] as T[])?.findIndex(
-      (item) => item.id === over.id,
-    );
+    const next = resumeTemplate[type]?.findIndex((item) => item.id === over.id);
 
     const newItems = arrayMove(resumeTemplate?.[type], actual, next);
 
@@ -66,9 +79,13 @@ export function useDragEnd<T extends ItemType>({
 
     void updateSectionItems.mutateAsync({ items: updateItems, type });
 
-    // setResume({ ...resume, [type]: newItems });
     setItems(newItems);
   };
 
-  return { items: resumeTemplate?.[type], sensors, handleDragEnd };
+  return {
+    items: resumeTemplate?.[type],
+    sensors,
+    handleDragStart,
+    handleDragEnd,
+  };
 }

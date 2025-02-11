@@ -10,17 +10,15 @@ import { useResumeStore } from "~/providers/resume-store-provider";
 
 export default function Layout({ children }: PropsWithChildren) {
   const { id } = useParams<{ id: string }>();
-  const { setResume } = useResumeStore((state) => state);
+  const { setResumeTemplate } = useResumeStore((state) => state);
 
   const resume = api.resumes.get.useQuery(id);
 
   useEffect(() => {
-    if (resume.data) setResume(resume.data);
-  }, [resume.isLoading, resume.data, setResume]);
+    if (resume.data) setResumeTemplate(resume.data);
+  }, [resume.isLoading, resume.data, setResumeTemplate]);
 
-  if (resume.isLoading) {
-    return <h1>Carregando...</h1>;
-  }
+  if (resume.isLoading) return <h1>Carregando...</h1>;
 
   return (
     <div>

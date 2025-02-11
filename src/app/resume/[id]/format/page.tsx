@@ -5,7 +5,7 @@ import { ChooseTemplate } from "~/components/choose-template";
 import { useResumeStore } from "~/providers/resume-store-provider";
 
 export default function Format() {
-  const { resume: resumeTemplate } = useResumeStore((state) => state);
+  const { resumeTemplate } = useResumeStore((state) => state);
 
   if (!resumeTemplate) return null;
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { type ReactNode, useState } from "react";
 import {
   useSensors,
   useSensor,
@@ -16,21 +17,26 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { type ReactNode, useState } from "react";
+import { Trash2 } from "lucide-react";
+
 import { SortableItem } from "~/app/_components/sortable-item";
 import { type ItemType } from "~/types/template";
+import { Button } from "./ui/button";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ListProps<T = any> {
   onUpdate: (value: T[]) => Promise<void>;
+  onDelete: (value: string) => Promise<unknown>;
   initialItems: T[];
   renderItem: (item: T) => ReactNode;
 }
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function List<T extends ItemType>({
   initialItems,
   onUpdate,
   renderItem,
+  onDelete,
 }: ListProps<T>) {
   const [items, setItems] = useState<T[]>(initialItems);
 
@@ -59,9 +65,13 @@ export function List<T extends ItemType>({
       );
 
       setItems(newItems);
-
       void onUpdate(newItems);
     }
+  };
+
+  const handleOnDelete = async (id: string) => {
+    setItems((items) => items.filter((item) => item.id !== id));
+    await onDelete(id);
   };
 
   return (
@@ -78,6 +88,14 @@ export function List<T extends ItemType>({
           {items.map((item) => (
             <SortableItem key={item.id} id={item.id}>
               {renderItem(item)}
+              <Button
+                onClick={() => handleOnDelete(item.id)}
+                size="icon"
+                variant="destructive"
+                className="h-6 w-6"
+              >
+                <Trash2 className="h-2 w-2" />
+              </Button>
             </SortableItem>
           ))}
         </SortableContext>

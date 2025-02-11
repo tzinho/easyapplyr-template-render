@@ -9,13 +9,17 @@ import {
 
 import { useDragEndTwoColumn } from "~/hooks/use-drag-end-two-column";
 import { type Section as SectionType } from "~/types/template";
+import { type Resume } from "~/stores/resume-store";
 
 interface TwoColumnProps {
-  resumeId: string;
+  resumeTemplate: Resume;
   renderSection: (section: SectionType) => ReactNode;
 }
 
-export const TwoColumn = ({ renderSection }: TwoColumnProps) => {
+export const TwoColumn = ({
+  resumeTemplate,
+  renderSection,
+}: TwoColumnProps) => {
   const {
     sensors,
     handleDragStart,

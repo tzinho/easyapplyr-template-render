@@ -1,14 +1,9 @@
-import { type Resume } from "~/types/template";
-import { api } from "~/trpc/server";
+"use client";
 
-interface InvolvementsProps {
-  params: Promise<{ id: string }>;
-}
+import { Body } from "./_components/body";
 
-const Involvements = async ({ params }: InvolvementsProps) => {
-  const { id } = await params;
-  const data = (await api.resumes.get(id)) as Resume;
-  return null;
+const Involvements = () => {
+  return <Body />;
 };
 
 export default Involvements;

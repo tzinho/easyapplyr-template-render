@@ -4,33 +4,30 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
-import { type InferSelectModel } from "drizzle-orm";
 
 import { Form } from "~/components/ui/form";
 import { Input } from "~/components/form/input";
 import { type ContactSchema, contactSchema } from "~/validators";
 import { api } from "~/trpc/react";
 import { ButtonLoading } from "~/components/ui/button-loading";
-import { type contacts } from "~/server/db/schema";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { type Contact } from "~/stores/resume-store";
 
-interface ContactFormProps {
-  data: InferSelectModel<typeof contacts>;
-}
-
-export const ContactForm = ({ data }: ContactFormProps) => {
+export const ContactForm = () => {
   const params = useParams<{ id: string }>();
 
-  const { resume, setResume } = useResumeStore((state) => state);
+  const { resumeTemplate, setContactTemplate } = useResumeStore(
+    (state) => state,
+  );
 
   const form = useForm<ContactSchema>({
     resolver: zodResolver(contactSchema),
-    defaultValues: data,
+    defaultValues: resumeTemplate?.contact,
   });
 
   const updateContactMutation = api.contact.create.useMutation({
     onSuccess(_, variables) {
-      setResume({ ...resume, contact: { ...resume?.contact, ...variables } });
+      setContactTemplate(variables as Contact);
       toast.success("Mudanças salvas com sucesso!");
     },
     onError() {

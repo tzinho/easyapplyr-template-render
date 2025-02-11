@@ -1,16 +1,10 @@
 import { HydrateClient } from "~/trpc/server";
-import { ResumeModal } from "./_components/resume-modal";
-import { ResumeTemplates } from "./_components/resume-grid";
+import { Body } from "./_components/body";
 
 export default async function Home() {
   return (
     <HydrateClient>
-      <main className="mx-5 flex min-h-screen w-full flex-col items-center justify-center">
-        <div className="mt-5 flex w-full flex-wrap gap-5">
-          <ResumeModal />
-          <ResumeTemplates />
-        </div>
-      </main>
+      <Body />
     </HydrateClient>
   );
 }

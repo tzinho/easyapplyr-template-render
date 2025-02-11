@@ -9,17 +9,23 @@ import { Textarea } from "~/components/form/textarea";
 import { Button } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { Form } from "~/components/ui/form";
+import { useResumeStore } from "~/providers/resume-store-provider";
 import { api } from "~/trpc/react";
 import { skillSchema, type SkillSchema } from "~/validators";
 
 export default function SkillsCreate() {
-  const utils = api.useUtils();
   const router = useRouter();
   const params = useParams<{ id: string }>();
+  const { resumeTemplate, setResumeTemplate } = useResumeStore(
+    (state) => state,
+  );
 
   const SkillsCreateMutation = api.skills.create.useMutation({
-    onSuccess() {
-      void utils.skills.invalidate();
+    onSuccess(data) {
+      setResumeTemplate({
+        ...resumeTemplate,
+        skills: [...resumeTemplate.skills, ...data],
+      });
       toast.success("Habilidade criada com sucesso!");
       router.push(`/resume/${params.id}/skills`);
     },
@@ -33,16 +39,13 @@ export default function SkillsCreate() {
   });
 
   const handleOnSubmit: SubmitHandler<SkillSchema> = async (values) => {
-    console.log("d", values);
     await SkillsCreateMutation.mutateAsync({
       ...values,
       resumeId: params.id,
     });
   };
 
-  const handleOnClick = () => {
-    router.back();
-  };
+  const handleOnClick = () => router.back();
 
   return (
     <Form {...form}>

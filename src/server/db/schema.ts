@@ -50,7 +50,6 @@ export const contacts = createTable("contact", {
   country: text("country"),
   state: text("state"),
   city: text("city"),
-  order: integer("order"),
 });
 
 export const contactsRelations = relations(contacts, ({ one }) => ({
@@ -68,7 +67,7 @@ export const summaries = createTable("summary", {
     .notNull()
     .unique()
     .references(() => resumes.id, { onDelete: "cascade" }),
-  text: text("text"),
+  text: text("text").notNull(),
 });
 
 export const summariesRelations = relations(summaries, ({ one }) => ({
@@ -90,7 +89,7 @@ export const experiences = createTable("experience", {
   where: text("where"),
   did: text("did"),
   appear: boolean("appear"),
-  order: integer("order"),
+  order: integer("order").notNull(),
 });
 
 export const experiencesRelations = relations(experiences, ({ one }) => ({
@@ -110,7 +109,7 @@ export const projects = createTable("project", {
   createdAt: timestamp("createdAt"),
   endAt: timestamp("endAt"),
   appear: boolean("appear"),
-  order: integer("order"),
+  order: integer("order").notNull(),
 });
 
 export const projectsRelations = relations(projects, ({ one }) => ({
@@ -150,7 +149,7 @@ export const certifications = createTable("certification", {
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
   appear: boolean("appear"),
-  order: integer("order"),
+  order: integer("order").notNull(),
 });
 
 export const certificationsRelations = relations(certifications, ({ one }) => ({
@@ -171,7 +170,7 @@ export const courseworks = createTable("coursework", {
   where: text("string"),
   when: text("string"),
   appear: boolean("appear"),
-  order: integer("order"),
+  order: integer("order").notNull(),
 });
 
 export const courseworkRelations = relations(courseworks, ({ one }) => ({
@@ -191,7 +190,7 @@ export const involvements = createTable("involvement", {
   role: text("role"),
   organization: text("organization"),
   appear: boolean("appear"),
-  order: integer("order"),
+  order: integer("order").notNull(),
 });
 
 export const involvementRelations = relations(involvements, ({ one }) => ({
@@ -229,7 +228,7 @@ export const languages = createTable("language", {
     .references(() => resumes.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   appear: boolean("appear"),
-  order: integer("order"),
+  order: integer("order").notNull(),
 });
 
 export const languageRelations = relations(languages, ({ one }) => ({
@@ -251,7 +250,7 @@ export const sections = createTable("section", {
   disabled: boolean("disabled"),
   appear: boolean("appear"),
   column: integer("column"),
-  order: integer("order"),
+  order: integer("order").notNull(),
 });
 
 export const sectionsRelations = relations(sections, ({ one }) => ({

@@ -1,19 +1,44 @@
-import { desc, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { getTemplate } from "~/lib/templates";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { educations, resumes, sections } from "~/server/db/schema";
+import {
+  courseworks,
+  educations,
+  experiences,
+  involvements,
+  languages,
+  projects,
+  resumes,
+  sections,
+  skills,
+} from "~/server/db/schema";
 
 const itemsTypes = {
-  educations: educations,
+  educations,
+  skills,
+  courseworks,
+  involvements,
+  languages,
+  projects,
+  experiences,
 };
 
 export const resumeRouter = createTRPCRouter({
   updateItems: publicProcedure
     .input(
       z.object({
-        type: z.enum(["educations"]),
+        type: z.enum([
+          "educations",
+          "skills",
+          "experiences",
+          "courseworks",
+          "projects",
+          "involvements",
+          "languages",
+          "certifications",
+        ]),
         items: z.array(
           z.object({
             id: z.string(),

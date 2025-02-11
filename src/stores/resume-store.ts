@@ -7,27 +7,57 @@ import {
   type resumes,
   type skills,
   type summaries,
+  type courseworks,
+  type projects,
+  type involvements,
+  type educations,
+  type languages,
+  type experiences,
+  type certifications,
 } from "~/server/db/schema";
 
+export type Skill = InferSelectModel<typeof skills>;
+export type Contact = InferSelectModel<typeof contacts>;
+export type Summary = InferSelectModel<typeof summaries>;
+export type Courseworks = InferSelectModel<typeof courseworks>;
+export type Project = InferSelectModel<typeof projects>;
+export type Involvements = InferSelectModel<typeof involvements>;
+export type Education = InferSelectModel<typeof educations>;
+export type Language = InferSelectModel<typeof languages>;
+export type Section = InferSelectModel<typeof sections>;
+export type Experience = InferSelectModel<typeof experiences>;
+export type Certification = InferSelectModel<typeof certifications>;
+
 export type Resume = InferSelectModel<typeof resumes> & {
-  contact: InferSelectModel<typeof contacts>;
-  summary: InferSelectModel<typeof summaries>;
-  skills: InferSelectModel<typeof skills>;
-  sections: InferSelectModel<typeof sections>;
+  contact: Contact;
+  summary: Summary;
+  skills: Skill[];
+  courseworks: Courseworks[];
+  projects: Project[];
+  involvements: Involvements[];
+  experiences: Experience[];
+  educations: Education[];
+  languages: Language[];
+  certifications: Certification[];
+  sections: Section[];
 };
 
 export type ResumeState = {
-  resume: Resume | null;
+  resumeTemplate: Resume | null;
 };
 
 export type ResumeActions = {
-  setResume: (resume: InferSelectModel<typeof resumes>) => void;
+  setResumeTemplate: (resumeTemplate: Resume) => void;
+  setSkillsTemplate: (skillsTemplate: Skill) => void;
+  setContactTemplate: (contactTemplate: Contact) => void;
+  setSummaryTemplate: (summaryTemplate: Summary) => void;
+  deleteSkillTemplate: (id: string) => void;
 };
 
 export type ResumeStore = ResumeState & ResumeActions;
 
 export const defaultInitState: ResumeState = {
-  resume: null,
+  resumeTemplate: null,
 };
 
 export const createResumeStore = (
@@ -35,6 +65,44 @@ export const createResumeStore = (
 ) => {
   return createStore<ResumeStore>()((set) => ({
     ...initState,
-    setResume: (resume) => set(() => ({ resume })),
+    setResumeTemplate: (resumeTemplate) => set(() => ({ resumeTemplate })),
+    setSkillsTemplate: (skill: Skill) =>
+      set((state) => ({
+        resumeTemplate: state.resumeTemplate
+          ? {
+              ...state.resumeTemplate,
+              skills: [...state.resumeTemplate.skills, skill],
+            }
+          : null,
+      })),
+    setContactTemplate: (contact: Contact) =>
+      set((state) => ({
+        resumeTemplate: state.resumeTemplate
+          ? {
+              ...state.resumeTemplate,
+              contact: { ...state.resumeTemplate.contact, ...contact },
+            }
+          : null,
+      })),
+    setSummaryTemplate: (summary: Summary) =>
+      set((state) => ({
+        resumeTemplate: state.resumeTemplate
+          ? {
+              ...state.resumeTemplate,
+              summary: { ...state.resumeTemplate.summary, ...summary },
+            }
+          : null,
+      })),
+    deleteSkillTemplate: (id: string) =>
+      set((state) => ({
+        resumeTemplate: state.resumeTemplate
+          ? {
+              ...state.resumeTemplate,
+              skills: state.resumeTemplate.skills.filter(
+                (skill) => skill.id !== id,
+              ),
+            }
+          : null,
+      })),
   }));
 };
