@@ -20,11 +20,11 @@ interface BodyProps {
   };
 }
 
-export const Body = ({ resume }: BodyProps) => {
+export const Body = ({ resume: resumeTemplate }: BodyProps) => {
   const { resume: previousValues, setResume } = useResumeStore(
     (state) => state,
   );
-  console.log("[body]: ", resume);
+  console.log("[body]: ", resumeTemplate);
 
   const skillsOrderMutation = api.skills.changeOrder.useMutation({
     onSuccess: async (_, variables) => {
@@ -44,7 +44,7 @@ export const Body = ({ resume }: BodyProps) => {
     <div className="flex justify-between gap-10">
       <div className="flex flex-1 flex-col">
         <List<InferSelectModel<typeof skills>>
-          initialItems={resume.skills}
+          initialItems={resumeTemplate.skills}
           renderItem={(item) => {
             return (
               <div className="flex w-full items-center justify-between rounded-md border p-3">
@@ -65,7 +65,7 @@ export const Body = ({ resume }: BodyProps) => {
         />
 
         <Link
-          href={`/resume/${resume.id}/skills/create`}
+          href={`/resume/${resumeTemplate.id}/skills/create`}
           className={cn(buttonVariants({ variant: "default" }), "h-6")}
         >
           <Plus />
@@ -73,7 +73,7 @@ export const Body = ({ resume }: BodyProps) => {
         </Link>
       </div>
 
-      <TemplatePreview data={resume} isPreview />
+      <TemplatePreview resumeTemplate={resumeTemplate} isPreview />
     </div>
   );
 };

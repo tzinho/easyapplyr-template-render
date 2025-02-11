@@ -64,11 +64,6 @@ export function useDragEndTwoColumn<T extends SectionType>() {
     const activeSection = sections.find((s) => s.id === active.id);
     const overSection = sections.find((s) => s.id === over.id);
 
-    console.log("[handleDragEnd]: ", {
-      activeSection: activeSection?.type,
-      overSection: overSection?.type,
-    });
-
     if (!activeSection || !overSection) return;
 
     if (overSection.disabled) return;
@@ -118,7 +113,6 @@ export function useDragEndTwoColumn<T extends SectionType>() {
       form.setValue("sections", finalSections);
       toast.success("Seções atualizadas com sucesso!");
     } else {
-      console.log("[same columns]");
       const oldIndex = sections.findIndex((s) => s.id === active.id);
       const newIndex = sections.findIndex((s) => s.id === over.id);
 

@@ -13,6 +13,7 @@ import { type Section, type ItemType } from "~/types/template";
 import { api } from "~/trpc/react";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Resume } from "~/stores/resume-store";
+import { useState } from "react";
 
 export function useDragEnd<T extends ItemType>({
   type,
@@ -21,7 +22,10 @@ export function useDragEnd<T extends ItemType>({
   type: Section["type"];
   resumeTemplate: Resume;
 }) {
-  const { resume, setResume } = useResumeStore((state) => state);
+  const [items, setItems] = useState(
+    resumeTemplate?.[type]?.sort((a, b) => a.order - b.order),
+  );
+  // const { resume, setResume } = useResumeStore((state) => state);
 
   const updateSectionItems = api.resumes.updateItems.useMutation({
     onSuccess() {
@@ -43,14 +47,14 @@ export function useDragEnd<T extends ItemType>({
     if (!over) return;
     if (active.id === over.id) return;
 
-    const actual = (resume?.[type] as T[])?.findIndex(
+    const actual = (resumeTemplate?.[type] as T[])?.findIndex(
       (item) => item.id === active.id,
     );
-    const next = (resume?.[type] as T[])?.findIndex(
+    const next = (resumeTemplate?.[type] as T[])?.findIndex(
       (item) => item.id === over.id,
     );
 
-    const newItems = arrayMove(resume?.[type], actual, next);
+    const newItems = arrayMove(resumeTemplate?.[type], actual, next);
 
     const updateItems = newItems
       .map((section, order) => {
@@ -62,9 +66,9 @@ export function useDragEnd<T extends ItemType>({
 
     void updateSectionItems.mutateAsync({ items: updateItems, type });
 
-    setResume({ ...resume, [type]: newItems });
-    // setItems(newItems);
+    // setResume({ ...resume, [type]: newItems });
+    setItems(newItems);
   };
 
-  return { items: resume?.[type], sensors, handleDragEnd };
+  return { items: resumeTemplate?.[type], sensors, handleDragEnd };
 }

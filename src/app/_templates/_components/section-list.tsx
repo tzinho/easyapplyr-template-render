@@ -8,12 +8,14 @@ import {
 import { Section } from "./section";
 import { type Section as SectionType, type ItemType } from "~/types/template";
 import { useDragEnd } from "~/hooks/use-drag-end";
+import { type Resume } from "~/stores/resume-store";
 
 interface SectionListProps<T> extends PropsWithChildren {
   id: string | number;
   disabled?: boolean;
   type: SectionType["type"];
   render: (items: T[]) => ReactNode[];
+  resumeTemplate: Resume;
 }
 
 export function SectionList<T extends ItemType>({

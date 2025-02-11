@@ -14,7 +14,6 @@ import { toast } from "sonner";
 import { type Section as SectionType } from "~/types/template";
 import { api } from "~/trpc/react";
 import { type Resume } from "~/stores/resume-store";
-import { sections } from "~/server/db/schema";
 
 export function useDragEndOneColumn<T extends SectionType>({
   resumeTemplate,
@@ -29,13 +28,16 @@ export function useDragEndOneColumn<T extends SectionType>({
     },
   });
 
-  console.log("[resumeTemplate]: ", resumeTemplate);
+  console.log("[useDragEndOneColumn]: ", resumeTemplate);
 
   const [items, setItems] = useState<T[]>(
     resumeTemplate?.sections?.sort((a, b) => a.order - b.order),
   );
 
-  console.log("[items]: ", items);
+  console.log(
+    "[items]: ",
+    items?.map((item) => ({ type: item.type, order: item.order })),
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -47,7 +49,7 @@ export function useDragEndOneColumn<T extends SectionType>({
 
   const handleDragStart = (event: DragStartEvent) => {
     const sectionId = event.active.id as string;
-    const section = sections.find((s) => s.id === sectionId);
+    const section = resumeTemplate?.sections?.find((s) => s.id === sectionId);
 
     if (!section) return;
 

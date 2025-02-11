@@ -19,6 +19,7 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <SectionList
       id={section.id}
+      resumeTemplate={resumeTemplate}
       disabled={section.disabled}
       type="skills"
       render={(items) => {
@@ -41,12 +42,13 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
     <SectionList
       id={section.id}
       disabled={section.disabled}
+      resumeTemplate={resumeTemplate}
       type="experiences"
       render={(items) =>
         items.map((item) => {
           return (
             <Item key={item.id} id={item.order}>
-              <li className="list-disc">{item.title}</li>
+              <li className="list-disc">{item.role}</li>
             </Item>
           );
         })
@@ -57,11 +59,12 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   );
 };
 
-const Education: React.FC<SectionProps> = ({ section }) => {
+const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <SectionList
       id={section.id}
       disabled={section.disabled}
+      resumeTemplate={resumeTemplate}
       type="educations"
       render={(items) => {
         return items.map((item) => (
@@ -132,19 +135,25 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
         );
       }
 
-      // case "educations": {
-      //   return <Education section={section} key={section.id} />;
-      // }
+      case "educations": {
+        return (
+          <Education
+            resumeTemplate={resumeTemplate}
+            section={section}
+            key={section.id}
+          />
+        );
+      }
 
-      // case "experiences": {
-      //   return (
-      //     <Experiences
-      //       resumeTemplate={resumeTemplate}
-      //       key={section.id}
-      //       section={section}
-      //     />
-      //   );
-      // }
+      case "experiences": {
+        return (
+          <Experiences
+            resumeTemplate={resumeTemplate}
+            key={section.id}
+            section={section}
+          />
+        );
+      }
 
       case "skills": {
         return (
