@@ -28,10 +28,6 @@ export function useDragEnd<T extends ItemType>({
     resumeTemplate[type]?.sort((a, b) => a.order - b.order),
   );
 
-  if (type === "skills") {
-    console.log("[useDragEnd]: ", items);
-  }
-
   const updateSectionItems = api.resumes.updateItems.useMutation({
     onSuccess() {
       toast.success("Atualizado com sucesso!");
@@ -83,7 +79,7 @@ export function useDragEnd<T extends ItemType>({
   };
 
   return {
-    items: resumeTemplate?.[type],
+    items,
     sensors,
     handleDragStart,
     handleDragEnd,
