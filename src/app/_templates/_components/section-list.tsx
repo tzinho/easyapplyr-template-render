@@ -31,10 +31,6 @@ export function SectionList<T extends ItemType>({
     type,
   });
 
-  if (type === "skills") {
-    console.log("[SectionList]: ", items);
-  }
-
   return (
     <Section id={id} disabled={disabled}>
       <DndContext

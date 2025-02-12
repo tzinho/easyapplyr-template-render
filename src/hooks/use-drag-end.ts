@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   useSensors,
   useSensor,
@@ -24,10 +23,6 @@ export function useDragEnd<T extends ItemType>({
   type: Exclude<Section["type"], "contact" | "summary" | "settings">;
   resumeTemplate: Resume;
 }) {
-  const [items, setItems] = useState(
-    resumeTemplate[type]?.sort((a, b) => a.order - b.order),
-  );
-
   const updateSectionItems = api.resumes.updateItems.useMutation({
     onSuccess() {
       toast.success("Atualizado com sucesso!");
@@ -74,12 +69,10 @@ export function useDragEnd<T extends ItemType>({
       });
 
     void updateSectionItems.mutateAsync({ items: updateItems, type });
-
-    setItems(newItems);
   };
 
   return {
-    items,
+    items: resumeTemplate[type]?.sort((a, b) => a.order - b.order),
     sensors,
     handleDragStart,
     handleDragEnd,

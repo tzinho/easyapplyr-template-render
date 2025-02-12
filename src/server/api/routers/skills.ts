@@ -33,21 +33,12 @@ export const skillsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      console.log("[skill]: ", input);
       const maxOrder = await ctx.db
         .select({ order: skills.order })
         .from(skills)
         .where(eq(skills.resumeId, input.resumeId))
         .orderBy(desc(skills.order))
         .limit(1);
-
-      console.log("[maxOrder]: ", maxOrder);
-      console.log("[item]: ", {
-        ...input,
-        appear: true,
-        order:
-          maxOrder[0]?.order !== undefined ? Number(maxOrder[0]?.order) + 1 : 0,
-      });
 
       return await ctx.db
         .insert(skills)

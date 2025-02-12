@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { createContext, type ReactNode } from "react";
 import { Linkedin, MapPin, Phone } from "lucide-react";
 
 import {
@@ -15,6 +15,24 @@ import { OneColumn } from "../_components/one-column";
 import { Item } from "../_components/item";
 import { type Resume } from "~/stores/resume-store";
 
+type ResumeApi = {
+  resumeTemplate: Resume | null;
+};
+
+const ResumeContext = createContext<ResumeApi | undefined>(undefined);
+
+interface ResumeProviderProps {
+  children: ReactNode;
+}
+
+export const ResumeProvider = ({ children }: ResumeProviderProps) => {
+  return (
+    <ResumeContext.Provider value={{ resumeTemplate: null }}>
+      {children}
+    </ResumeContext.Provider>
+  );
+};
+
 const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <SectionList
@@ -22,15 +40,13 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       resumeTemplate={resumeTemplate}
       disabled={section.disabled}
       type="skills"
-      render={(items) => {
-        return items.map((item) => {
-          return (
-            <Item key={item.id} id={item.id}>
-              <li className="list-disc">{item.text}</li>
-            </Item>
-          );
-        });
-      }}
+      render={(items) =>
+        items.map((item) => (
+          <Item key={item.id} id={item.id}>
+            <li className="list-disc">{item.text}</li>
+          </Item>
+        ))
+      }
     >
       <h3>{section.title}</h3>
     </SectionList>
@@ -45,13 +61,11 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       resumeTemplate={resumeTemplate}
       type="experiences"
       render={(items) =>
-        items.map((item) => {
-          return (
-            <Item key={item.id} id={item.id}>
-              <li className="list-disc">{item.role}</li>
-            </Item>
-          );
-        })
+        items.map((item) => (
+          <Item key={item.id} id={item.id}>
+            <li className="list-disc">{item.role}</li>
+          </Item>
+        ))
       }
     >
       <h3>{section.title}</h3>
@@ -66,13 +80,13 @@ const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       disabled={section.disabled}
       resumeTemplate={resumeTemplate}
       type="educations"
-      render={(items) => {
-        return items.map((item) => (
+      render={(items) =>
+        items.map((item) => (
           <Item key={item.id} id={item.id}>
             <li className="list-disc">{item.degree}</li>
           </Item>
-        ));
-      }}
+        ))
+      }
     >
       <h3>{section.title}</h3>
     </SectionList>

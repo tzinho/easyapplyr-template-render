@@ -13,7 +13,7 @@ export interface Section {
     | "projects"
     | "involvements";
   order: number;
-  disabled?: boolean;
+  disabled: boolean;
   appear: boolean;
   title?: string;
   column?: 1 | 2;

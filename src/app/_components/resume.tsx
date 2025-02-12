@@ -166,9 +166,6 @@ export const ResumePreview2 = ({
   const paperWidth = 215.16; // px
   const paperHeight = Math.min(290, paperWidth * 1.4142); // Maintain A4 ratio but cap at container height
 
-  console.log("paperWidth", paperWidth);
-  console.log("paperHeight", paperHeight);
-
   return (
     <Card className="group relative h-[290px] w-[215.16px] cursor-pointer transition-all duration-300 hover:shadow-lg">
       <div className="absolute inset-0 overflow-hidden rounded-lg bg-white">

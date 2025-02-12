@@ -9,7 +9,7 @@ export const templates = [
     component: SimpleTemplate.Template,
     defaultSections: SimpleTemplate.defaultSections,
     settings: {
-      fontSize: 9,
+      fontSize: 12,
       primaryColor: "purple",
     },
   },
@@ -19,7 +19,7 @@ export const templates = [
     component: ModernTemplate.Template,
     defaultSections: ModernTemplate.defaultSections,
     settings: {
-      fontSize: 9,
+      fontSize: 12,
       primaryColor: "black",
     },
   },

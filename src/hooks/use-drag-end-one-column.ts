@@ -28,8 +28,6 @@ export function useDragEndOneColumn<T extends SectionType>({
     },
   });
 
-  console.log("[useDragEndOneColumn]: ", resumeTemplate);
-
   const [items, setItems] = useState<T[]>(
     resumeTemplate.sections?.sort((a, b) => a.order - b.order),
   );
@@ -78,8 +76,6 @@ export function useDragEndOneColumn<T extends SectionType>({
       resumeId: resumeTemplate.id,
       sections: updateItems,
     });
-
-    setRe;
 
     setItems(newItems);
   };

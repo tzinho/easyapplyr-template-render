@@ -46,7 +46,9 @@ export const Body = () => {
               </div>
             );
           }}
-          onUpdate={skillsOrderMutation.mutateAsync}
+          onUpdate={(data) => {
+            skillsOrderMutation.mutateAsync(data);
+          }}
           onDelete={(id) => skillsDeleteMutation.mutateAsync(id)}
         />
 
