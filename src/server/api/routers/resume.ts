@@ -12,6 +12,7 @@ import {
   projects,
   resumes,
   sections,
+  settings,
   skills,
 } from "~/server/db/schema";
 
@@ -136,6 +137,7 @@ export const resumeRouter = createTRPCRouter({
         languages: true,
         summary: true,
         sections: true,
+        settings: true,
       },
       where: eq(resumes.id, input),
     });
@@ -156,14 +158,20 @@ export const resumeRouter = createTRPCRouter({
 
         const template = getTemplate(input.templateId);
 
+        const resumeId = resume[0]!.id;
+
         const defaultSections = template.defaultSections.map((section) => {
           return {
             ...section,
-            resumeId: resume[0]!.id,
+            resumeId,
           };
         });
 
         await tx.insert(sections).values(defaultSections);
+        await tx.insert(settings).values({
+          resumeId,
+          ...template.settings,
+        });
 
         return resume[0];
       });

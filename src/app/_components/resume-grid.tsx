@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { api } from "~/trpc/react";
 import { DeleteResume } from "./dialog/delete-resume";
-import { ResumePreview } from "./resume";
+import { ResumePreview, ResumePreview2 } from "./resume";
 import { type ResumeActions } from "~/stores/resume-store";
 
 export const ResumeTemplates = () => {
@@ -17,7 +17,7 @@ export const ResumeTemplates = () => {
   return (
     <>
       {resumesTemplates?.data?.map((resumeTemplate) => (
-        <ResumePreview
+        <ResumePreview2
           key={resumeTemplate.id}
           resumeTemplate={resumeTemplate}
           onDelete={setSelectedResumeTemplate}

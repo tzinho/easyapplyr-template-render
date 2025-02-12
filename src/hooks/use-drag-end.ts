@@ -21,7 +21,7 @@ export function useDragEnd<T extends ItemType>({
   type,
   resumeTemplate,
 }: {
-  type: Exclude<Section["type"], "contact" | "summary">;
+  type: Exclude<Section["type"], "contact" | "summary" | "settings">;
   resumeTemplate: Resume;
 }) {
   const [items, setItems] = useState(

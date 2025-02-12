@@ -12,8 +12,8 @@ import { type Resume } from "~/stores/resume-store";
 
 interface SectionListProps<T> extends PropsWithChildren {
   id: string | number;
-  disabled?: boolean;
-  type: SectionType["type"];
+  disabled: boolean;
+  type: Exclude<SectionType["type"], "contact" | "summary" | "settings">;
   render: (items: T[]) => ReactNode[];
   resumeTemplate: Resume;
 }

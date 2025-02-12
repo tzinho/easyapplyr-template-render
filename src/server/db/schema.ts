@@ -260,6 +260,24 @@ export const sectionsRelations = relations(sections, ({ one }) => ({
   }),
 }));
 
+export const settings = createTable("setting", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  resumeId: text("resumeId")
+    .notNull()
+    .references(() => resumes.id, { onDelete: "cascade" }),
+  fontSize: integer("fontSize").notNull(),
+  primaryColor: text("primaryColor").notNull(),
+});
+
+export const settingsRelations = relations(settings, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [settings.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
 export const resumeRelations = relations(resumes, ({ many, one }) => ({
   experiences: many(experiences),
   projects: many(projects),
@@ -270,6 +288,7 @@ export const resumeRelations = relations(resumes, ({ many, one }) => ({
   summary: one(summaries),
   skills: many(skills),
   contact: one(contacts),
-  sections: many(sections),
   languages: many(languages),
+  settings: one(settings),
+  sections: many(sections),
 }));

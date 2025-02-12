@@ -8,11 +8,17 @@ export const templates = [
     title: "São Paulo",
     component: SimpleTemplate.Template,
     defaultSections: SimpleTemplate.defaultSections,
+    settings: {
+      fontSize: 9,
+    },
   },
   {
     id: "2",
     title: "Guarulhos",
     component: ModernTemplate.Template,
     defaultSections: ModernTemplate.defaultSections,
+    settings: {
+      fontSize: 9,
+    },
   },
 ] as Template[];

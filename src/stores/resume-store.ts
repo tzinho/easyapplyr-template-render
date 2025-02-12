@@ -14,6 +14,7 @@ import {
   type languages,
   type experiences,
   type certifications,
+  type settings,
 } from "~/server/db/schema";
 
 export type Skill = InferSelectModel<typeof skills>;
@@ -27,6 +28,7 @@ export type Language = InferSelectModel<typeof languages>;
 export type Section = InferSelectModel<typeof sections>;
 export type Experience = InferSelectModel<typeof experiences>;
 export type Certification = InferSelectModel<typeof certifications>;
+export type Settings = InferSelectModel<typeof settings>;
 
 export type Resume = InferSelectModel<typeof resumes> & {
   contact: Contact;
@@ -40,6 +42,7 @@ export type Resume = InferSelectModel<typeof resumes> & {
   languages: Language[];
   certifications: Certification[];
   sections: Section[];
+  settings: Settings;
 };
 
 export type ResumeState = {
@@ -52,6 +55,7 @@ export type ResumeActions = {
   setContactTemplate: (contactTemplate: Contact) => void;
   setSummaryTemplate: (summaryTemplate: Summary) => void;
   deleteSkillTemplate: (id: string) => void;
+  setSettings: (settings: Partial<Settings>) => void;
 };
 
 export type ResumeStore = ResumeState & ResumeActions;
@@ -101,6 +105,15 @@ export const createResumeStore = (
               skills: state.resumeTemplate.skills.filter(
                 (skill) => skill.id !== id,
               ),
+            }
+          : null,
+      })),
+    setSettings: (settings: Partial<Settings>) =>
+      set((state) => ({
+        resumeTemplate: state.resumeTemplate
+          ? {
+              ...state.resumeTemplate,
+              settings: { ...state.resumeTemplate.settings, ...settings },
             }
           : null,
       })),

@@ -47,11 +47,16 @@ export interface ItemType {
   [key: string]: string | number | boolean | undefined;
 }
 
+export interface Settings {
+  fontSize: number;
+}
+
 export interface Template {
   id: string;
   title: string;
   component: ({ resumeTemplate }: { resumeTemplate: Resume }) => JSX.Element;
   defaultSections: Section[];
+  settings: Settings;
 }
 
 export interface Skill {

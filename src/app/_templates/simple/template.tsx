@@ -95,15 +95,20 @@ const Contact: React.FC<SectionProps> = ({ section, resumeTemplate }) => {
         <p>{resumeTemplate?.contact?.name}</p>
       </h2>
       <div className="flex items-center gap-3">
-        <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+        <div className="inline-flex items-center gap-1 text-muted-foreground">
           <MapPin size={12} />
-          <p>{resumeTemplate?.contact?.country}</p>
+          <div className="flex">
+            <p>
+              {resumeTemplate?.contact?.city} - {resumeTemplate?.contact?.state}{" "}
+              - {resumeTemplate?.contact?.country}
+            </p>
+          </div>
         </div>
-        <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+        <div className="inline-flex items-center gap-1 text-muted-foreground">
           <Linkedin size={12} />
           <p>{resumeTemplate?.contact?.email}</p>
         </div>
-        <div className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+        <div className="inline-flex items-center gap-1 text-muted-foreground">
           <Phone size={12} />
           <p>{resumeTemplate?.contact?.phone}</p>
         </div>

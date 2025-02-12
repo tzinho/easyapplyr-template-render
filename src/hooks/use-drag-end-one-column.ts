@@ -31,12 +31,7 @@ export function useDragEndOneColumn<T extends SectionType>({
   console.log("[useDragEndOneColumn]: ", resumeTemplate);
 
   const [items, setItems] = useState<T[]>(
-    resumeTemplate?.sections?.sort((a, b) => a.order - b.order),
-  );
-
-  console.log(
-    "[items]: ",
-    items?.map((item) => ({ type: item.type, order: item.order })),
+    resumeTemplate.sections?.sort((a, b) => a.order - b.order),
   );
 
   const sensors = useSensors(
@@ -83,6 +78,8 @@ export function useDragEndOneColumn<T extends SectionType>({
       resumeId: resumeTemplate.id,
       sections: updateItems,
     });
+
+    setRe;
 
     setItems(newItems);
   };

@@ -33,7 +33,11 @@ export const OneColumn = ({
       sensors={sensors}
     >
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
-        <div id="resume" className="rounded-md bg-white p-4">
+        <div
+          id="resume"
+          className="rounded-md bg-white p-4"
+          style={{ fontSize: resumeTemplate?.settings?.fontSize }}
+        >
           {items.filter((item) => item.appear).map(renderSection)}
         </div>
       </SortableContext>
