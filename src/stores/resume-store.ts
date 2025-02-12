@@ -56,6 +56,7 @@ export type ResumeActions = {
   setSummaryTemplate: (summaryTemplate: Summary) => void;
   deleteSkillTemplate: (id: string) => void;
   setSettings: (settings: Partial<Settings>) => void;
+  setOrderItemsTemplate: (data: Partial<Resume>) => void;
 };
 
 export type ResumeStore = ResumeState & ResumeActions;
@@ -70,6 +71,14 @@ export const createResumeStore = (
   return createStore<ResumeStore>()((set) => ({
     ...initState,
     setResumeTemplate: (resumeTemplate) => set(() => ({ resumeTemplate })),
+    setOrderItemsTemplate: (data: Partial<Resume>) => {
+      console.log("[data]: ", data);
+      set((state) => ({
+        resumeTemplate: state.resumeTemplate
+          ? { ...state.resumeTemplate, ...data }
+          : null,
+      }));
+    },
     setSkillsTemplate: (skill: Skill) =>
       set((state) => ({
         resumeTemplate: state.resumeTemplate

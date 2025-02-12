@@ -12,21 +12,32 @@ import {
 import { sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { toast } from "sonner";
 
-import { type Section, type ItemType } from "~/types/template";
+import { type Section } from "~/types/template";
 import { api } from "~/trpc/react";
 import { type Resume } from "~/stores/resume-store";
+import { useState } from "react";
 
-export function useDragEnd<T extends ItemType>({
+export function useDragEnd({
   type,
   resumeTemplate,
 }: {
   type: Exclude<Section["type"], "contact" | "summary" | "settings">;
   resumeTemplate: Resume;
 }) {
+  const [items, setItems] = useState(() => {
+    if (type === "skills") console.log("useState");
+    return resumeTemplate[type].sort((a, b) => a.order - b.order);
+  });
+
+  if (type === "skills") {
+    console.log(
+      "[items]: ",
+      items?.sort((a, b) => a.order - b.order).map((item) => item.text),
+    );
+  }
+
   const updateSectionItems = api.resumes.updateItems.useMutation({
-    onSuccess() {
-      toast.success("Atualizado com sucesso!");
-    },
+    onSuccess: () => toast.success("Atualizado com sucesso!"),
   });
 
   const sensors = useSensors(
@@ -53,12 +64,13 @@ export function useDragEnd<T extends ItemType>({
     if (!over) return;
     if (active.id === over.id) return;
 
-    const actual = resumeTemplate[type]?.findIndex(
-      (item) => item.id === active.id,
-    );
-    const next = resumeTemplate[type]?.findIndex((item) => item.id === over.id);
+    const actual = items.findIndex((item) => item.id === active.id);
 
-    const newItems = arrayMove(resumeTemplate?.[type], actual, next);
+    const next = items.findIndex((item) => item.id === over.id);
+
+    const newItems = arrayMove(items, actual, next);
+
+    setItems(newItems);
 
     const updateItems = newItems
       .map((section, order) => {
@@ -68,11 +80,11 @@ export function useDragEnd<T extends ItemType>({
         return [active.id, over.id].includes(section.id);
       });
 
-    void updateSectionItems.mutateAsync({ items: updateItems, type });
+    // void updateSectionItems.mutateAsync({ items: updateItems, type });
   };
 
   return {
-    items: resumeTemplate[type]?.sort((a, b) => a.order - b.order),
+    items,
     sensors,
     handleDragStart,
     handleDragEnd,

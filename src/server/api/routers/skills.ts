@@ -5,6 +5,23 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { skills } from "~/server/db/schema";
 
 export const skillsRouter = createTRPCRouter({
+  hide: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        appear: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      console.log("input", input);
+      return await ctx.db
+        .update(skills)
+        .set({
+          appear: input.appear,
+        })
+        .where(eq(skills.id, input.id))
+        .returning();
+    }),
   changeOrder: publicProcedure
     .input(
       z.array(

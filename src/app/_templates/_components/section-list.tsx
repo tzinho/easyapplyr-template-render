@@ -14,7 +14,7 @@ interface SectionListProps<T> extends PropsWithChildren {
   id: string | number;
   disabled: boolean;
   type: Exclude<SectionType["type"], "contact" | "summary" | "settings">;
-  render: (items: T[]) => ReactNode[];
+  renderItem: (items: T[]) => ReactNode[];
   resumeTemplate: Resume;
 }
 
@@ -23,10 +23,10 @@ export function SectionList<T extends ItemType>({
   disabled,
   type,
   children,
-  render,
+  renderItem,
   resumeTemplate,
 }: SectionListProps<T>) {
-  const { sensors, handleDragStart, handleDragEnd, items } = useDragEnd<T>({
+  const { sensors, handleDragStart, handleDragEnd, items } = useDragEnd({
     resumeTemplate,
     type,
   });
@@ -35,13 +35,13 @@ export function SectionList<T extends ItemType>({
     <Section id={id} disabled={disabled}>
       <DndContext
         collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
+        // onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         sensors={sensors}
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           {children}
-          {render(items.filter((item) => item.appear))}
+          {renderItem(items.filter((item) => item.appear) as unknown as T[])}
         </SortableContext>
       </DndContext>
     </Section>

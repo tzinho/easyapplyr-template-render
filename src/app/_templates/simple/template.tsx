@@ -40,7 +40,7 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       resumeTemplate={resumeTemplate}
       disabled={section.disabled}
       type="skills"
-      render={(items) =>
+      renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id}>
             <li className="list-disc">{item.text}</li>
@@ -60,7 +60,7 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       disabled={section.disabled}
       resumeTemplate={resumeTemplate}
       type="experiences"
-      render={(items) =>
+      renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id}>
             <li className="list-disc">{item.role}</li>
@@ -80,7 +80,7 @@ const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       disabled={section.disabled}
       resumeTemplate={resumeTemplate}
       type="educations"
-      render={(items) =>
+      renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id}>
             <li className="list-disc">{item.degree}</li>

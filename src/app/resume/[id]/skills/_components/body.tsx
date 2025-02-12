@@ -16,6 +16,23 @@ export const Body = () => {
   const { resumeTemplate, setResumeTemplate, deleteSkillTemplate } =
     useResumeStore((state) => state);
 
+  const skillsHideMutation = api.skills.hide.useMutation({
+    onSuccess: (_, variables) => {
+      console.log("_", _);
+      console.log("variables", variables);
+      setResumeTemplate({
+        ...resumeTemplate,
+        skills: resumeTemplate!.skills.map((skill) => {
+          if (skill.id === variables.id) {
+            return variables;
+          }
+          return skill;
+        }),
+      });
+      toast.success("Item não aparecerá no curriculum!");
+    },
+  });
+
   const skillsOrderMutation = api.skills.changeOrder.useMutation({
     onSuccess: async (_, variables) => {
       setResumeTemplate({ ...resumeTemplate, skills: variables });
@@ -46,8 +63,11 @@ export const Body = () => {
               </div>
             );
           }}
-          onUpdate={(data) => {
-            skillsOrderMutation.mutateAsync(data);
+          onHide={async (item) => {
+            void skillsHideMutation.mutateAsync(item);
+          }}
+          onUpdate={async (data) => {
+            await skillsOrderMutation.mutateAsync(data);
           }}
           onDelete={(id) => skillsDeleteMutation.mutateAsync(id)}
         />
