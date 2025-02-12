@@ -10,6 +10,7 @@ export const templates = [
     defaultSections: SimpleTemplate.defaultSections,
     settings: {
       fontSize: 9,
+      primaryColor: "purple",
     },
   },
   {
@@ -19,6 +20,7 @@ export const templates = [
     defaultSections: ModernTemplate.defaultSections,
     settings: {
       fontSize: 9,
+      primaryColor: "black",
     },
   },
 ] as Template[];

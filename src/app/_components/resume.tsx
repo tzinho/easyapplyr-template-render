@@ -156,13 +156,18 @@ export const ResumePreview2 = ({
   onMove,
   resumeTemplate,
 }: ResumePreviewProps) => {
+  const router = useRouter();
+
   const handleOnEdit = (resumeTemplate: Resume) => {
-    console.log("Editing resume:", resumeTemplate.id);
+    router.push(`/resume/${resumeTemplate.id}/contact`);
   };
 
   // A4 aspect ratio is 1:1.4142 (width:height)
   const paperWidth = 215.16; // px
   const paperHeight = Math.min(290, paperWidth * 1.4142); // Maintain A4 ratio but cap at container height
+
+  console.log("paperWidth", paperWidth);
+  console.log("paperHeight", paperHeight);
 
   return (
     <Card className="group relative h-[290px] w-[215.16px] cursor-pointer transition-all duration-300 hover:shadow-lg">
@@ -178,102 +183,10 @@ export const ResumePreview2 = ({
           >
             {/* Resume content preview */}
             <div className="absolute inset-4 flex origin-top-left scale-[0.4] transform flex-col gap-1.5">
-              {/* Header section */}
-              <div className="text-[16px] font-bold text-gray-900">
-                John Doe
-              </div>
-              <div className="text-[10px] text-gray-600">
-                Senior Software Engineer
-              </div>
-              <div className="text-[8px] text-gray-500">
-                john.doe@example.com • (555) 123-4567 • New York, NY
-              </div>
-
-              {/* Summary section */}
-              <div className="mt-2">
-                <div className="border-b border-gray-200 text-[12px] font-semibold text-gray-800">
-                  Professional Summary
-                </div>
-                <div className="mt-0.5 text-[6px] text-gray-600">
-                  Experienced software engineer with 8+ years of expertise in
-                  full-stack development, cloud architecture, and team
-                  leadership. Proven track record of delivering scalable
-                  solutions and driving innovation.
-                </div>
-              </div>
-
-              {/* Experience section */}
-              <div className="mt-2">
-                <div className="border-b border-gray-200 text-[12px] font-semibold text-gray-800">
-                  Experience
-                </div>
-                <div className="mt-1">
-                  <div className="text-[10px] font-medium text-gray-700">
-                    Senior Software Engineer
-                  </div>
-                  <div className="text-[8px] text-gray-600">
-                    Tech Innovations Inc. • 2020 - Present
-                  </div>
-                  <div className="mt-0.5 text-[6px] text-gray-500">
-                    • Led development of microservices architecture serving 1M+
-                    users • Managed team of 5 developers, improving productivity
-                    by 40% • Implemented CI/CD pipelines reducing deployment
-                    time by 60%
-                  </div>
-                </div>
-                <div className="mt-1">
-                  <div className="text-[10px] font-medium text-gray-700">
-                    Software Engineer
-                  </div>
-                  <div className="text-[8px] text-gray-600">
-                    Digital Solutions Co. • 2018 - 2020
-                  </div>
-                  <div className="mt-0.5 text-[6px] text-gray-500">
-                    • Developed RESTful APIs for mobile applications • Optimized
-                    database queries improving response time by 50% • Mentored
-                    junior developers in best practices
-                  </div>
-                </div>
-              </div>
-
-              {/* Education section */}
-              <div className="mt-2">
-                <div className="border-b border-gray-200 text-[12px] font-semibold text-gray-800">
-                  Education
-                </div>
-                <div className="mt-1">
-                  <div className="text-[10px] font-medium text-gray-700">
-                    Master of Computer Science
-                  </div>
-                  <div className="text-[8px] text-gray-600">
-                    Tech University • 2018-2020
-                  </div>
-                </div>
-                <div className="mt-0.5">
-                  <div className="text-[10px] font-medium text-gray-700">
-                    BS Computer Science
-                  </div>
-                  <div className="text-[8px] text-gray-600">
-                    State University • 2014-2018
-                  </div>
-                </div>
-              </div>
-
-              {/* Skills section */}
-              <div className="mt-2">
-                <div className="border-b border-gray-200 text-[12px] font-semibold text-gray-800">
-                  Skills
-                </div>
-                <div className="mt-0.5 text-[8px] text-gray-600">
-                  Languages: JavaScript, TypeScript, Python, Go
-                </div>
-                <div className="text-[8px] text-gray-600">
-                  Technologies: React, Node.js, AWS, Docker, Kubernetes, MongoDB
-                </div>
-                <div className="text-[8px] text-gray-600">
-                  Tools: Git, Jenkins, Terraform, ELK Stack
-                </div>
-              </div>
+              <TemplatePreview
+                resumeTemplate={resumeTemplate}
+                isPreview={true}
+              />
             </div>
           </div>
 

@@ -49,6 +49,7 @@ export interface ItemType {
 
 export interface Settings {
   fontSize: number;
+  primaryColor: string;
 }
 
 export interface Template {

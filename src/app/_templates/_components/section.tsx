@@ -1,12 +1,19 @@
 import { type PropsWithChildren } from "react";
 import { useSortable } from "@dnd-kit/sortable";
+import { cn } from "~/lib/utils";
 
 interface SectionProps extends PropsWithChildren {
   id: string | number;
   disabled?: boolean;
+  className?: string;
 }
 
-export const Section = ({ id, disabled, children }: SectionProps) => {
+export const Section = ({
+  id,
+  disabled,
+  children,
+  className,
+}: SectionProps) => {
   const {
     attributes,
     listeners,
@@ -31,7 +38,7 @@ export const Section = ({ id, disabled, children }: SectionProps) => {
       style={style}
       {...attributes}
       {...listeners}
-      className="cursor-move rounded border bg-gray-50 p-4"
+      className={cn("cursor-move rounded p-4", className)}
     >
       {children}
     </div>
