@@ -25,9 +25,12 @@ import { Card, CardContent } from "~/components/ui/card";
 import { type ResumeSchema, resumeSchema } from "~/validators";
 import { templates } from "../_templates";
 
-export const ResumeModal = () => {
+export const ModalToCreateAResume = () => {
   const router = useRouter();
   const { toast } = useToast();
+  const form = useForm<ResumeSchema>({
+    resolver: zodResolver(resumeSchema),
+  });
 
   const createResumeMutation = api.resumes.create.useMutation<{ id: string }[]>(
     {
@@ -38,16 +41,10 @@ export const ResumeModal = () => {
     },
   );
 
-  const form = useForm<ResumeSchema>({
-    resolver: zodResolver(resumeSchema),
-  });
-
   const handleSubmit: SubmitHandler<ResumeSchema> = async (d) => {
     await createResumeMutation.mutateAsync(d, {
-      onSuccess: (resume) => {
-        if (resume) {
-          router.push(`/resume/${resume.id}/contact`);
-        }
+      onSuccess: (resumeTemplate) => {
+        if (resumeTemplate) router.push(`/resume/${resumeTemplate.id}/contact`);
       },
     });
   };

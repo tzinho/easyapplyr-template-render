@@ -56,6 +56,7 @@ export const Body = () => {
       <div className="flex flex-1 flex-col">
         <List<Skill>
           initialItems={resumeTemplate.skills}
+          type="skills"
           renderItem={(item) => {
             return (
               <div className="flex w-full items-center justify-between rounded-md border p-3">

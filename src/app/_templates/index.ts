@@ -11,6 +11,9 @@ export const templates = [
     settings: {
       fontSize: 13,
       primaryColor: "purple",
+      fontFamily: "Merriweather",
+      paperSize: "Letter",
+      showIcons: true,
     },
   },
   {
@@ -21,6 +24,9 @@ export const templates = [
     settings: {
       fontSize: 13,
       primaryColor: "black",
+      fontFamily: "Merriweather",
+      paperSize: "A4",
+      showIcons: false,
     },
   },
 ] as Template[];

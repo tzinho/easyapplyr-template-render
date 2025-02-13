@@ -2,7 +2,6 @@
 
 import {
   AlertDialog,
-  AlertDialogTrigger,
   AlertDialogContent,
   AlertDialogTitle,
   AlertDialogDescription,
@@ -12,19 +11,19 @@ import {
   AlertDialogFooter,
 } from "~/components/ui/alert-dialog";
 import { useToast } from "~/hooks/use-toast";
+import { type Resume } from "~/stores/resume-store";
 import { api } from "~/trpc/react";
-import { type Resume } from "~/types/template";
 
 interface DeleteResumeProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  resume: Resume | null;
+  resumeTemplate: Resume | null;
 }
 
-export const DeleteResume = ({
+export const AlertToDeleteAResume = ({
   open,
   onOpenChange,
-  resume,
+  resumeTemplate,
 }: DeleteResumeProps) => {
   const { toast } = useToast();
 
@@ -51,7 +50,7 @@ export const DeleteResume = ({
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              deleteItemMutation.mutate(resume!.id);
+              deleteItemMutation.mutate(resumeTemplate!.id);
             }}
           >
             Confirmar

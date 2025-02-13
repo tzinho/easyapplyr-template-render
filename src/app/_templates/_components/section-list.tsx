@@ -35,7 +35,7 @@ export function SectionList<T extends ItemType>({
     <Section id={id} disabled={disabled}>
       <DndContext
         collisionDetection={closestCorners}
-        // onDragStart={handleDragStart}
+        onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         sensors={sensors}
       >

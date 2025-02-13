@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { formatDistance } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
+import { useRouter } from "next/navigation";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -24,7 +25,6 @@ import {
   DropdownMenuPortal,
 } from "~/components/ui/dropdown-menu";
 import { Card } from "~/components/ui/card";
-import { useRouter } from "next/navigation";
 import { TemplatePreview } from "./template-preview";
 import { type Resume } from "~/stores/resume-store";
 
@@ -169,21 +169,108 @@ export const ResumePreview2 = ({
   return (
     <Card className="group relative h-[290px] w-[215.16px] cursor-pointer transition-all duration-300 hover:shadow-lg">
       <div className="absolute inset-0 overflow-hidden rounded-lg bg-white">
-        <div className="relative flex h-full w-full items-center justify-center bg-gray-50">
+        <div className="relative h-full w-full bg-gray-50">
           {/* Paper preview with shadow */}
-          <div
-            className="relative bg-white shadow-lg"
-            style={{
-              width: `${paperWidth}px`,
-              height: `${paperHeight}px`,
-            }}
-          >
+          <div className="absolute inset-0 bg-white shadow-lg">
             {/* Resume content preview */}
-            <div className="absolute inset-4 flex origin-top-left scale-[0.4] transform flex-col gap-1.5">
-              <TemplatePreview
-                resumeTemplate={resumeTemplate}
-                isPreview={true}
-              />
+            <div className="absolute inset-0 h-full w-full origin-top-left scale-[0.3] transform">
+              <div className="flex min-h-full w-[333%] flex-col p-12">
+                {/* Header section */}
+                <div className="space-y-2">
+                  <div className="text-[48px] font-bold text-gray-900">
+                    Charles Bloomberg
+                  </div>
+                  <div className="flex items-center gap-4 text-[24px] text-gray-600">
+                    Web Marketing, United States
+                    <span className="text-gray-400">•</span>
+                    charlesb@gmail.com
+                    <span className="text-gray-400">•</span>
+                    (234) 567-8901
+                  </div>
+                </div>
+
+                {/* Professional section */}
+                <div className="mt-8">
+                  <div className="border-b-2 border-[#9b87f5] pb-1 text-[32px] font-semibold text-[#9b87f5]">
+                    PROFESSIONAL
+                  </div>
+                  <div className="mt-4 text-[24px] leading-relaxed text-gray-600">
+                    Marketing professional with over 10+ years of experience in
+                    marketing and advertising. Proven track record of driving
+                    successful marketing initiatives across multiple platforms.
+                    Strong analytical skills and creative problem-solving
+                    abilities.
+                  </div>
+                </div>
+
+                {/* Experience section */}
+                <div className="mt-8">
+                  <div className="border-b-2 border-[#9b87f5] pb-1 text-[32px] font-semibold text-[#9b87f5]">
+                    EXPERIENCE
+                  </div>
+                  <div className="mt-4 space-y-6">
+                    <div>
+                      <div className="text-[28px] font-semibold text-gray-800">
+                        Marketing Director
+                      </div>
+                      <div className="text-[24px] text-gray-600">
+                        Tech Solutions Company • New York, NY
+                      </div>
+                      <div className="mt-2 text-[20px] text-gray-600">
+                        • Led comprehensive marketing strategies across digital
+                        and traditional channels
+                        <br />
+                        • Managed team of 8 marketing professionals, increasing
+                        department efficiency by 40%
+                        <br />• Developed and executed successful product
+                        launches with 25% above target ROI
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[28px] font-semibold text-gray-800">
+                        Senior Marketing Manager
+                      </div>
+                      <div className="text-[24px] text-gray-600">
+                        Digital Innovations Ltd • San Francisco, CA
+                      </div>
+                      <div className="mt-2 text-[20px] text-gray-600">
+                        • Spearheaded digital marketing initiatives resulting in
+                        150% growth in online presence
+                        <br />
+                        • Implemented data-driven marketing strategies
+                        increasing customer engagement by 60%
+                        <br />• Coordinated with sales team to achieve 125% of
+                        annual revenue targets
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Education section */}
+                <div className="mt-8">
+                  <div className="border-b-2 border-[#9b87f5] pb-1 text-[32px] font-semibold text-[#9b87f5]">
+                    EDUCATION
+                  </div>
+                  <div className="mt-4 space-y-4">
+                    <div>
+                      <div className="text-[28px] font-semibold text-gray-800">
+                        MBA in Marketing
+                      </div>
+                      <div className="text-[24px] text-gray-600">
+                        Stanford University • 2015
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-[28px] font-semibold text-gray-800">
+                        BS in Business Administration
+                      </div>
+                      <div className="text-[24px] text-gray-600">
+                        UC Berkeley • 2011
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

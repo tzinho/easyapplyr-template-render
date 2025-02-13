@@ -50,6 +50,10 @@ export interface ItemType {
 export interface Settings {
   fontSize: number;
   primaryColor: string;
+  fontFamily: string;
+  paperSize: "A4" | "Letter";
+  showIcons: boolean;
+  sectionSpacing: number;
 }
 
 export interface Template {

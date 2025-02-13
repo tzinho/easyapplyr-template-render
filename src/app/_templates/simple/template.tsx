@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, type ReactNode } from "react";
+import React from "react";
 import { Linkedin, MapPin, Phone } from "lucide-react";
 
 import {
@@ -14,24 +14,6 @@ import { Section } from "../_components/section";
 import { OneColumn } from "../_components/one-column";
 import { Item } from "../_components/item";
 import { type Resume } from "~/stores/resume-store";
-
-type ResumeApi = {
-  resumeTemplate: Resume | null;
-};
-
-const ResumeContext = createContext<ResumeApi | undefined>(undefined);
-
-interface ResumeProviderProps {
-  children: ReactNode;
-}
-
-export const ResumeProvider = ({ children }: ResumeProviderProps) => {
-  return (
-    <ResumeContext.Provider value={{ resumeTemplate: null }}>
-      {children}
-    </ResumeContext.Provider>
-  );
-};
 
 const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
@@ -105,9 +87,7 @@ const Summary: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
 const Contact: React.FC<SectionProps> = ({ section, resumeTemplate }) => {
   return (
     <Section id={section.id} disabled={section.disabled}>
-      <h2 className="text-lg">
-        <p>{resumeTemplate?.contact?.name}</p>
-      </h2>
+      <h2 className="text-3xl">{resumeTemplate?.contact?.name}</h2>
       <div className="flex items-center gap-3">
         <div className="inline-flex items-center gap-1 text-muted-foreground">
           <MapPin size={12} />

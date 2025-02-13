@@ -20,8 +20,9 @@ import {
 import { Eye, EyeOff, Trash2 } from "lucide-react";
 
 import { SortableItem } from "~/app/_components/sortable-item";
-import { type ItemType } from "~/types/template";
+import { type Section, type ItemType } from "~/types/template";
 import { Button } from "./ui/button";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ListProps<T = any> {
@@ -29,6 +30,7 @@ interface ListProps<T = any> {
   onDelete: (id: string) => Promise<unknown>;
   onHide: (item: T) => Promise<unknown>;
   initialItems: T[];
+  type: Exclude<Section["type"], "contact" | "summary" | "settings">;
   renderItem: (item: T) => ReactNode;
 }
 
@@ -39,8 +41,16 @@ export function List<T extends ItemType>({
   renderItem,
   onDelete,
   onHide,
+  type,
 }: ListProps<T>) {
   const [items, setItems] = useState<T[]>(initialItems);
+  const { resumeTemplate, setResumeTemplate } = useResumeStore(
+    (state) => state,
+  );
+
+  console.log("type", type);
+  console.log("resumeTemplate", resumeTemplate);
+  console.log("skills", resumeTemplate?.[type]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -83,6 +93,25 @@ export function List<T extends ItemType>({
         return item;
       }),
     );
+
+    console.log("result", {
+      [type]: resumeTemplate?.[type].map((item) => {
+        if (item.id === selected.id) {
+          return { ...item, appear: !item.appear };
+        }
+        return item;
+      }),
+    });
+
+    setResumeTemplate({
+      ...resumeTemplate!,
+      [type]: resumeTemplate?.[type].map((item) => {
+        if (item.id === selected.id) {
+          return { ...item, appear: !item.appear };
+        }
+        return item;
+      }),
+    });
 
     await onHide({ ...selected, appear: !selected.appear });
   };
