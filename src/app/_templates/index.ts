@@ -14,6 +14,10 @@ export const templates = [
       fontFamily: "Merriweather",
       paperSize: "Letter",
       showIcons: true,
+      sectionSpacing: 1,
+      lineHeight: 21,
+      indent: false,
+      showSeparators: true,
     },
   },
   {
@@ -27,6 +31,10 @@ export const templates = [
       fontFamily: "Merriweather",
       paperSize: "A4",
       showIcons: false,
+      sectionSpacing: 1,
+      lineHeight: 21,
+      indent: false,
+      showSeparators: false,
     },
   },
 ] as Template[];

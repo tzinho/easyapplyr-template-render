@@ -1,5 +1,5 @@
-import { ListOfResumeTemplates } from "./list-of-resume-templates";
-import { ModalToCreateAResume } from "./modal-to-create-a-resume";
+import { ListOfResumeTemplates } from "~/app/_components/list-of-resume-templates";
+import { ModalToCreateAResume } from "~/app/_components/modal-to-create-a-resume";
 
 export const Body = () => {
   return (

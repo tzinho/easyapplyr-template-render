@@ -1,10 +1,12 @@
-"use client";
+import { type PropsWithChildren } from "react";
 
 import { ResumeStoreProvider } from "~/providers/resume-store-provider";
 
-export default function RootLayout({
+export * from "./__metadata";
+
+export default function ResumeLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<PropsWithChildren>) {
   return (
     <ResumeStoreProvider>
       <div className="mt-3 flex min-h-screen w-full flex-col items-center justify-between">

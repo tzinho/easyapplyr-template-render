@@ -25,7 +25,7 @@ import { Card, CardContent } from "~/components/ui/card";
 import { type ResumeSchema, resumeSchema } from "~/validators";
 import { templates } from "../_templates";
 
-export const ModalToCreateAResume = () => {
+const FormToCreateResume = () => {
   const router = useRouter();
   const { toast } = useToast();
   const form = useForm<ResumeSchema>({
@@ -50,9 +50,67 @@ export const ModalToCreateAResume = () => {
   };
 
   return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <DialogHeader>
+          <DialogTitle>Criar um curriculum</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-6 py-4">
+          <Input
+            name="title"
+            label="Título do curriculum"
+            placeholder="Digite aqui..."
+            description="Insira um título pra que fique fácil você identificá-lo"
+            required
+          />
+
+          <Select
+            name="templateId"
+            placeholder="Selecione o modelo"
+            label="Modelo"
+          >
+            {templates.map((template) => (
+              <SelectItem value={template.id} key={template.id}>
+                {template.title}
+              </SelectItem>
+            ))}
+          </Select>
+
+          <Select
+            name="experience"
+            placeholder="Selecione..."
+            label="Experiência"
+          >
+            <SelectItem value="0">0-1 anos</SelectItem>
+            <SelectItem value="1">1-3 anos</SelectItem>
+            <SelectItem value="2">3-5 anos</SelectItem>
+            <SelectItem value="3">5+ anos</SelectItem>
+          </Select>
+        </div>
+        <DialogFooter className="justify-end gap-3 sm:gap-0">
+          <DialogClose asChild>
+            <Button type="button" variant="secondary">
+              Fechar
+            </Button>
+          </DialogClose>
+
+          <ButtonLoading
+            type="submit"
+            isLoading={createResumeMutation.isPending}
+          >
+            Salvar
+          </ButtonLoading>
+        </DialogFooter>
+      </form>
+    </Form>
+  );
+};
+
+export const ModalToCreateAResume = () => {
+  return (
     <Dialog>
       <DialogTrigger asChild>
-        <Card className="flex h-[290px] w-full max-w-[240px] cursor-pointer flex-col justify-between overflow-hidden border-dashed">
+        <Card className="flex h-[290px] w-[215.16px] cursor-pointer flex-col justify-between overflow-hidden border-dashed">
           <CardContent className="m-auto flex h-full w-full items-center justify-center">
             <span className="my-auto text-muted-foreground">
               Criar novo curriculum
@@ -61,59 +119,7 @@ export const ModalToCreateAResume = () => {
         </Card>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleSubmit)}>
-            <DialogHeader>
-              <DialogTitle>Criar um curriculum</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-6 py-4">
-              <Input
-                name="title"
-                label="Título do curriculum"
-                placeholder="Digite aqui..."
-                description="Insira um título pra que fique fácil você identificá-lo"
-                required
-              />
-
-              <Select
-                name="templateId"
-                placeholder="Selecione o modelo"
-                label="Modelo"
-              >
-                {templates.map((template) => (
-                  <SelectItem value={template.id} key={template.id}>
-                    {template.title}
-                  </SelectItem>
-                ))}
-              </Select>
-
-              <Select
-                name="experience"
-                placeholder="Selecione..."
-                label="Experiência"
-              >
-                <SelectItem value="0">0-1 anos</SelectItem>
-                <SelectItem value="1">1-3 anos</SelectItem>
-                <SelectItem value="2">3-5 anos</SelectItem>
-                <SelectItem value="3">5+ anos</SelectItem>
-              </Select>
-            </div>
-            <DialogFooter className="justify-end gap-3 sm:gap-0">
-              <DialogClose asChild>
-                <Button type="button" variant="secondary">
-                  Fechar
-                </Button>
-              </DialogClose>
-
-              <ButtonLoading
-                type="submit"
-                isLoading={createResumeMutation.isPending}
-              >
-                Salvar
-              </ButtonLoading>
-            </DialogFooter>
-          </form>
-        </Form>
+        <FormToCreateResume />
       </DialogContent>
     </Dialog>
   );

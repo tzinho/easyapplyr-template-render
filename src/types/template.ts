@@ -54,6 +54,9 @@ export interface Settings {
   paperSize: "A4" | "Letter";
   showIcons: boolean;
   sectionSpacing: number;
+  lineHeight: number;
+  indent: boolean;
+  showSeparators: boolean;
 }
 
 export interface Template {

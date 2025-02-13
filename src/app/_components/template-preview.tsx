@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, type ReactNode, type PropsWithChildren } from "react";
+
 import { getTemplate } from "~/lib/templates";
 import { cn } from "~/lib/utils";
 import { useResumeStore } from "~/providers/resume-store-provider";
@@ -37,6 +38,7 @@ export const Wrapper = ({ isPreview, children }: WrapperProps) => {
   const { resumeTemplate } = useResumeStore((state) => state);
 
   if (isPreview) {
+    return null;
   }
 
   return children;

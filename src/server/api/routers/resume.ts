@@ -15,6 +15,7 @@ import {
   settings,
   skills,
 } from "~/server/db/schema";
+import { resumeSchema } from "~/validators";
 
 const itemsTypes = {
   educations,
@@ -145,13 +146,7 @@ export const resumeRouter = createTRPCRouter({
     return data;
   }),
   create: publicProcedure
-    .input(
-      z.object({
-        title: z.string().min(3),
-        templateId: z.string(),
-        experience: z.coerce.number().optional(),
-      }),
-    )
+    .input(resumeSchema)
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.transaction(async (tx) => {
         const resume = await tx.insert(resumes).values(input).returning();
