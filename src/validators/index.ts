@@ -28,9 +28,9 @@ export const summarySchema = z.object({
 
 export const educationSchema = z.object({
   degree: z.string(),
-  institution: z.string().optional(),
-  year: z.number().optional(),
-  description: z.string().optional(),
+  institution: z.string().optional().nullish(),
+  year: z.string().optional().nullish(),
+  description: z.string().optional().nullish(),
 });
 
 export const courseworkSchema = z.object({

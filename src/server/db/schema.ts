@@ -126,7 +126,7 @@ export const educations = createTable("education", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
-  degree: text("degree"),
+  degree: text("degree").notNull(),
   institution: text("institution"),
   year: text("year"),
   description: text("description"),

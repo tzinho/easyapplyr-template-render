@@ -37,9 +37,14 @@ const EducationForm = ({
     defaultValues: data,
     resolver: zodResolver(educationSchema),
   });
-
   const handleOnSubmit: SubmitHandler<EducationSchema> = async (d) => {
-    await updateEducationMutation.mutateAsync({ id: educationId, ...d });
+    const { institution, description, ...rest } = d;
+    await updateEducationMutation.mutateAsync({
+      id: educationId,
+      institution: institution ?? undefined,
+      description: description ?? undefined,
+      ...rest,
+    });
   };
 
   return (
