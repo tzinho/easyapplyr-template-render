@@ -25,15 +25,21 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { useStore } from "~/store";
+import { cn } from "~/lib/utils";
 
 export function UserNav() {
+  const isCollapsed = useStore((state) => state.isCollapsed);
+
   // const session = useSession();
 
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex items-center gap-2">
+          <div
+            className={cn("flex items-center gap-2", isCollapsed && "mx-auto")}
+          >
             <Avatar className="h-8 w-8">
               <AvatarImage
                 src="https://github.com/shadcn.png"
@@ -41,12 +47,16 @@ export function UserNav() {
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
-            <div>
-              <p className="text-sm font-semibold text-gray-800">Thiago Luiz</p>
-              <p className="text-xs font-medium text-gray-500">
-                tthiaguinho638@gmail.com
-              </p>
-            </div>
+            {!isCollapsed && (
+              <div>
+                <p className="text-sm font-semibold text-gray-800">
+                  Thiago Luiz
+                </p>
+                <p className="text-xs font-medium text-gray-500">
+                  tthiaguinho638@gmail.com
+                </p>
+              </div>
+            )}
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
