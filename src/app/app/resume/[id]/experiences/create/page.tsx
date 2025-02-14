@@ -21,7 +21,7 @@ export default function ExperienceCreate() {
     onSuccess() {
       void utils.experiences.invalidate();
       toast.success("Experiência criada com sucesso!");
-      router.push(`/resume/${params.id}/experiences`);
+      router.push(`/app/resume/${params.id}/experiences`);
     },
     onError: (error) => {
       toast.error(error.message);

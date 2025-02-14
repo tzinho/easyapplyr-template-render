@@ -74,7 +74,7 @@ export const Body = () => {
         />
 
         <Link
-          href={`/resume/${resumeTemplate.id}/skills/create`}
+          href={`/app/resume/${resumeTemplate.id}/skills/create`}
           className={cn(buttonVariants({ variant: "default" }), "h-6")}
         >
           <Plus />

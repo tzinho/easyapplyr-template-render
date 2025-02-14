@@ -113,7 +113,7 @@ export const List = () => {
             <SortableItem key={experience.id} id={experience.id}>
               <div className="flex w-full items-center justify-between rounded-md border p-3">
                 <Link
-                  href={`/resume/${params.id}/experiences/edit/${experience.id}`}
+                  href={`/app/resume/${params.id}/experiences/edit/${experience.id}`}
                 >
                   <p>{experience.role}</p>
                   <p>{experience.company}</p>
@@ -134,7 +134,7 @@ export const List = () => {
         </SortableContext>
 
         <Link
-          href={`/resume/${params.id}/experiences/create`}
+          href={`/app/resume/${params.id}/experiences/create`}
           className={cn(buttonVariants({ variant: "default" }), "h-6")}
         >
           <Plus />

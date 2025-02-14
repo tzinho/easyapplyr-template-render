@@ -107,7 +107,7 @@ export const List = () => {
           {items.map((skill) => (
             <SortableItem key={skill.id} id={skill.id}>
               <div className="flex w-full items-center justify-between rounded-md border p-3">
-                <Link href={`/resume/${params.id}/skills/edit/${skill.id}`}>
+                <Link href={`/app/resume/${params.id}/skills/edit/${skill.id}`}>
                   <p>{skill.text}</p>
                 </Link>
 
@@ -126,7 +126,7 @@ export const List = () => {
         </SortableContext>
 
         <Link
-          href={`/resume/${params.id}/skills/create`}
+          href={`/app/resume/${params.id}/skills/create`}
           className={cn(buttonVariants({ variant: "default" }), "h-6")}
         >
           <Plus />

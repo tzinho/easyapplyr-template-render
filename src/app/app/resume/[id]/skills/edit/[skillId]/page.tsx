@@ -23,7 +23,7 @@ const SkillsForm = ({ data }: { data: InferSelectModel<typeof skills> }) => {
     onSuccess: () => {
       toast.success("Habilidade salva com sucesso!");
       void utils.skills.invalidate();
-      router.push(`/resume/${id}/skills`);
+      router.push(`/app/resume/${id}/skills`);
     },
     onError: (error) => {
       toast.error(error.message);

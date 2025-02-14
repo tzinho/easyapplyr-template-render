@@ -26,7 +26,7 @@ const EducationForm = ({
     onSuccess: () => {
       toast.success("Educação salva com sucesso!");
       void utils.educations.invalidate();
-      router.push(`/resume/${id}/education`);
+      router.push(`/app/resume/${id}/education`);
     },
     onError: (error) => {
       toast.error(error.message);
