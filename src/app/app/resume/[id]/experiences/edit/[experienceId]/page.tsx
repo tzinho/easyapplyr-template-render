@@ -12,12 +12,7 @@ import { ButtonLoading } from "~/components/ui/button-loading";
 import { Form } from "~/components/ui/form";
 import { type experiences } from "~/server/db/schema";
 import { api } from "~/trpc/react";
-import {
-  educationSchema,
-  type ExperienceSchema,
-  type EducationSchema,
-  experienceSchema,
-} from "~/validators";
+import { type ExperienceSchema, experienceSchema } from "~/validators";
 
 const ExperienceForm = ({
   data,
