@@ -17,35 +17,26 @@ import { cn } from "~/lib/utils";
 import { useStore } from "~/store";
 
 function Sidebar() {
-  const { isCollapsed, toggleCollapse } = useStore();
+  const { isCollapsed } = useStore();
 
   return (
     <div
       className={cn(
-        "fixed top-0 h-screen shrink-0 overflow-hidden font-sans transition-all duration-300 ease-in-out md:block",
+        "sticky top-0 h-screen shrink-0 overflow-hidden font-sans transition-all duration-300 ease-in-out md:block",
         isCollapsed ? "w-16" : "w-64",
       )}
     >
-      <div className="h-full w-full border-r bg-white">
-        <div className="relative">
-          <CompanyNav />
-          <button
-            onClick={toggleCollapse}
-            className="absolute right-2 top-4 rounded-lg p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
-          >
-            {isCollapsed ? <ArrowRight size={20} /> : <ArrowLeft size={20} />}
-          </button>
-        </div>
+      <div className="relative h-full w-full border-r bg-white">
+        <CompanyNav />
 
         <hr className="mx-2 bg-gray-400" />
 
         <div className="flex h-full flex-col justify-between">
           <div className="space-y-1 overflow-y-auto pt-6 text-xs font-medium text-gray-500 md:px-2">
-            <MenuLink href="/app" title="Início" icon={Home} />
-            <MenuLink href="/app/resumes" title="Currículums" icon={File} />
-            <MenuLink href="/app/resumes" title="Biblioteca" icon={Library} />
+            <MenuLink href="/app" title="Currículos" icon={File} />
+            <MenuLink href="/app/library" title="Biblioteca" icon={Library} />
             <MenuLink
-              href="/app/resumes"
+              href="/app/ia-interview"
               title="Entrevista com I.A"
               icon={Shirt}
             />

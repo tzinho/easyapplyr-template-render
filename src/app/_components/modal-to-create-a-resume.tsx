@@ -35,7 +35,7 @@ const FormToCreateResume = () => {
   const createResumeMutation = api.resumes.create.useMutation<{ id: string }[]>(
     {
       onSuccess: (resume) => {
-        toast({ title: "Curriculum criado com sucesso!", description: "" });
+        toast({ title: "Currículo criado com sucesso!", description: "" });
         if (resume) router.push(`/app/resume/${resume.id}/contact`);
       },
     },
@@ -54,12 +54,12 @@ const FormToCreateResume = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <DialogHeader>
-          <DialogTitle>Criar um curriculum</DialogTitle>
+          <DialogTitle>Criar um currículo</DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4">
           <Input
             name="title"
-            label="Título do curriculum"
+            label="Título do currículo"
             placeholder="Digite aqui..."
             description="Insira um título pra que fique fácil você identificá-lo"
             required
@@ -114,7 +114,7 @@ export const ModalToCreateAResume = () => {
         <Card className="flex h-[290px] w-[215.16px] cursor-pointer flex-col justify-between overflow-hidden border-dashed">
           <CardContent className="m-auto flex h-full w-full items-center justify-center">
             <span className="my-auto text-muted-foreground">
-              Criar novo curriculum
+              Criar novo currículo
             </span>
           </CardContent>
         </Card>

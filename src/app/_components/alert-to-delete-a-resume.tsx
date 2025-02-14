@@ -30,7 +30,7 @@ export const AlertToDeleteAResume = ({
   const utils = api.useUtils();
   const deleteItemMutation = api.resumes.delete.useMutation({
     onSuccess: () => {
-      toast({ title: "Curriculum deletado com sucesso!" });
+      toast({ title: "Currículo deletado com sucesso!" });
       void utils.resumes.list.invalidate();
     },
   });
@@ -41,7 +41,7 @@ export const AlertToDeleteAResume = ({
         <AlertDialogHeader>
           <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
           <AlertDialogDescription>
-            Excluindo o curriculum você perde todo o histórico de edições, tire
+            Excluindo o Currículo você perde todo o histórico de edições, tire
             um tempo pra pensar sobre as implicações disso. Caso tenha certeza
             clique em confirmar.
           </AlertDialogDescription>

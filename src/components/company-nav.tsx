@@ -8,13 +8,13 @@ export function CompanyNav() {
   return (
     <div
       className={cn(
-        "group cursor-pointer p-4 md:p-6",
+        "group flex cursor-pointer p-4",
         isCollapsed ? "justify-center" : "justify-between",
       )}
     >
       <div className="flex h-10 items-center gap-3">
         <Avatar className="h-8 w-8">
-          <AvatarImage src="/ico.jpg" alt="Company logo" />
+          <AvatarImage src="https://github.com/shadcn.png" alt="Company logo" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         {!isCollapsed && (

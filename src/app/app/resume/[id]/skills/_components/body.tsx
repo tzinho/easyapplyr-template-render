@@ -29,7 +29,7 @@ export const Body = () => {
           return skill;
         }),
       });
-      toast.success("Item não aparecerá no curriculum!");
+      toast.success("Item não aparecerá no currículo!");
     },
   });
 

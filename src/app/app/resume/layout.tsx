@@ -1,6 +1,7 @@
 import { type PropsWithChildren } from "react";
 
 import { ResumeStoreProvider } from "~/providers/resume-store-provider";
+import { useStore } from "~/store";
 
 export * from "./__metadata";
 

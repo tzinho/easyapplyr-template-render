@@ -57,9 +57,9 @@ export const involvementSchema = z.object({
 
 export const resumeSchema = z.object({
   title: z
-    .string({ required_error: "O título do curriculum é obrigatório" })
+    .string({ required_error: "O título do currículo é obrigatório" })
     .min(3, {
-      message: "O título do curriculum deve possuir ao menos 3 caracteres!",
+      message: "O título do currículo deve possuir ao menos 3 caracteres!",
     }),
   experience: z.coerce.number().optional(),
   templateId: z.string(),

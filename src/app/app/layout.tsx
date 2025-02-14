@@ -42,12 +42,12 @@ export default function AppLayout({ children }: Readonly<PropsWithChildren>) {
           )}
         </AnimatePresence>
 
-        <div className="grid w-screen overflow-x-hidden md:grid-cols-[240px_1fr]">
+        <div className="flex w-screen overflow-x-hidden">
           <div className="hidden md:block">
             <Sidebar />
           </div>
 
-          <div className="mx-auto w-full max-w-[1440px] overflow-x-auto">
+          <div className="mx-auto w-full max-w-[1440px] flex-1 overflow-x-auto">
             {children}
           </div>
         </div>
