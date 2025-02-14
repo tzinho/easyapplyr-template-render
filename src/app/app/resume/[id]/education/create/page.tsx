@@ -31,10 +31,12 @@ export default function EducationCreate() {
   const form = useForm<EducationSchema>({
     resolver: zodResolver(educationSchema),
   });
-
   const handleOnSubmit: SubmitHandler<EducationSchema> = async (values) => {
+    const { degree, institution, description } = values;
     await educationCreateMutation.mutateAsync({
-      ...values,
+      degree,
+      institution: institution ?? undefined,
+      description: description ?? undefined,
       resumeId: params.id,
     });
   };

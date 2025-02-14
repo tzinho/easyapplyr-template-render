@@ -10,6 +10,7 @@ import { Button } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { Form } from "~/components/ui/form";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { type Resume } from "~/stores/resume-store";
 import { api } from "~/trpc/react";
 import { skillSchema, type SkillSchema } from "~/validators";
 
@@ -22,10 +23,11 @@ export default function SkillsCreate() {
 
   const SkillsCreateMutation = api.skills.create.useMutation({
     onSuccess(data) {
+      if (!resumeTemplate) return;
       setResumeTemplate({
         ...resumeTemplate,
         skills: [...resumeTemplate.skills, ...data],
-      });
+      } as Resume);
       toast.success("Habilidade criada com sucesso!");
       router.push(`/resume/${params.id}/skills`);
     },
