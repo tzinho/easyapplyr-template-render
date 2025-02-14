@@ -12,7 +12,7 @@ export const contactSchema = z.object({
 });
 
 export const experienceSchema = z.object({
-  role: z.string().optional(),
+  role: z.string(),
   company: z.string().optional(),
   where: z.string().optional(),
   did: z.string().optional(),

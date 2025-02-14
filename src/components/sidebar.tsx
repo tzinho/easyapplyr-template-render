@@ -7,17 +7,35 @@ import {
   Settings2,
   Shirt,
   File,
+  ArrowLeft,
 } from "lucide-react";
 
 import { CompanyNav } from "./company-nav";
 import { MenuLink } from "./menu-link";
 import { UserNav } from "./user-nav";
+import { cn } from "~/lib/utils";
+import { useStore } from "~/store";
 
 function Sidebar() {
+  const { isCollapsed, toggleCollapse } = useStore();
+
   return (
-    <div className="fixed top-0 h-screen w-64 shrink-0 overflow-hidden font-sans md:block">
+    <div
+      className={cn(
+        "fixed top-0 h-screen shrink-0 overflow-hidden font-sans transition-all duration-300 ease-in-out md:block",
+        isCollapsed ? "w-16" : "w-64",
+      )}
+    >
       <div className="h-full w-full border-r bg-white">
-        <CompanyNav />
+        <div className="relative">
+          <CompanyNav />
+          <button
+            onClick={toggleCollapse}
+            className="absolute right-2 top-4 rounded-lg p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+          >
+            {isCollapsed ? <ArrowRight size={20} /> : <ArrowLeft size={20} />}
+          </button>
+        </div>
 
         <hr className="mx-2 bg-gray-400" />
 
@@ -44,12 +62,13 @@ function Sidebar() {
 
             <hr className="mx-2 my-4 bg-gray-400" />
 
-            <div className="flex cursor-pointer items-center justify-between px-4 pb-[90px] duration-200 hover:pr-5 md:px-6 md:pb-28">
+            <div
+              className={cn(
+                "flex cursor-pointer items-center px-4 pb-[90px] duration-200 md:px-6 md:pb-28",
+                isCollapsed && "px-2 md:px-2",
+              )}
+            >
               <UserNav />
-
-              <button className="text-gray-500">
-                <ArrowRight size={16} />
-              </button>
             </div>
           </div>
         </div>

@@ -187,7 +187,7 @@ export const involvements = createTable("involvement", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
-  role: text("role"),
+  role: text("role").notNull(),
   organization: text("organization"),
   appear: boolean("appear"),
   order: integer("order").notNull(),

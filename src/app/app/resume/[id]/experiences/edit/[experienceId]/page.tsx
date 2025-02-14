@@ -16,6 +16,7 @@ import {
   educationSchema,
   type ExperienceSchema,
   type EducationSchema,
+  experienceSchema,
 } from "~/validators";
 
 const ExperienceForm = ({
@@ -40,10 +41,9 @@ const ExperienceForm = ({
       toast.error(error.message);
     },
   });
-
-  const form = useForm<EducationSchema>({
+  const form = useForm<ExperienceSchema>({
     defaultValues: data,
-    resolver: zodResolver(educationSchema),
+    resolver: zodResolver(experienceSchema),
   });
 
   const handleOnSubmit: SubmitHandler<ExperienceSchema> = async (d) => {
