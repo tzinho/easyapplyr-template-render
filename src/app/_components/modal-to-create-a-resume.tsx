@@ -36,7 +36,7 @@ const FormToCreateResume = () => {
     {
       onSuccess: (resume) => {
         toast({ title: "Curriculum criado com sucesso!", description: "" });
-        if (resume) router.push(`/resume/${resume.id}/contact`);
+        if (resume) router.push(`/app/resume/${resume.id}/contact`);
       },
     },
   );
@@ -44,7 +44,8 @@ const FormToCreateResume = () => {
   const handleSubmit: SubmitHandler<ResumeSchema> = async (d) => {
     await createResumeMutation.mutateAsync(d, {
       onSuccess: (resumeTemplate) => {
-        if (resumeTemplate) router.push(`/resume/${resumeTemplate.id}/contact`);
+        if (resumeTemplate)
+          router.push(`/app/resume/${resumeTemplate.id}/contact`);
       },
     });
   };

@@ -23,7 +23,7 @@ export default function Layout({ children }: PropsWithChildren) {
   return (
     <div>
       <div className="mb-5 flex items-center justify-center gap-5">
-        <Link href={`/resume/${id}/contact`}>
+        <Link href={`/app/resume/${id}/contact`}>
           <Button className="h-6 text-xs">Contato</Button>
         </Link>
         <Link href={`/resume/${id}/education`}>
