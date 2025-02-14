@@ -134,6 +134,7 @@ export const resumeRouter = createTRPCRouter({
         experiences: true,
         courseworks: true,
         involvements: true,
+        certifications: true,
         skills: true,
         languages: true,
         summary: true,

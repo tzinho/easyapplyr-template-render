@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { type Resume } from "~/stores/resume-store";
 
 export default function Layout({ children }: PropsWithChildren) {
   const { id } = useParams<{ id: string }>();
@@ -15,7 +16,7 @@ export default function Layout({ children }: PropsWithChildren) {
   const resume = api.resumes.get.useQuery(id);
 
   useEffect(() => {
-    if (resume.data) setResumeTemplate(resume.data);
+    if (resume.data) setResumeTemplate(resume.data as unknown as Resume);
   }, [resume.isLoading, resume.data, setResumeTemplate]);
 
   if (resume.isLoading) return <h1>Carregando...</h1>;
