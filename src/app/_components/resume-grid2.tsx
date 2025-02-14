@@ -274,11 +274,11 @@ export const ResumePreview2 = ({
             </div>
           </div>
 
-          {resumeTemplate.isLocked && (
+          {/* {resumeTemplate.isLocked && (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-900/10">
               <Lock className="h-6 w-6 text-gray-500" />
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="invisible absolute inset-0 flex items-center justify-center gap-4 bg-gray-900/70 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
