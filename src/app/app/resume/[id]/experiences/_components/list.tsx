@@ -21,14 +21,15 @@ import { Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
+import { type InferSelectModel } from "drizzle-orm";
 
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { SortableItem } from "~/app/_components/sortable-item";
-import { type InferSelectModel } from "drizzle-orm";
 import { type experiences } from "~/server/db/schema";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export const List = () => {
   const params = useParams<{ id: string }>();
@@ -74,7 +75,15 @@ export const List = () => {
     void experienceDeleteMutation.mutateAsync(id);
   };
 
-  if (experiencesList.isLoading) return <h1>Carregando...</h1>;
+  if (experiencesList.isLoading)
+    return (
+      <div className="flex flex-col gap-5">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;

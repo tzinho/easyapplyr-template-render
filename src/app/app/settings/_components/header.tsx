@@ -15,13 +15,13 @@ export const Header = ({ onOpenChange }: HeaderProps) => {
   return (
     <>
       <PageNavbarSearchAction
-        title="Biblioteca"
-        subtitle="Busque pelo modelo ideal"
+        title="Configurações"
+        subtitle="Gerencie as configurações da sua conta"
         icon={File}
       >
         <PageNavbarPrimaryButton onClick={() => onOpenChange?.(true)}>
           <Plus size={16} />
-          <span className="hidden md:inline">Indicar um modelo</span>
+          <span className="hidden md:inline">Reportar um erro</span>
         </PageNavbarPrimaryButton>
       </PageNavbarSearchAction>
     </>

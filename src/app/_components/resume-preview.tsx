@@ -83,7 +83,11 @@ export const ResumePreview = ({
             <Settings className="h-6 w-6" />
           </Button>
           <Button
-            onClick={() => onDelete(resumeTemplate)}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onDelete(resumeTemplate);
+            }}
             size="icon"
             className="h-9 w-9 rounded-full bg-red-500 transition-colors hover:bg-red-600"
           >

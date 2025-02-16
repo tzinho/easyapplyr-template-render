@@ -1,3 +1,5 @@
+"use client";
+
 import { type PropsWithChildren } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";

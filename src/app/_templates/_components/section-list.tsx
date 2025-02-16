@@ -5,10 +5,10 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import { Section } from "./section";
 import { type Section as SectionType, type ItemType } from "~/types/template";
 import { useDragEnd } from "~/hooks/use-drag-end";
 import { type Resume } from "~/stores/resume-store";
+import { Section } from "~/components/templates/section";
 
 interface SectionListProps<T> extends PropsWithChildren {
   id: string | number;

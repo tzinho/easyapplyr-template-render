@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useStore } from "~/store";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
+import { Skeleton } from "./ui/skeleton";
 
 const PageNavbarLeftContent = React.forwardRef<
   HTMLDivElement,
@@ -90,7 +91,16 @@ interface PageContentProps extends Readonly<PropsWithChildren> {
 const PageContent = ({ children, isLoading }: PageContentProps) => {
   return (
     <main className="w-full space-y-4 p-4 md:p-6">
-      {isLoading ? <h1>Carregando...</h1> : children}
+      {isLoading ? (
+        <div className="flex flex-col gap-5">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+      ) : (
+        children
+      )}
     </main>
   );
 };

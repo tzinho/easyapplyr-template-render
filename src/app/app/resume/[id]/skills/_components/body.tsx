@@ -11,6 +11,7 @@ import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Skill } from "~/stores/resume-store";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export const Body = () => {
   const { resumeTemplate, setResumeTemplate, deleteSkillTemplate } =
@@ -47,7 +48,15 @@ export const Body = () => {
     },
   });
 
-  if (!resumeTemplate) return <h1>Carregando...</h1>;
+  if (!resumeTemplate)
+    return (
+      <div className="flex flex-col gap-5">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
 
   return (
     <div className="flex justify-between gap-10">

@@ -45,7 +45,8 @@ export const OneColumn = ({
       <DragOverlay>
         {activeId ? (
           <div className="rounded border-2 border-primary bg-white shadow-lg">
-            {renderSection(items.find((item) => item.id === activeId)!)}
+            {/* {renderSection(items.find((item) => item.id === activeId)!)} */}
+            {items.find((item) => item.id === activeId)!.title}
           </div>
         ) : null}
       </DragOverlay>

@@ -29,6 +29,7 @@ import { buttonVariants } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { SortableItem } from "~/app/_components/sortable-item";
 import { type skills } from "~/server/db/schema";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export const List = () => {
   const [items, setItems] = useState<InferSelectModel<typeof skills>[]>([]);
@@ -69,7 +70,15 @@ export const List = () => {
     void skillsDeleteMutation.mutateAsync(id);
   };
 
-  if (skillsList.isLoading) return <h1>Carregando...</h1>;
+  if (skillsList.isLoading)
+    return (
+      <div className="flex flex-col gap-5">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+    );
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;

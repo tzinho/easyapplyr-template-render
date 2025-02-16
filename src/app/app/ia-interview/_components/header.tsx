@@ -1,6 +1,6 @@
 "use client";
 
-import { File, Plus } from "lucide-react";
+import { UserCheck, Plus } from "lucide-react";
 
 import {
   PageNavbarPrimaryButton,
@@ -15,13 +15,13 @@ export const Header = ({ onOpenChange }: HeaderProps) => {
   return (
     <>
       <PageNavbarSearchAction
-        title="Biblioteca"
-        subtitle="Busque pelo modelo ideal"
-        icon={File}
+        title="IA Entrevista"
+        subtitle="Simule uma entrevista"
+        icon={UserCheck}
       >
         <PageNavbarPrimaryButton onClick={() => onOpenChange?.(true)}>
           <Plus size={16} />
-          <span className="hidden md:inline">Indicar um modelo</span>
+          <span className="hidden md:inline">Criar entrevista</span>
         </PageNavbarPrimaryButton>
       </PageNavbarSearchAction>
     </>

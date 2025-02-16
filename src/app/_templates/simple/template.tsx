@@ -10,10 +10,10 @@ import {
   type Section as SectionType,
 } from "~/types/template";
 import { SectionList } from "../_components/section-list";
-import { Section } from "../_components/section";
 import { OneColumn } from "../_components/one-column";
-import { Item } from "../_components/item";
 import { type Resume } from "~/stores/resume-store";
+import { Item } from "~/components/templates/item";
+import { Section } from "~/components/templates/section";
 
 const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
