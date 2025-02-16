@@ -12,10 +12,9 @@ import { cn } from "~/lib/utils";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Skill } from "~/stores/resume-store";
 import { Skeleton } from "~/components/ui/skeleton";
-import { useIsMobile } from "~/hooks/use-mobile";
+import { PageContentEditor } from "~/components/page";
 
 export const Body = () => {
-  const isMobile = useIsMobile();
   const { resumeTemplate, setResumeTemplate, deleteSkillTemplate } =
     useResumeStore((state) => state);
 
@@ -61,8 +60,8 @@ export const Body = () => {
     );
 
   return (
-    <div className="flex justify-between gap-10">
-      <div className="flex flex-1 flex-col">
+    <PageContentEditor>
+      <div>
         <List<Skill>
           initialItems={resumeTemplate.skills}
           type="skills"
@@ -91,9 +90,7 @@ export const Body = () => {
         </Link>
       </div>
 
-      {!isMobile && (
-        <TemplatePreview resumeTemplate={resumeTemplate} isPreview />
-      )}
-    </div>
+      <TemplatePreview resumeTemplate={resumeTemplate} isPreview />
+    </PageContentEditor>
   );
 };

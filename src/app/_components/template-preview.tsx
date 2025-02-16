@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, type ReactNode, type PropsWithChildren } from "react";
+import { useIsMobile } from "~/hooks/use-mobile";
 
 import { getTemplate } from "~/lib/templates";
 import { cn } from "~/lib/utils";
@@ -48,7 +49,11 @@ export const TemplatePreview = ({
   resumeTemplate,
   isPreview,
 }: TemplatePreviewProps) => {
+  const isMobile = useIsMobile();
+
   const Template = getTemplate(resumeTemplate.templateId).component;
+
+  if (isMobile && isPreview) return null;
 
   return (
     <div className={cn("flex-1", isPreview && "pointer-events-none")}>

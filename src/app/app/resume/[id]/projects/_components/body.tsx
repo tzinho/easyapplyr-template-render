@@ -1,5 +1,5 @@
-import { PageContent } from "~/components/page";
+import { PageContentEditor } from "~/components/page";
 
 export const Body = () => {
-  return <PageContent>Projects</PageContent>;
+  return <PageContentEditor>Projects</PageContentEditor>;
 };
