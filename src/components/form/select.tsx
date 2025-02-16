@@ -1,3 +1,6 @@
+"use client";
+
+import { type PropsWithChildren } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { FormField, FormItem, FormMessage } from "../ui/form";
@@ -8,7 +11,6 @@ import {
   Select as SelectShadcn,
   SelectValue,
 } from "../ui/select";
-import { type PropsWithChildren } from "react";
 
 interface SelectProps extends PropsWithChildren {
   name: string;

@@ -1,5 +1,6 @@
 "use client";
 
+import { type PropsWithChildren } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -21,11 +22,11 @@ import { Input } from "~/components/form/input";
 import { api } from "~/trpc/react";
 import { useToast } from "~/hooks/use-toast";
 import { ButtonLoading } from "~/components/ui/button-loading";
-import { Card, CardContent } from "~/components/ui/card";
 import { type ResumeSchema, resumeSchema } from "~/validators";
 import { templates } from "../_templates";
 
 const FormToCreateResume = () => {
+  const utils = api.useUtils();
   const router = useRouter();
   const { toast } = useToast();
   const form = useForm<ResumeSchema>({
@@ -35,6 +36,7 @@ const FormToCreateResume = () => {
   const createResumeMutation = api.resumes.create.useMutation<{ id: string }[]>(
     {
       onSuccess: (resume) => {
+        void utils.resumes.list.invalidate();
         toast({ title: "Currículo criado com sucesso!", description: "" });
         if (resume) router.push(`/app/resume/${resume.id}/contact`);
       },
@@ -107,18 +109,10 @@ const FormToCreateResume = () => {
   );
 };
 
-export const ModalToCreateAResume = () => {
+export const ModalToCreateAResume = ({ children }: PropsWithChildren) => {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Card className="flex h-[290px] w-[215.16px] cursor-pointer flex-col justify-between overflow-hidden border-dashed">
-          <CardContent className="m-auto flex h-full w-full items-center justify-center">
-            <span className="my-auto text-muted-foreground">
-              Criar novo currículo
-            </span>
-          </CardContent>
-        </Card>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <FormToCreateResume />
       </DialogContent>

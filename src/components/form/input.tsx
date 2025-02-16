@@ -1,6 +1,8 @@
-import { useFormContext } from "react-hook-form";
-import { Input as InputShadcn } from "../ui/input";
+"use client";
 
+import { useFormContext } from "react-hook-form";
+
+import { Input as InputShadcn } from "~/components/ui/input";
 import {
   FormControl,
   FormDescription,
@@ -8,7 +10,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "~/components/ui/form";
 
 interface InputProps {
   name: string;

@@ -48,10 +48,6 @@ export function List<T extends ItemType>({
     (state) => state,
   );
 
-  console.log("type", type);
-  console.log("resumeTemplate", resumeTemplate);
-  console.log("skills", resumeTemplate?.[type]);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),
@@ -93,15 +89,6 @@ export function List<T extends ItemType>({
         return item;
       }),
     );
-
-    console.log("result", {
-      [type]: resumeTemplate?.[type].map((item) => {
-        if (item.id === selected.id) {
-          return { ...item, appear: !item.appear };
-        }
-        return item;
-      }),
-    });
 
     setResumeTemplate({
       ...resumeTemplate!,

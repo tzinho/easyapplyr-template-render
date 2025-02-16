@@ -25,16 +25,8 @@ export function useDragEnd({
   resumeTemplate: Resume;
 }) {
   const [items, setItems] = useState(() => {
-    if (type === "skills") console.log("useState");
     return resumeTemplate[type].sort((a, b) => a.order - b.order);
   });
-
-  if (type === "skills") {
-    console.log(
-      "[items]: ",
-      items?.sort((a, b) => a.order - b.order).map((item) => item.text),
-    );
-  }
 
   const updateSectionItems = api.resumes.updateItems.useMutation({
     onSuccess: () => toast.success("Atualizado com sucesso!"),

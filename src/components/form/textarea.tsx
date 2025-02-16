@@ -1,5 +1,9 @@
+"use client";
+
 import { useFormContext } from "react-hook-form";
-import { Textarea as TextareaShadcn } from "../ui/textarea";
+import { TextareaUL } from "react-textarea-list";
+
+import { Textarea as TextareaShadcn } from "~/components/ui/textarea";
 
 import {
   FormControl,
@@ -8,8 +12,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { TextareaUL } from "react-textarea-list";
+} from "~/components/ui/form";
 
 interface TextareaProps extends React.ComponentProps<"textarea"> {
   name: string;

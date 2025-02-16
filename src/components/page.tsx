@@ -2,11 +2,11 @@
 
 import React, { type PropsWithChildren } from "react";
 import { ArrowLeft, Search, SidebarClose } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { useStore } from "~/store";
 import { cn } from "~/lib/utils";
-import { Button } from "./ui/button";
-import { useRouter } from "next/navigation";
+import { Button } from "~/components/ui/button";
 
 const PageNavbarLeftContent = React.forwardRef<
   HTMLDivElement,

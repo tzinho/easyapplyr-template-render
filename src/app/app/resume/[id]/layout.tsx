@@ -9,11 +9,13 @@ import { api } from "~/trpc/react";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Resume } from "~/stores/resume-store";
 import { useStore } from "~/store";
+import { useIsMobile } from "~/hooks/use-mobile";
 
 export default function Layout({ children }: PropsWithChildren) {
   const { id } = useParams<{ id: string }>();
   const { setResumeTemplate } = useResumeStore((state) => state);
   const { setIsSidebarCollapse } = useStore();
+  const isMobile = useIsMobile();
 
   const resume = api.resumes.get.useQuery(id);
 
@@ -22,8 +24,9 @@ export default function Layout({ children }: PropsWithChildren) {
   }, [resume.isLoading, resume.data, setResumeTemplate]);
 
   useEffect(() => {
-    console.log("called");
-    setIsSidebarCollapse(true);
+    if (!isMobile) {
+      setIsSidebarCollapse(true);
+    }
   }, []);
 
   if (resume.isLoading) return <h1>Carregando...</h1>;

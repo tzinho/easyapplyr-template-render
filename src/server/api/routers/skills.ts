@@ -13,7 +13,6 @@ export const skillsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      console.log("input", input);
       return await ctx.db
         .update(skills)
         .set({

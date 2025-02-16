@@ -29,7 +29,7 @@ export default function SkillsCreate() {
         skills: [...resumeTemplate.skills, ...data],
       } as Resume);
       toast.success("Habilidade criada com sucesso!");
-      router.push(`/resume/${params.id}/skills`);
+      router.push(`/app/resume/${params.id}/skills`);
     },
     onError: (error) => {
       toast.error(error.message);

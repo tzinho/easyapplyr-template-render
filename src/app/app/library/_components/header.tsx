@@ -16,14 +16,14 @@ export const Header = ({ onOpenChange }: HeaderProps) => {
   return (
     <>
       <PageNavbarSearchAction
-        title="Currículos"
-        subtitle="Gerencie seus currículos"
+        title="Biblioteca"
+        subtitle="Busque pelo modelo ideal"
         icon={File}
       >
         <ModalToCreateAResume>
           <PageNavbarPrimaryButton onClick={() => onOpenChange?.(true)}>
             <Plus size={16} />
-            <span className="hidden md:inline">Criar currículo</span>
+            <span className="hidden md:inline">Indicar um modelo</span>
           </PageNavbarPrimaryButton>
         </ModalToCreateAResume>
       </PageNavbarSearchAction>

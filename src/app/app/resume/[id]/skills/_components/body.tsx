@@ -18,8 +18,6 @@ export const Body = () => {
 
   const skillsHideMutation = api.skills.hide.useMutation({
     onSuccess: (_, variables) => {
-      console.log("_", _);
-      console.log("variables", variables);
       setResumeTemplate({
         ...resumeTemplate,
         skills: resumeTemplate!.skills.map((skill) => {
