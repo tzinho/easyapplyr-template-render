@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, type PropsWithChildren } from "react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 
-import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Resume } from "~/stores/resume-store";
@@ -28,6 +26,7 @@ export default function Layout({ children }: PropsWithChildren) {
     if (!isMobile) {
       setIsSidebarCollapse(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (resume.isLoading)
@@ -40,36 +39,5 @@ export default function Layout({ children }: PropsWithChildren) {
       </div>
     );
 
-  return (
-    <div>
-      <div className="mb-5 flex items-center justify-center gap-5">
-        <Link href={`/app/resume/${id}/contact`}>
-          <Button className="h-6 text-xs">Contato</Button>
-        </Link>
-        <Link href={`/app/resume/${id}/education`}>
-          <Button className="h-6 text-xs">Educações</Button>
-        </Link>
-        <Link href={`/app/resume/${id}/experiences`}>
-          <Button className="h-6 text-xs">Experiências</Button>
-        </Link>
-        <Link href={`/app/resume/${id}/skills`}>
-          <Button className="h-6 text-xs">Habilidades</Button>
-        </Link>
-        <Link href={`/app/resume/${id}/projects`}>
-          <Button className="h-6 text-xs">Projetos</Button>
-        </Link>
-        <Link href={`/app/resume/${id}/summary`}>
-          <Button className="h-6 text-xs">Sumário</Button>
-        </Link>
-        <Link href={`/app/resume/${id}/format`}>
-          <Button className="h-6 text-xs">Visualização</Button>
-        </Link>
-        <Button className="h-6" variant="outline">
-          Adicionar seção
-        </Button>
-      </div>
-
-      {children}
-    </div>
-  );
+  return <div className="flex flex-col gap-3">{children}</div>;
 }

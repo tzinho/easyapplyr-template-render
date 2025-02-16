@@ -1,14 +1,15 @@
-import { type Resume } from "~/types/template";
-import { api } from "~/trpc/server";
+"use client";
 
-interface ProjectsProps {
-  params: Promise<{ id: string }>;
-}
+import { Header } from "./_components/header";
+import { Body } from "./_components/body";
 
-const Projects = async ({ params }: ProjectsProps) => {
-  const { id } = await params;
-  const data = (await api.resumes.get(id)) as Resume;
-  return null;
+const Projects = () => {
+  return (
+    <>
+      <Header />
+      <Body />
+    </>
+  );
 };
 
 export default Projects;

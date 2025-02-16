@@ -1,23 +1,15 @@
 "use client";
 
-import { TemplatePreview } from "~/app/_components/template-preview";
-import { ChooseTemplate } from "~/components/choose-template";
-import { useResumeStore } from "~/providers/resume-store-provider";
-import { Toolbar } from "../../_components/toolbar";
+import { Header } from "./_components/header";
+import { Body } from "./_components/body";
 
-export default function Format() {
-  const { resumeTemplate } = useResumeStore((state) => state);
-
-  if (!resumeTemplate) return null;
-
+const Format = () => {
   return (
     <>
-      <Toolbar />
-      <TemplatePreview resumeTemplate={resumeTemplate} />
-      <ChooseTemplate
-        excludeTemplateId={resumeTemplate.templateId}
-        resumeId={resumeTemplate.id}
-      />
+      <Header />
+      <Body />
     </>
   );
-}
+};
+
+export default Format;

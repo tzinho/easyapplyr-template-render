@@ -30,7 +30,7 @@ const ExperienceForm = ({
     onSuccess: () => {
       toast.success("Experiência salva com sucesso!");
       void utils.experiences.invalidate();
-      router.push(`/app/resume/${id}/education`);
+      router.push(`/app/resume/${id}/educations`);
     },
     onError: (error) => {
       toast.error(error.message);
