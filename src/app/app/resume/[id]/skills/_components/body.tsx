@@ -12,8 +12,10 @@ import { cn } from "~/lib/utils";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Skill } from "~/stores/resume-store";
 import { Skeleton } from "~/components/ui/skeleton";
+import { useIsMobile } from "~/hooks/use-mobile";
 
 export const Body = () => {
+  const isMobile = useIsMobile();
   const { resumeTemplate, setResumeTemplate, deleteSkillTemplate } =
     useResumeStore((state) => state);
 
@@ -89,7 +91,9 @@ export const Body = () => {
         </Link>
       </div>
 
-      <TemplatePreview resumeTemplate={resumeTemplate} isPreview />
+      {!isMobile && (
+        <TemplatePreview resumeTemplate={resumeTemplate} isPreview />
+      )}
     </div>
   );
 };
