@@ -68,7 +68,7 @@ const PageNavbar = ({ children }: Readonly<PropsWithChildren>) => {
 
   return (
     <div>
-      <div className="flex items-center justify-between p-4 text-gray-500 md:p-6">
+      <div className="flex items-center justify-between p-4 text-gray-500">
         {children}
 
         <button
@@ -102,6 +102,17 @@ const PageContent = ({ children, isLoading }: PageContentProps) => {
         children
       )}
     </main>
+  );
+};
+
+export const PageContentEditor = ({
+  children,
+  isLoading,
+}: PageContentProps) => {
+  return (
+    <PageContent isLoading={isLoading}>
+      <div className="flex gap-5">{children}</div>
+    </PageContent>
   );
 };
 

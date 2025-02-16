@@ -21,7 +21,7 @@ export default function EducationCreate() {
     onSuccess() {
       void utils.educations.invalidate();
       toast.success("Educação criada com sucesso!");
-      router.push(`/app/resume/${params.id}/education`);
+      router.push(`/app/resume/${params.id}/educations`);
     },
     onError: (error) => {
       toast.error(error.message);

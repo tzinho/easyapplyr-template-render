@@ -2,6 +2,7 @@
 
 import { File, Plus } from "lucide-react";
 
+import { ModalToSuggestATemplate } from "~/components/modal-to-suggest-a-template";
 import {
   PageNavbarPrimaryButton,
   PageNavbarSearchAction,
@@ -19,10 +20,12 @@ export const Header = ({ onOpenChange }: HeaderProps) => {
         subtitle="Busque pelo modelo ideal"
         icon={File}
       >
-        <PageNavbarPrimaryButton onClick={() => onOpenChange?.(true)}>
-          <Plus size={16} />
-          <span className="hidden md:inline">Indicar um modelo</span>
-        </PageNavbarPrimaryButton>
+        <ModalToSuggestATemplate>
+          <PageNavbarPrimaryButton onClick={() => onOpenChange?.(true)}>
+            <Plus size={16} />
+            <span className="hidden md:inline">Indicar um modelo</span>
+          </PageNavbarPrimaryButton>
+        </ModalToSuggestATemplate>
       </PageNavbarSearchAction>
     </>
   );

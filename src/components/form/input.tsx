@@ -12,12 +12,13 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 
-interface InputProps {
+interface InputProps extends React.ComponentProps<"input"> {
   name: string;
   placeholder?: string;
   required?: boolean;
   description?: string;
   label: string;
+  className?: string;
 }
 
 export const Input = ({
@@ -26,6 +27,8 @@ export const Input = ({
   placeholder,
   description,
   required,
+  className,
+  ...props
 }: InputProps) => {
   const { control } = useFormContext();
 
@@ -39,7 +42,7 @@ export const Input = ({
             {label} {required && <span className="text-red-500">*</span>}
           </FormLabel>
           <FormControl>
-            <InputShadcn placeholder={placeholder} {...field} />
+            <InputShadcn placeholder={placeholder} {...field} {...props} />
           </FormControl>
           <FormDescription>{description}</FormDescription>
           <FormMessage />
