@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  ArrowRight,
-  Home,
-  Library,
-  Settings2,
-  Shirt,
-  File,
-  ArrowLeft,
-} from "lucide-react";
+import { Library, Settings2, Shirt, File } from "lucide-react";
 
 import { CompanyNav } from "./company-nav";
 import { MenuLink } from "./menu-link";

@@ -23,11 +23,9 @@ export default function Layout({ children }: PropsWithChildren) {
   }, [resume.isLoading, resume.data, setResumeTemplate]);
 
   useEffect(() => {
-    if (!isMobile) {
-      setIsSidebarCollapse(true);
-    }
+    if (isMobile !== undefined) setIsSidebarCollapse(!isMobile);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isMobile]);
 
   if (resume.isLoading)
     return (
