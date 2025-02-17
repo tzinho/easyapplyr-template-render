@@ -1,3 +1,5 @@
+"use client";
+
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { TemplatePreview } from "~/app/_components/template-preview";
 import { List } from "./list";

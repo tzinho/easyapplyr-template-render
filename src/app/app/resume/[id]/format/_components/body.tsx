@@ -1,3 +1,5 @@
+"use client";
+
 import { PageContentEditor } from "~/components/page";
 import { TemplatePreview } from "~/app/_components/template-preview";
 import { ChooseTemplate } from "~/components/choose-template";

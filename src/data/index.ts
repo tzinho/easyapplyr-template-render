@@ -1,32 +1,308 @@
-export const fakeUserData = {
-  resumeTitle: "Copy of Copy of Product Marketing",
-  header: {
-    fullName: "Charles Bloomberg",
-    title: "Product Marketing Manager",
-    email: "charles.bloomberg@email.com",
-    phone: "(555) 123-4567",
-    location: "New York, NY",
+export const fakeData = {
+  male: {
+    contato: {
+      nome: "Thiago Luiz",
+      email: "thiago@luiz.com",
+      telefone: "(11) 96065-7707",
+      linkedin: "https://linkedin.com/in/tluiz",
+      pessoal: "https://thiago.luiz.com",
+      pais: "Brasil",
+      estado: "SP",
+      cidade: "Guarulhos",
+    },
+    educacoes: [
+      {
+        grau: "Analista de sistemas",
+        instituicao: "UniCV - Universidade Cidade Verde",
+        ano: "2021 - 2023",
+        descricao: "",
+        aparecer: true,
+        ordem: 0,
+      },
+      {
+        grau: "Engenharia de software",
+        instituicao: "USP - Universidade de São Paulo",
+        ano: "2024 - Presente",
+        descricao: "",
+        aparecer: true,
+        ordem: 1,
+      },
+      {
+        grau: "Mestrado em Ciência da Computação",
+        instituicao: "MIT - Massachusetts Institute of Technology",
+        ano: "2026 - 2028",
+        descricao: "Foco em inteligência artificial",
+        aparecer: true,
+        ordem: 2,
+      },
+    ],
+    habilidades: [
+      {
+        texto: "HTML, CSS e JS",
+        aparecer: true,
+        ordem: 0,
+      },
+      {
+        texto: "Python",
+        aparecer: true,
+        ordem: 1,
+      },
+      {
+        texto: "Ruby",
+        aparecer: true,
+        ordem: 2,
+      },
+      {
+        texto: "UI/UX Design",
+        aparecer: true,
+        ordem: 2,
+      },
+      {
+        texto: "Inteligência Artificial",
+        aparecer: true,
+        ordem: 4,
+      },
+    ],
+    cursos: [
+      {
+        nome: "Web Developer",
+        onde: "Alura",
+        quando: "2021",
+        aparecer: true,
+        ordem: 0,
+      },
+      {
+        nome: "Front-end Developer",
+        onde: "Udemy",
+        quando: "2022",
+        aparecer: true,
+        ordem: 1,
+      },
+      {
+        nome: "UX/UI",
+        onde: "Origamid",
+        quando: "2024",
+        aparecer: true,
+        ordem: 2,
+      },
+      {
+        nome: "Machine Learning",
+        onde: "Coursera",
+        quando: "2025",
+        aparecer: true,
+        ordem: 3,
+      },
+    ],
+    experiencias: [
+      {
+        cargo: "Web Developer",
+        onde: "Google",
+        fez: "Trabalhei como Web developer por 2 anos na Google com microservices e outras tecnologias atuais ...",
+        aparecer: true,
+        ordem: 0,
+      },
+      {
+        cargo: "UX/UI Developer",
+        onde: "Facebook",
+        fez: "Criei diversas interfaces usando o Figma e outras ferramentas visuais como ...",
+        aparecer: true,
+        ordem: 1,
+      },
+      {
+        cargo: "Engenheiro de Software",
+        onde: "Amazon",
+        fez: "Trabalhei no desenvolvimento de sistemas de alta performance",
+        aparecer: true,
+        ordem: 2,
+      },
+    ],
+    resumo: {
+      texto:
+        "Trabalhei alguns anos como desenvolvedor Web e me especializei na área de criação de interfaces ...",
+    },
+    projetos: [
+      {
+        titulo: "Next.JS",
+        organizacao: "Vercel",
+        quando: "2025 - Presente",
+        url: "www.vercel.com",
+        fez: "Voluntário na tradução do projeto para a língua portuguesa",
+        aparecer: true,
+        ordem: 0,
+      },
+      {
+        titulo: "React Native",
+        organizacao: "Meta",
+        quando: "2024 - Presente",
+        url: "www.facebook.com",
+        fez: "Desenvolvimento de aplicativos mobile",
+        aparecer: true,
+        ordem: 1,
+      },
+    ],
+    certificacoes: [
+      {
+        nome: "Front-end Developer",
+        onde: "FIAP",
+        quando: "2023",
+        descricao:
+          "Visando evoluir minhas habilidades na criação de interfaces",
+        aparecer: true,
+        ordem: 0,
+      },
+      {
+        nome: "Python Developer",
+        onde: "Udemy",
+        quando: "2024",
+        descricao: "Certificação em Python para desenvolvimento de backend",
+        aparecer: true,
+        ordem: 1,
+      },
+      {
+        nome: "AWS Certified Cloud Practitioner",
+        onde: "Amazon Web Services",
+        quando: "2025",
+        descricao: "Certificação em computação em nuvem",
+        aparecer: true,
+        ordem: 2,
+      },
+    ],
   },
-  summary:
-    "Results-driven product marketing professional with extensive experience...",
-  experience: [
-    {
-      company: "Tech Solutions Inc.",
-      position: "Senior Product Marketing Manager",
-      startDate: "2020",
-      endDate: "Present",
-      description:
-        "Led product marketing initiatives resulting in 150% growth...",
+  female: {
+    contact: {
+      name: "Kate Homes",
+      email: "kate.homes@example.com",
+      phone: "+1-555-123-4567",
+      linkedin: "https://www.linkedin.com/in/katehomes",
+      personal: "https://www.katehomes.com",
+      country: "Estados Unidos",
+      state: "NY",
+      city: "Nova York",
     },
-  ],
-  education: [
-    {
-      institution: "New York University",
-      degree: "Bachelor in Marketing",
-      startDate: "2014",
-      endDate: "2018",
+    educations: [
+      {
+        degree: "Bacharel em Ciências da Computação",
+        institution: "Universidade de Stanford",
+        year: "2015 - 2019",
+        description: "",
+        appear: true,
+        order: 0,
+      },
+      {
+        degree: "Mestre em Ciência em Inteligência Artificial",
+        institution: "Massachusetts Institute of Technology (MIT)",
+        year: "2019 - 2021",
+        description: "",
+        appear: true,
+        order: 1,
+      },
+    ],
+    skills: [
+      {
+        text: "Python",
+        appear: true,
+        order: 0,
+      },
+      {
+        text: "Java",
+        appear: true,
+        order: 1,
+      },
+      {
+        text: "Aprendizado de Máquina",
+        appear: true,
+        order: 2,
+      },
+      {
+        text: "Aprendizado Profundo",
+        appear: true,
+        order: 3,
+      },
+      {
+        text: "Ciência de Dados",
+        appear: true,
+        order: 4,
+      },
+    ],
+    courseworks: [
+      {
+        name: "Especialização em Aprendizado de Máquina",
+        where: "Coursera",
+        when: "2020",
+        appear: true,
+        order: 0,
+      },
+      {
+        name: "Especialização em Aprendizado Profundo",
+        where: "deeplearning.ai",
+        when: "2021",
+        appear: true,
+        order: 1,
+      },
+      {
+        name: "Ciência de Dados com Python",
+        where: "edX",
+        when: "2022",
+        appear: true,
+        order: 2,
+      },
+    ],
+    experiences: [
+      {
+        role: "Engenheira de Software",
+        where: "Google",
+        did: "Desenvolveu e implantou modelos de aprendizado de máquina para vários produtos do Google.",
+        appear: true,
+        order: 0,
+      },
+      {
+        role: "Cientista de Pesquisa",
+        where: "OpenAI",
+        did: "Conduziu pesquisas sobre tecnologias de IA de ponta, incluindo processamento de linguagem natural e visão computacional.",
+        appear: true,
+        order: 1,
+      },
+    ],
+    summary: {
+      text: "Engenheira de software e cientista de pesquisa experiente, apaixonada por inteligência artificial e aprendizado de máquina. Habilidade comprovada para desenvolver e implantar soluções de IA que resolvem problemas do mundo real.",
     },
-  ],
-  isLocked: false,
-  isSearchable: true,
+    projects: [
+      {
+        title: "Chatbot com IA",
+        organiztion: "Projeto Pessoal",
+        when: "2023",
+        url: "https://github.com/katehomes/ai-chatbot",
+        did: "Desenvolveu um chatbot capaz de entender e responder a consultas de usuários de forma natural e envolvente.",
+        appear: true,
+        order: 0,
+      },
+      {
+        title: "Sistema de Reconhecimento de Imagem",
+        organiztion: "MIT",
+        when: "2021",
+        url: "",
+        did: "Desenvolveu um sistema capaz de identificar objetos em imagens com precisão.",
+        appear: true,
+        order: 1,
+      },
+    ],
+    certifications: [
+      {
+        name: "Google AI",
+        where: "Google",
+        when: "2022",
+        description: "Certificada na Plataforma Google AI.",
+        appear: true,
+        order: 0,
+      },
+      {
+        name: "AWS Certified Machine Learning - Specialty",
+        where: "Amazon Web Services",
+        when: "2023",
+        description: "Certificada em AWS Machine Learning.",
+        appear: true,
+        order: 1,
+      },
+    ],
+  },
 };

@@ -6,6 +6,7 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { Input } from "~/components/form/input";
+import { PageContent } from "~/components/page";
 import { Button } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { Form } from "~/components/ui/form";
@@ -46,23 +47,25 @@ export default function EducationCreate() {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleOnSubmit)}>
-        <Input name="degree" label="Grau" />
-        <Input name="institution" label="Instituição" />
-        <Input name="description" label="Descrição" />
-        <div className="flex justify-end gap-3">
-          <Button type="button" variant="destructive" onClick={handleOnClick}>
-            Cancelar
-          </Button>
-          <ButtonLoading
-            type="submit"
-            isLoading={educationCreateMutation.isPending}
-          >
-            Salvar
-          </ButtonLoading>
-        </div>
-      </form>
-    </Form>
+    <PageContent>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleOnSubmit)}>
+          <Input name="degree" label="Grau" />
+          <Input name="institution" label="Instituição" />
+          <Input name="description" label="Descrição" />
+          <div className="flex justify-end gap-3">
+            <Button type="button" variant="destructive" onClick={handleOnClick}>
+              Cancelar
+            </Button>
+            <ButtonLoading
+              type="submit"
+              isLoading={educationCreateMutation.isPending}
+            >
+              Salvar
+            </ButtonLoading>
+          </div>
+        </form>
+      </Form>
+    </PageContent>
   );
 }
