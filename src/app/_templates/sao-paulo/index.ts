@@ -13,7 +13,7 @@ export const defaultSections = [
   },
   {
     type: "summary",
-    title: "Summary",
+    title: "Sumário",
     column: 1,
     order: 1,
     disabled: false,
@@ -23,7 +23,7 @@ export const defaultSections = [
   },
   {
     type: "skills",
-    title: "Skills",
+    title: "Habilidades",
     column: 1,
     order: 2,
     disabled: false,
@@ -33,7 +33,7 @@ export const defaultSections = [
   },
   {
     type: "experiences",
-    title: "Experiences",
+    title: "Experiências",
     column: 1,
     order: 3,
     disabled: false,
@@ -43,7 +43,7 @@ export const defaultSections = [
   },
   {
     type: "educations",
-    title: "Educations",
+    title: "Educações",
     column: 1,
     order: 4,
     disabled: false,

@@ -96,11 +96,11 @@ export const Body = () => {
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <ScrollArea className="h-[calc(90vh-8rem)] w-full">
-              <div className="absolute inset-0 overflow-hidden rounded-lg bg-white">
+              <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg bg-white">
                 <div className="relative h-full w-full bg-gray-50">
                   <div className="absolute inset-0 bg-white shadow-lg">
-                    <div className="absolute inset-0 h-full w-full origin-top-left scale-[0.3] transform">
-                      <div className="flex min-h-full w-[333%] flex-col p-12">
+                    <div className="absolute inset-0 h-full w-full origin-top-left transform">
+                      <div className="flex min-h-full flex-col p-12">
                         {selectedTemplate && (
                           <selectedTemplate.component
                             resumeTemplate={{
@@ -117,14 +117,6 @@ export const Body = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between border-t bg-white p-3">
-                <div className="flex flex-col">
-                  <span className="max-w-[160px] truncate text-sm font-medium">
-                    {selectedTemplate?.title}
-                  </span>
                 </div>
               </div>
             </ScrollArea>

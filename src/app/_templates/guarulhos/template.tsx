@@ -32,7 +32,7 @@ const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
         });
       }}
     >
-      <h3>Educations</h3>
+      <h3>{section.title}</h3>
     </SectionList>
   );
 };
@@ -54,7 +54,7 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
         });
       }}
     >
-      <h3>Skills</h3>
+      <h3>{section.title}</h3>
     </SectionList>
   );
 };
@@ -68,7 +68,6 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       type="experiences"
       renderItem={(items) => {
         return items.map((item) => {
-          console.log("item", item);
           return (
             <Item key={item.id} id={item.id}>
               <li className="list-disc">{item.role}</li>
@@ -77,7 +76,7 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
         });
       }}
     >
-      <h3>Experiences</h3>
+      <h3>{section.title}</h3>
     </SectionList>
   );
 };
@@ -85,7 +84,7 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
 const Summary: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <Section id={section.id} disabled={section.disabled}>
-      <h3>Summary</h3>
+      <h3>{section.title}</h3>
       <p>{resumeTemplate?.summary?.text}</p>
     </Section>
   );
@@ -94,7 +93,7 @@ const Summary: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
 const Contact: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <Section id={section.id} disabled={section.disabled}>
-      <h2>{resumeTemplate?.contact?.name}</h2>
+      <h2 className="text-3xl font-bold">{resumeTemplate?.contact?.name}</h2>
       <p>{resumeTemplate?.contact?.phone}</p>
       <p>{resumeTemplate?.contact?.email}</p>
     </Section>
