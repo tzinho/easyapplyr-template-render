@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import { Button } from "../ui/button";
 
 interface TextareaProps extends React.ComponentProps<"textarea"> {
   name: string;
@@ -38,9 +39,12 @@ export const Textarea = ({
       name={name}
       render={({ field }) => (
         <FormItem className="w-full">
-          <FormLabel>
-            {label} {required && <span className="text-red-500">*</span>}
-          </FormLabel>
+          <div className="flex items-center justify-between">
+            <FormLabel>
+              {label} {required && <span className="text-red-500">*</span>}
+            </FormLabel>
+            <Button disabled>AI help</Button>
+          </div>
           <FormControl>
             <TextareaShadcn placeholder={placeholder} {...field} {...props} />
           </FormControl>

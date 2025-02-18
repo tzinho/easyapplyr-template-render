@@ -17,7 +17,7 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { Plus, Trash } from "lucide-react";
+import { Edit2, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
@@ -25,7 +25,7 @@ import { type InferSelectModel } from "drizzle-orm";
 
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
-import { buttonVariants } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { SortableItem } from "~/app/_components/sortable-item";
 import { type educations } from "~/server/db/schema";
@@ -115,31 +115,43 @@ export const List = () => {
         >
           {items.map((education) => (
             <SortableItem key={education.id} id={education.id}>
-              <div className="flex w-full items-center justify-between rounded-md border p-3">
-                <Link
-                  href={`/app/resume/${params.id}/educations/edit/${education.id}`}
-                >
-                  <p>{education.degree}</p>
-                  <p>{education.institution}</p>
-                </Link>
+              <Link
+                href={`/app/resume/${params.id}/educations/edit/${education.id}`}
+                className="w-full"
+              >
+                <div className="flex w-full flex-1 items-center justify-between rounded-md border p-3">
+                  <div>
+                    <p>{education.degree}</p>
+                    <p>{education.institution}</p>
+                  </div>
 
-                <ButtonLoading
-                  onClick={() => handleOnDelete(education.id)}
-                  size="icon"
-                  variant="destructive"
-                  className="h-6 w-6"
-                  isLoading={educationDeleteMutation.isPending}
-                >
-                  <Trash className="h-2 w-2" />
-                </ButtonLoading>
-              </div>
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => handleOnDelete(education.id)}
+                      size="icon"
+                      variant="outline"
+                      className="h-fit w-fit px-1"
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      onClick={() => handleOnDelete(education.id)}
+                      size="icon"
+                      variant="destructive"
+                      className="h-fit w-fit px-1"
+                    >
+                      Remover
+                    </Button>
+                  </div>
+                </div>
+              </Link>
             </SortableItem>
           ))}
         </SortableContext>
 
         <Link
           href={`/app/resume/${params.id}/educations/create`}
-          className={cn(buttonVariants({ variant: "default" }), "h-6")}
+          className={cn(buttonVariants({ variant: "outline" }), "h-6 w-full")}
         >
           <Plus />
           Adicionar educação

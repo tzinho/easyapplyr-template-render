@@ -12,14 +12,14 @@ export const contactSchema = z.object({
 });
 
 export const experienceSchema = z.object({
-  role: z.string(),
+  role: z.string({ message: "O papel é obrigatório" }),
   company: z.string().optional(),
   where: z.string().optional(),
   did: z.string().optional(),
 });
 
 export const skillSchema = z.object({
-  text: z.string(),
+  text: z.string({ message: "A habilidade é obrigatória" }),
 });
 
 export const summarySchema = z.object({
@@ -27,20 +27,20 @@ export const summarySchema = z.object({
 });
 
 export const educationSchema = z.object({
-  degree: z.string(),
+  degree: z.string({ message: "O campo de grau é obrigatório" }),
   institution: z.string().optional().nullish(),
   year: z.string().optional().nullish(),
   description: z.string().optional().nullish(),
 });
 
 export const courseworkSchema = z.object({
-  name: z.string().optional(),
+  name: z.string({ message: "O nome do curso é obrigatório" }),
   where: z.string().optional(),
   when: z.string().optional(),
 });
 
 export const projectSchema = z.object({
-  title: z.string(),
+  title: z.string({ message: "O nome do projeto é obrigatório" }),
   organization: z.string(),
   url: z.string().optional(),
   startAt: z.date().optional(),
@@ -49,7 +49,7 @@ export const projectSchema = z.object({
 });
 
 export const involvementSchema = z.object({
-  title: z.string(),
+  title: z.string({ message: "O nome do envolvimento é obrigatório" }),
   organization: z.string().optional(),
   college: z.string().optional(),
   did: z.string().optional(),

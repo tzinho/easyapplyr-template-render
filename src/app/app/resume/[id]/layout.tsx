@@ -27,15 +27,18 @@ export default function Layout({ children }: PropsWithChildren) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]);
 
-  if (resume.isLoading)
-    return (
-      <div className="flex flex-col gap-5">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-      </div>
-    );
-
-  return <div className="flex flex-col gap-3">{children}</div>;
+  return (
+    <div className="flex flex-col gap-3">
+      {resume.isLoading ? (
+        <div className="w-full space-y-4 p-4 md:p-6">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+      ) : (
+        children
+      )}
+    </div>
+  );
 }
