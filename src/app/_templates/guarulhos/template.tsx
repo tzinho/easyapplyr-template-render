@@ -68,9 +68,10 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       type="experiences"
       renderItem={(items) => {
         return items.map((item) => {
+          console.log("item", item);
           return (
-            <Item key={item.id} id={item.order}>
-              <li className="list-disc">{item.company}</li>
+            <Item key={item.id} id={item.id}>
+              <li className="list-disc">{item.role}</li>
             </Item>
           );
         });

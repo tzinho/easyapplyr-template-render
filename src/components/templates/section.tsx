@@ -38,16 +38,18 @@ export const Section = ({ id, disabled, children }: SectionProps) => {
       ref={setNodeRef}
       {...attributes}
     >
-      <div className="absolute -left-4 top-0" {...listeners}>
-        <ArrowDownUp
-          className={cn(
-            "h-2 w-2 cursor-grab opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100",
-            "group-hover:scale-110",
-            "active:scale-110",
-          )}
-          strokeWidth={2}
-        />
-      </div>
+      {!disabled && (
+        <div className="absolute -left-4 top-0" {...listeners}>
+          <ArrowDownUp
+            className={cn(
+              "h-2 w-2 cursor-grab opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100",
+              "group-hover:scale-110",
+              "active:scale-110",
+            )}
+            strokeWidth={2}
+          />
+        </div>
+      )}
       <div>{children}</div>
     </div>
   );

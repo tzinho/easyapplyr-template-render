@@ -28,7 +28,7 @@ export const TwoColumn = ({
     column2Items,
     activeId,
     sections,
-  } = useDragEndTwoColumn<SectionType>();
+  } = useDragEndTwoColumn<SectionType>({ resumeTemplate });
 
   return (
     <DndContext

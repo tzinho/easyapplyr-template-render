@@ -64,6 +64,7 @@ export interface Template {
   title: string;
   component: ({ resumeTemplate }: { resumeTemplate: Resume }) => JSX.Element;
   defaultSections: Section[];
+  categories: string[];
   settings: Settings;
 }
 

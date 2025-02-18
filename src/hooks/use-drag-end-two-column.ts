@@ -10,14 +10,17 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { useFormContext } from "react-hook-form";
 
 import { type Section as SectionType } from "~/types/template";
 import { toast } from "sonner";
+import { type Resume } from "~/stores/resume-store";
 
-export function useDragEndTwoColumn<T extends SectionType>() {
-  const form = useFormContext();
-  const sections = form.watch("sections") as T[];
+export function useDragEndTwoColumn<T extends SectionType>({
+  resumeTemplate,
+}: {
+  resumeTemplate: Resume;
+}) {
+  const sections = resumeTemplate.sections;
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const column1Items = sections
@@ -110,7 +113,7 @@ export function useDragEndTwoColumn<T extends SectionType>() {
         .map((item, index) => ({ ...item, order: index + 1 }));
 
       const finalSections = [...column1Items, ...column2Items];
-      form.setValue("sections", finalSections);
+      // form.setValue("sections", finalSections);
       toast.success("Seções atualizadas com sucesso!");
     } else {
       const oldIndex = sections.findIndex((s) => s.id === active.id);
@@ -127,7 +130,7 @@ export function useDragEndTwoColumn<T extends SectionType>() {
         .map((item, index) => ({ ...item, order: index + 1 }));
 
       const finalSections = [...column1Items, ...column2Items];
-      form.setValue("sections", finalSections);
+      // form.setValue("sections", finalSections);
       toast.success("Seções atualizadas com sucesso!");
     }
   };

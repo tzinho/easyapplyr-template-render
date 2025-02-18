@@ -17,16 +17,15 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { Edit2, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { type InferSelectModel } from "drizzle-orm";
 
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import { Button, buttonVariants } from "~/components/ui/button";
-import { ButtonLoading } from "~/components/ui/button-loading";
 import { SortableItem } from "~/app/_components/sortable-item";
 import { type educations } from "~/server/db/schema";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -52,9 +51,7 @@ export const List = () => {
   });
 
   useEffect(() => {
-    if (educationsList.isSuccess) {
-      setItems(educationsList.data);
-    }
+    if (educationsList.isSuccess) setItems(educationsList.data);
   }, [educationsList.isSuccess, educationsList.data]);
 
   const sensors = useSensors(

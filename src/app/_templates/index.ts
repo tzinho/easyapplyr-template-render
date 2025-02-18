@@ -1,13 +1,15 @@
 import { type Template } from "~/types/template";
-import * as SimpleTemplate from "./simple";
-import * as ModernTemplate from "./modern";
+import * as SaoPaulo from "./sao-paulo";
+import * as Guarulhos from "./guarulhos";
+import * as PracaOito from "./praca-oito";
 
 export const templates = [
   {
     id: "1",
     title: "São Paulo",
-    component: SimpleTemplate.Template,
-    defaultSections: SimpleTemplate.defaultSections,
+    component: SaoPaulo.Template,
+    defaultSections: SaoPaulo.defaultSections,
+    categories: ["pro"],
     settings: {
       fontSize: 13,
       primaryColor: "purple",
@@ -23,8 +25,9 @@ export const templates = [
   {
     id: "2",
     title: "Guarulhos",
-    component: ModernTemplate.Template,
-    defaultSections: ModernTemplate.defaultSections,
+    component: Guarulhos.Template,
+    defaultSections: Guarulhos.defaultSections,
+    categories: ["pro", "marketing"],
     settings: {
       fontSize: 13,
       primaryColor: "black",
@@ -35,6 +38,24 @@ export const templates = [
       lineHeight: 21,
       indent: false,
       showSeparators: false,
+    },
+  },
+  {
+    id: "3",
+    title: "Praça oito",
+    component: PracaOito.Template,
+    defaultSections: PracaOito.defaultSections,
+    categories: ["pro"],
+    settings: {
+      fontSize: 13,
+      primaryColor: "purple",
+      fontFamily: "Merriweather",
+      paperSize: "Letter",
+      showIcons: true,
+      sectionSpacing: 1,
+      lineHeight: 21,
+      indent: false,
+      showSeparators: true,
     },
   },
 ] as Template[];

@@ -24,7 +24,7 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       type="skills"
       renderItem={(items) =>
         items.map((item) => (
-          <Item key={item.id} id={item.id}>
+          <Item key={item.id} id={item.id} disabled={section.disabled}>
             <li className="list-disc">{item.text}</li>
           </Item>
         ))
@@ -44,7 +44,7 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       type="experiences"
       renderItem={(items) =>
         items.map((item) => (
-          <Item key={item.id} id={item.id}>
+          <Item key={item.id} id={item.id} disabled={section.disabled}>
             <li className="list-disc">{item.role}</li>
           </Item>
         ))
@@ -64,7 +64,7 @@ const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       type="educations"
       renderItem={(items) =>
         items.map((item) => (
-          <Item key={item.id} id={item.id}>
+          <Item key={item.id} id={item.id} disabled={section.disabled}>
             <li className="list-disc">{item.degree}</li>
           </Item>
         ))
@@ -117,9 +117,9 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
       case "contact": {
         return (
           <Contact
+            key={section.id}
             resumeTemplate={resumeTemplate}
             section={section}
-            key={section.id}
           />
         );
       }
@@ -127,8 +127,8 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
       case "summary": {
         return (
           <Summary
-            resumeTemplate={resumeTemplate}
             key={section.id}
+            resumeTemplate={resumeTemplate}
             section={section}
           />
         );
@@ -137,9 +137,9 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
       case "educations": {
         return (
           <Education
+            key={section.id}
             resumeTemplate={resumeTemplate}
             section={section}
-            key={section.id}
           />
         );
       }
@@ -147,8 +147,8 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
       case "experiences": {
         return (
           <Experiences
-            resumeTemplate={resumeTemplate}
             key={section.id}
+            resumeTemplate={resumeTemplate}
             section={section}
           />
         );
@@ -157,9 +157,9 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
       case "skills": {
         return (
           <Skills
+            key={section.id}
             resumeTemplate={resumeTemplate}
             section={section}
-            key={section.id}
           />
         );
       }

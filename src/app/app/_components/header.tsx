@@ -1,6 +1,6 @@
 "use client";
 
-import { File, Plus } from "lucide-react";
+import { FileUser, Plus } from "lucide-react";
 
 import { ModalToCreateAResume } from "~/app/_components/modal-to-create-a-resume";
 import {
@@ -18,7 +18,7 @@ export const Header = ({ onOpenChange }: HeaderProps) => {
       <PageNavbarSearchAction
         title="Currículos"
         subtitle="Gerencie seus currículos"
-        icon={File}
+        icon={FileUser}
       >
         <ModalToCreateAResume>
           <PageNavbarPrimaryButton onClick={() => onOpenChange?.(true)}>

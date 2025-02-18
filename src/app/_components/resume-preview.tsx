@@ -42,9 +42,8 @@ export const ResumePreview = ({
 }: ResumePreviewProps) => {
   const router = useRouter();
 
-  const handleOnClick = () => {
+  const handleOnClick = () =>
     router.push(`/app/resume/${resumeTemplate.id}/contact`);
-  };
 
   // A4 aspect ratio is 1:1.4142 (width:height)
   // const paperWidth = 215.16; // px

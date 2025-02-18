@@ -36,6 +36,7 @@ export const ListOfResumeTemplates = () => {
           </CardContent>
         </Card>
       </ModalToCreateAResume>
+
       {resumesTemplates.data?.map((resumeTemplate) => (
         <ResumePreview
           key={resumeTemplate.id}
