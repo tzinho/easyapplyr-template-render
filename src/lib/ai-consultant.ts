@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 
-const API_KEY =
-  "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";
+const API_KEY = "";
 
 export const getAIAdvice = async (apiKey: string, resumeData: any) => {
   try {
