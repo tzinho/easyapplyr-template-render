@@ -81,11 +81,14 @@ export const Body = () => {
         onOpenChange={() => setSelectedTemplate(null)}
       >
         <DialogContent className="h-[90vh] max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>{selectedTemplate?.title}</DialogTitle>
-            <DialogDescription>
-              Clique nas setas pra encontrar o seu template ideal
-            </DialogDescription>
+          <DialogHeader className="flex flex-row items-center gap-3">
+            <div>
+              <DialogTitle>{selectedTemplate?.title}</DialogTitle>
+              <DialogDescription>
+                Clique nas setas pra encontrar o seu template ideal
+              </DialogDescription>
+            </div>
+            <Button size="sm">Usar este modelo</Button>
           </DialogHeader>
           <div className="relative flex items-center">
             <Button
@@ -97,10 +100,10 @@ export const Body = () => {
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <ScrollArea className="h-[calc(90vh-8rem)] w-full">
-              <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg bg-white">
+            <ScrollArea className="h-[calc(90vh-8rem)] w-full overflow-y-auto">
+              <div className="pointer-events-none absolute inset-0 rounded-lg bg-white">
                 <div className="relative h-full w-full bg-gray-50">
-                  <div className="absolute inset-0 bg-white shadow-lg">
+                  <div className="absolute inset-0 bg-white">
                     <div className="absolute inset-0 h-full w-full origin-top-left transform">
                       <div className="flex min-h-full flex-col p-12">
                         {selectedTemplate && (

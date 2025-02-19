@@ -67,7 +67,7 @@ const SelectState = ({ name, placeholder }: SelectStateProps) => {
     <Select
       name={name}
       placeholder={placeholder}
-      label="País"
+      label="Estado"
       className="flex-1"
     >
       {states.map((state) => (

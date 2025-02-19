@@ -71,7 +71,14 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
         return items.map((item) => {
           return (
             <Item key={item.id} id={item.id}>
-              <li className="list-disc">{item.role}</li>
+              <li className="list-none">
+                <p className="text-xs">2017 - 2019</p>
+                <p>
+                  {item.company} | {item.where}
+                </p>
+                <p className="font-bold">{item.role}</p>
+                <p>{item.did}</p>
+              </li>
             </Item>
           );
         });
@@ -95,8 +102,15 @@ const Contact: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <Section id={section.id} disabled={section.disabled}>
       <h2 className="text-3xl font-bold">{resumeTemplate?.contact?.name}</h2>
+      <p className="font-bold">Telefone</p>
       <p>{resumeTemplate?.contact?.phone}</p>
+      <p className="font-bold">Endereço de email</p>
       <p>{resumeTemplate?.contact?.email}</p>
+      <p className="font-bold">Endereço</p>
+      <p>
+        {resumeTemplate?.contact?.city}, {resumeTemplate?.contact?.state} -{" "}
+        {resumeTemplate?.contact?.country}
+      </p>
     </Section>
   );
 };

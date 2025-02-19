@@ -96,21 +96,24 @@ export const fakeData = {
     experiences: [
       {
         role: "Web Developer",
-        where: "Google",
+        company: "Google",
+        where: "ST. Park Avenue",
         did: "Trabalhei como Web developer por 2 years na Google com microservices e outras tecnologias atuais ...",
         appear: true,
         order: 0,
       },
       {
         role: "UX/UI Developer",
-        where: "Facebook",
+        company: "Facebook",
+        where: "ST. Park Avenue",
         did: "Criei diversas interfaces usando o Figma e outras ferramentas visuais como ...",
         appear: true,
         order: 1,
       },
       {
         role: "Engenheiro de Software",
-        where: "Amazon",
+        company: "Amazon",
+        where: "ST. Park Avenue",
         did: "Trabalhei no desenvolvimento de sistemas de alta performance",
         appear: true,
         order: 2,
@@ -249,14 +252,16 @@ export const fakeData = {
     experiences: [
       {
         role: "Engenheira de Software",
-        where: "Google",
+        where: "St. Park Avenue",
+        company: "Google",
         did: "Desenvolveu e implantou modelos de aprendizado de máquina para vários produtos do Google.",
         appear: true,
         order: 0,
       },
       {
         role: "Cientista de Pesquisa",
-        where: "OpenAI",
+        company: "OpenAI",
+        where: "ST. Park Avenue",
         did: "Conduziu pesquisas sobre tecnologias de IA de ponta, incluindo processamento de linguagem natural e visão computacional.",
         appear: true,
         order: 1,

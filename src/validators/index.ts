@@ -12,8 +12,8 @@ export const contactSchema = z.object({
 });
 
 export const experienceSchema = z.object({
-  role: z.string({ message: "O papel é obrigatório" }),
-  company: z.string().optional(),
+  role: z.string({ message: "A função é obrigatória" }),
+  company: z.string({ message: "A empresa é obrigatória" }),
   where: z.string().optional(),
   did: z.string().optional(),
 });
