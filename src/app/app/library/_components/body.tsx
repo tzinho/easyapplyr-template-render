@@ -1,26 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from "lucide-react";
 import { templates } from "~/app/_templates";
 import { PageContent } from "~/components/page";
 import { Preview } from "~/components/preview";
 
 import { Button } from "~/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
-import { ScrollArea } from "~/components/ui/scroll-area";
+import { Dialog, DialogContent } from "~/components/ui/dialog";
 import { CATEGORIES } from "~/config/constants";
 import { fakeData } from "~/data";
 import { type Template } from "~/types/template";
 
 export const Body = () => {
   const [selectedCategory, setSelectedCategory] = useState("pro");
+  const [zoom, setZoom] = useState(0.5);
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     null,
   );
@@ -43,8 +37,19 @@ export const Body = () => {
       setSelectedTemplate(templatesCategory[currentIndex - 1]);
   };
 
+  const handleZoomIn = () => {
+    if (zoom >= 1) return;
+
+    setZoom((prev) => Math.min(prev + 0.1, 1));
+  };
+
+  const handleZoomOut = () => {
+    if (zoom <= 0.5) return;
+    setZoom((prev) => Math.max(prev - 0.1, 0.5));
+  };
+
   return (
-    <PageContent>
+    <PageContent className="md:px-28">
       <div className="mb-8 flex w-full flex-wrap justify-center gap-2">
         {CATEGORIES.map((category) => (
           <Button
@@ -80,59 +85,66 @@ export const Body = () => {
         open={!!selectedTemplate}
         onOpenChange={() => setSelectedTemplate(null)}
       >
-        <DialogContent className="h-[90vh] max-w-4xl">
-          <DialogHeader className="flex flex-row items-center gap-3">
-            <div>
-              <DialogTitle>{selectedTemplate?.title}</DialogTitle>
-              <DialogDescription>
-                Clique nas setas pra encontrar o seu template ideal
-              </DialogDescription>
-            </div>
-            <Button size="sm">Usar este modelo</Button>
-          </DialogHeader>
-          <div className="relative flex items-center">
+        <DialogContent className="max-h-[90vh] max-w-[90vw] p-0">
+          <div className="fixed right-4 top-4 z-20 flex gap-2">
+            <Button variant="secondary" size="icon" onClick={handleZoomIn}>
+              <ZoomIn className="h-4 w-4" />
+            </Button>
+            <Button variant="secondary" size="icon" onClick={handleZoomOut}>
+              <ZoomOut className="h-4 w-4" />
+            </Button>
             <Button
-              variant="outline"
+              variant="secondary"
               size="icon"
-              className="absolute left-0 z-10"
+              onClick={() => setSelectedTemplate(null)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <div className="relative flex h-[90vh] w-full items-center justify-center bg-black/90">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute left-4 text-white hover:bg-white/20"
               onClick={showPrevious}
               disabled={currentIndex <= 0}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-6 w-6" />
             </Button>
-            <ScrollArea className="h-[calc(90vh-8rem)] w-full overflow-y-auto">
-              <div className="pointer-events-none absolute inset-0 rounded-lg bg-white">
-                <div className="relative h-full w-full bg-gray-50">
-                  <div className="absolute inset-0 bg-white">
-                    <div className="absolute inset-0 h-full w-full origin-top-left transform">
-                      <div className="flex min-h-full flex-col p-12">
-                        {selectedTemplate && (
-                          <selectedTemplate.component
-                            resumeTemplate={{
-                              ...fakeData.female,
-                              sections: selectedTemplate.defaultSections.map(
-                                (section) => ({
-                                  ...section,
-                                  disabled: true,
-                                }),
-                              ),
-                            }}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
+            {selectedTemplate && (
+              <div
+                className="relative transition-transform duration-200 ease-in-out"
+                style={{
+                  transform: `scale(${zoom})`,
+                  aspectRatio: "1/1.414", // A4 aspect ratio
+                  height: "297mm",
+                  width: "210mm",
+                }}
+              >
+                <selectedTemplate.component
+                  resumeTemplate={{
+                    ...fakeData.female,
+                    sections: selectedTemplate.defaultSections.map(
+                      (section) => ({
+                        ...section,
+                        disabled: true,
+                      }),
+                    ),
+                  }}
+                />
               </div>
-            </ScrollArea>
+            )}
+
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
-              className="absolute right-0 z-10"
+              className="absolute right-4 text-white hover:bg-white/20"
               onClick={showNext}
               disabled={currentIndex >= templates.length - 1}
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-6 w-6" />
             </Button>
           </div>
         </DialogContent>

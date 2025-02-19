@@ -31,14 +31,15 @@ import { cn } from "~/lib/utils";
 export function UserNav() {
   const isCollapsed = useStore((state) => state.isCollapsed);
 
-  // const session = useSession();
-
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div
-            className={cn("flex items-center gap-2", isCollapsed && "mx-auto")}
+            className={cn(
+              "flex h-full items-center gap-2",
+              isCollapsed && "mx-auto",
+            )}
           >
             <Avatar className="h-8 w-8">
               <AvatarImage

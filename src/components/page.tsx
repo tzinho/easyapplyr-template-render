@@ -86,11 +86,12 @@ const PageNavbar = ({ children }: Readonly<PropsWithChildren>) => {
 
 interface PageContentProps extends Readonly<PropsWithChildren> {
   isLoading?: boolean;
+  className?: string;
 }
 
-const PageContent = ({ children, isLoading }: PageContentProps) => {
+const PageContent = ({ children, isLoading, className }: PageContentProps) => {
   return (
-    <main className="w-full space-y-4 p-4 md:p-6">
+    <main className={cn("w-full space-y-4 p-4 md:px-56 md:py-6", className)}>
       {isLoading ? (
         <div className="flex flex-col gap-5">
           <Skeleton className="h-10 w-full" />
@@ -111,7 +112,7 @@ export const PageContentEditor = ({
 }: PageContentProps) => {
   return (
     <PageContent isLoading={isLoading}>
-      <div className="flex gap-5">{children}</div>
+      <div className="flex flex-col gap-5 md:flex-row">{children}</div>
     </PageContent>
   );
 };

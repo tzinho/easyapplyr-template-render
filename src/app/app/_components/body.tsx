@@ -3,7 +3,7 @@ import { PageContent } from "~/components/page";
 
 export const Body = () => {
   return (
-    <PageContent>
+    <PageContent className="md:px-6">
       <ListOfResumeTemplates />
     </PageContent>
   );

@@ -43,7 +43,9 @@ export const Textarea = ({
             <FormLabel>
               {label} {required && <span className="text-red-500">*</span>}
             </FormLabel>
-            <Button disabled>AI help</Button>
+            <Button disabled size="sm">
+              AI help
+            </Button>
           </div>
           <FormControl>
             <TextareaShadcn placeholder={placeholder} {...field} {...props} />

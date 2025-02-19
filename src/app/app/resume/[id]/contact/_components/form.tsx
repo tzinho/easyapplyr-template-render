@@ -13,7 +13,7 @@ import { type ContactSchema, contactSchema } from "~/validators";
 import { api } from "~/trpc/react";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { useResumeStore } from "~/providers/resume-store-provider";
-import { type Contact } from "~/stores/resume-store";
+import { type Resume, type Contact } from "~/stores/resume-store";
 import { SelectItem } from "~/components/ui/select";
 import { Select } from "~/components/form/select";
 
@@ -98,19 +98,21 @@ const SelectCountry = ({ name, placeholder }: SelectCountryProps) => {
   );
 };
 
-export const ContactForm = () => {
+export const ContactForm = ({
+  defaultValues,
+}: {
+  defaultValues: Resume["contact"];
+}) => {
   const params = useParams<{ id: string }>();
 
-  const { resumeTemplate, setContactTemplate } = useResumeStore(
-    (state) => state,
-  );
+  const { setContactTemplate } = useResumeStore((state) => state);
 
   const form = useForm<ContactSchema>({
     resolver: zodResolver(contactSchema),
-    defaultValues: resumeTemplate?.contact,
+    defaultValues,
   });
 
-  const updateContactMutation = api.contact.create.useMutation({
+  const updateContact = api.contact.create.useMutation({
     onSuccess(_, variables) {
       setContactTemplate(variables as Contact);
       toast.success("Mudanças salvas com sucesso!");
@@ -121,12 +123,15 @@ export const ContactForm = () => {
   });
 
   const onSubmit = async (values: ContactSchema) => {
-    await updateContactMutation.mutateAsync({ ...values, resumeId: params.id });
+    await updateContact.mutateAsync({ ...values, resumeId: params.id });
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-1 flex-col space-y-6"
+      >
         <div className="flex w-full flex-col gap-3 md:flex-row">
           <Input name="name" label="Nome Completo" placeholder="Thiago Luiz" />
           <Input name="email" label="Email" placeholder="thiago@luiz.com" />
@@ -158,7 +163,8 @@ export const ContactForm = () => {
 
         <ButtonLoading
           type="submit"
-          isLoading={updateContactMutation.isPending}
+          isLoading={updateContact.isPending}
+          className="self-end"
         >
           Salvar
         </ButtonLoading>

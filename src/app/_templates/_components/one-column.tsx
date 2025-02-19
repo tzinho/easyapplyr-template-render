@@ -35,7 +35,7 @@ export const OneColumn = ({
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
         <div
           id="resume"
-          className="rounded-md bg-white p-4"
+          className="h-full w-full rounded-md bg-white p-4"
           style={{ fontSize: resumeTemplate?.settings?.fontSize }}
         >
           {items.filter((item) => item.appear).map(renderSection)}

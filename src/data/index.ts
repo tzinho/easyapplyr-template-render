@@ -142,7 +142,17 @@ export const fakeData = {
         order: 1,
       },
     ],
-    ceritifications: [
+    languages: [
+      {
+        name: "English",
+        order: 0,
+      },
+      {
+        name: "Portuguese",
+        order: 1,
+      },
+    ],
+    certifications: [
       {
         name: "Front-end Developer",
         where: "FIAP",
@@ -270,6 +280,16 @@ export const fakeData = {
     summary: {
       text: "Engenheira de software e cientista de pesquisa experiente, apaixonada por inteligência artificial e aprendizado de máquina. Habilidade comprovada para desenvolver e implantar soluções de IA que resolvem problemas do mundo real.",
     },
+    languages: [
+      {
+        name: "English",
+        order: 0,
+      },
+      {
+        name: "Portuguese",
+        order: 1,
+      },
+    ],
     projects: [
       {
         title: "Chatbot com IA",

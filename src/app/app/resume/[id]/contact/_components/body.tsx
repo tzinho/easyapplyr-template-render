@@ -1,19 +1,17 @@
 "use client";
 
-import { TemplatePreview } from "~/app/_components/template-preview";
-import { useResumeStore } from "~/providers/resume-store-provider";
-import { ContactForm } from "./form";
 import { PageContentEditor } from "~/components/page";
+import { ContactForm } from "./form";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
 export const Body = () => {
   const { resumeTemplate } = useResumeStore((state) => state);
 
-  if (!resumeTemplate) return null;
+  if (!resumeTemplate) return <h1>Carregando ...</h1>;
 
   return (
     <PageContentEditor>
-      <ContactForm />
-      <TemplatePreview resumeTemplate={resumeTemplate} isPreview />
+      <ContactForm defaultValues={resumeTemplate?.contact} />
     </PageContentEditor>
   );
 };

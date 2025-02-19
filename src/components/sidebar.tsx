@@ -15,7 +15,7 @@ function Sidebar() {
     <div
       className={cn(
         "sticky top-0 h-screen shrink-0 overflow-hidden font-sans transition-all duration-300 ease-in-out md:block",
-        isCollapsed ? "w-16" : "w-64",
+        isCollapsed ? "w-16" : "w-56",
       )}
     >
       <div className="relative h-full w-full border-r bg-white">
@@ -47,7 +47,8 @@ function Sidebar() {
 
             <div
               className={cn(
-                "flex cursor-pointer items-center px-4 pb-[90px] duration-200 md:px-6 md:pb-28",
+                // "flex cursor-pointer items-center justify-start px-4 duration-200 md:px-6 md:pb-20",
+                "flex cursor-pointer items-center justify-start px-4 duration-200 md:px-6 md:pb-20",
                 isCollapsed && "px-2 md:px-2",
               )}
             >
