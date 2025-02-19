@@ -91,7 +91,7 @@ export const Body = () => {
                         size="icon"
                         className="h-5 w-5"
                         onClick={handleOnAdd}
-                        disabled={!fields.length}
+                        disabled={true}
                       >
                         <Plus className="h-5 w-5" />
                       </Button>
