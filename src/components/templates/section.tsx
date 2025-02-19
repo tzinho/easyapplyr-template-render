@@ -10,14 +10,19 @@ interface SectionProps extends PropsWithChildren {
   className?: string;
 }
 
-export const Section = ({ id, disabled, children }: SectionProps) => {
+export const Section = ({
+  id,
+  disabled,
+  className,
+  children,
+}: SectionProps) => {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    isDragging,
+    // isDragging,
   } = useSortable({ id, disabled });
 
   const style = {
@@ -26,14 +31,14 @@ export const Section = ({ id, disabled, children }: SectionProps) => {
       : undefined,
     transition,
     cursor: disabled ? "not-allowed" : "grab",
-    opacity: isDragging ? 0.5 : 1,
+    // opacity: isDragging ? 0.5 : 1,
   };
 
   if (disabled) return children;
 
   return (
     <div
-      className="group relative"
+      className={cn("group relative", className)}
       style={style}
       ref={setNodeRef}
       {...attributes}

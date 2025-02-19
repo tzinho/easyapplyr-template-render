@@ -17,7 +17,7 @@ export const Item = ({ id, children, disabled }: ItemProps) => {
     listeners,
     setNodeRef,
     transform,
-    isDragging,
+    // isDragging,
     transition,
   } = useSortable({ id, disabled });
 
@@ -27,7 +27,7 @@ export const Item = ({ id, children, disabled }: ItemProps) => {
       : undefined,
     transition,
     cursor: disabled ? "not-allowed" : "grab",
-    opacity: isDragging ? 0.5 : 1,
+    // opacity: isDragging ? 0.5 : 1,
   };
 
   return (

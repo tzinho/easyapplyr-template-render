@@ -99,26 +99,32 @@ export const SelectPage = ({ links }: { links: LinkEditPage[] }) => {
   };
 
   return (
-    <Select onValueChange={handleOnChange} defaultValue={initial.value}>
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select a page" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {links.map((link) => (
-            <SelectItem key={link.value} value={link.value}>
-              <Link href={link.href}>{link.label}</Link>
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div className="px-4">
+      <Select onValueChange={handleOnChange} defaultValue={initial.value}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder="Select a page" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            {links.map((link) => (
+              <SelectItem key={link.value} value={link.value}>
+                <Link href={link.href}>{link.label}</Link>
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 
 export const LinkPage = ({ links }: { links: LinkEditPage[] }) => {
   const visibleLinks = links.filter((link) => link.appear);
   const hiddenLinks = links.filter((link) => !link.appear);
+
+  const toggleSection = (link: LinkEditPage) => {
+    console.log("[toggleSection]: ", link);
+  };
 
   return (
     <div className="mb-5 flex items-center justify-center gap-5">
@@ -146,9 +152,7 @@ export const LinkPage = ({ links }: { links: LinkEditPage[] }) => {
                 disabled={link.required}
                 onSelect={(e) => {
                   e.preventDefault();
-                  if (!link.required) {
-                    // toggleSection(section.id)
-                  }
+                  if (!link.required) toggleSection(link);
                 }}
               >
                 <div className="flex flex-1 items-center space-x-2">

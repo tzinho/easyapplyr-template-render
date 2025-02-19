@@ -12,8 +12,9 @@ import {
 import { type Resume } from "~/stores/resume-store";
 import { Item } from "~/components/templates/item";
 import { Section } from "~/components/templates/section";
-import { SectionList } from "../_components/section-list";
 import { OneColumn } from "../_components/one-column";
+import { SectionList } from "~/components/templates/section-list";
+import { SectionTitle } from "~/components/templates/section-title";
 
 const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
@@ -30,7 +31,7 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
         ))
       }
     >
-      <h3>{section.title}</h3>
+      <SectionTitle>{section.title}</SectionTitle>
     </SectionList>
   );
 };
@@ -50,7 +51,7 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
         ))
       }
     >
-      <h3>{section.title}</h3>
+      <SectionTitle>{section.title}</SectionTitle>
     </SectionList>
   );
 };
@@ -70,7 +71,7 @@ const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
         ))
       }
     >
-      <h3>{section.title}</h3>
+      <SectionTitle>{section.title}</SectionTitle>
     </SectionList>
   );
 };
@@ -78,7 +79,7 @@ const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
 const Summary: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   return (
     <Section id={section.id} disabled={section.disabled}>
-      <h3>{section.title}</h3>
+      <SectionTitle>{section.title}</SectionTitle>
       <p>{resumeTemplate?.summary?.text}</p>
     </Section>
   );

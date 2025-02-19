@@ -16,9 +16,16 @@ interface SelectProps extends PropsWithChildren {
   name: string;
   placeholder?: string;
   label?: string;
+  className?: string;
 }
 
-export const Select = ({ name, placeholder, children, label }: SelectProps) => {
+export const Select = ({
+  name,
+  placeholder,
+  className,
+  children,
+  label,
+}: SelectProps) => {
   const { control } = useFormContext();
 
   return (
@@ -27,13 +34,13 @@ export const Select = ({ name, placeholder, children, label }: SelectProps) => {
       control={control}
       render={({ field }) => {
         return (
-          <FormItem>
-            <Label htmlFor="experience">{label}</Label>
+          <FormItem className={className}>
+            <Label htmlFor={`${name}-id`}>{label}</Label>
             <SelectShadcn
               onValueChange={field.onChange}
               defaultValue={field.value as string}
             >
-              <SelectTrigger>
+              <SelectTrigger id={`${name}-id`}>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>{children}</SelectContent>

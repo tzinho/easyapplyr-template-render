@@ -7,7 +7,6 @@ import { PageContent } from "~/components/page";
 import { Preview } from "~/components/preview";
 
 import { Button } from "~/components/ui/button";
-import { Card } from "~/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -18,32 +17,35 @@ import {
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { CATEGORIES } from "~/config/constants";
 import { fakeData } from "~/data";
+import { type Template } from "~/types/template";
 
 export const Body = () => {
   const [selectedCategory, setSelectedCategory] = useState("pro");
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
+    null,
+  );
 
-  const templatesPerCategory = templates.filter((template) =>
+  const templatesCategory = templates.filter((template) =>
     template.categories.includes(selectedCategory),
   );
 
   const currentIndex = selectedTemplate
-    ? templatesPerCategory.findIndex((t) => t.id === selectedTemplate.id)
+    ? templatesCategory.findIndex((t) => t.id === selectedTemplate.id)
     : -1;
 
   const showNext = () => {
     if (currentIndex < templates.length - 1)
-      setSelectedTemplate(templatesPerCategory[currentIndex + 1]);
+      setSelectedTemplate(templatesCategory[currentIndex + 1]);
   };
 
   const showPrevious = () => {
     if (currentIndex > 0)
-      setSelectedTemplate(templatesPerCategory[currentIndex - 1]);
+      setSelectedTemplate(templatesCategory[currentIndex - 1]);
   };
 
   return (
     <PageContent>
-      <div className="mb-8 flex w-full justify-center gap-2">
+      <div className="mb-8 flex w-full flex-wrap justify-center gap-2">
         {CATEGORIES.map((category) => (
           <Button
             key={category.id}
@@ -65,7 +67,7 @@ export const Body = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {templatesPerCategory.map((template) => (
+        {templatesCategory.map((template) => (
           <Preview
             key={template.id}
             template={template}

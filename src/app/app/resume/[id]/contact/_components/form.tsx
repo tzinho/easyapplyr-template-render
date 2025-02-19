@@ -1,9 +1,11 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useMemo } from "react";
+import { useParams } from "next/navigation";
+import { useForm, useFormContext } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { useParams } from "next/navigation";
+import { City, Country, State } from "country-state-city";
 
 import { Form } from "~/components/ui/form";
 import { Input } from "~/components/form/input";
@@ -12,6 +14,89 @@ import { api } from "~/trpc/react";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Contact } from "~/stores/resume-store";
+import { SelectItem } from "~/components/ui/select";
+import { Select } from "~/components/form/select";
+
+interface SelectCountryProps {
+  name: string;
+  placeholder?: string;
+}
+
+interface SelectStateProps {
+  name: string;
+  placeholder?: string;
+}
+
+interface SelectCityProps {
+  name: string;
+  placeholder?: string;
+}
+
+const SelectCity = ({ name, placeholder }: SelectCityProps) => {
+  const { watch } = useFormContext();
+  const country = watch("country") as string;
+  const state = watch("state") as string;
+
+  const cities = useMemo(
+    () => City.getCitiesOfState(country, state),
+    [country, state],
+  );
+
+  return (
+    <Select
+      name={name}
+      placeholder={placeholder}
+      label="Cidade"
+      className="flex-1"
+    >
+      {cities.map((city) => (
+        <SelectItem key={city.name} value={city.name}>
+          {city.name}
+        </SelectItem>
+      ))}
+    </Select>
+  );
+};
+
+const SelectState = ({ name, placeholder }: SelectStateProps) => {
+  const { watch } = useFormContext();
+  const country = watch("country") as string;
+  const states = State.getStatesOfCountry(country);
+
+  return (
+    <Select
+      name={name}
+      placeholder={placeholder}
+      label="País"
+      className="flex-1"
+    >
+      {states.map((state) => (
+        <SelectItem key={state.isoCode} value={state.isoCode}>
+          {state.name}
+        </SelectItem>
+      ))}
+    </Select>
+  );
+};
+
+const SelectCountry = ({ name, placeholder }: SelectCountryProps) => {
+  const countries = Country.getAllCountries();
+
+  return (
+    <Select
+      name={name}
+      placeholder={placeholder}
+      label="País"
+      className="flex-1"
+    >
+      {countries.map((country) => (
+        <SelectItem key={country.isoCode} value={country.isoCode}>
+          {country.name}
+        </SelectItem>
+      ))}
+    </Select>
+  );
+};
 
 export const ContactForm = () => {
   const params = useParams<{ id: string }>();
@@ -61,13 +146,14 @@ export const ContactForm = () => {
             name="personal"
             label="Site"
             placeholder="https://www.thiagoluiz.com"
+            className="flex-1"
           />
-          <Input name="country" label="País" placeholder="Brasil" />
+          <SelectCountry name="country" placeholder="Brasil" />
         </div>
 
         <div className="flex w-full flex-col gap-3 md:flex-row">
-          <Input name="state" label="Estado" placeholder="São Paulo, SP" />
-          <Input name="city" label="Cidade" placeholder="Guarulhos" />
+          <SelectState name="state" placeholder="São Paulo, SP" />
+          <SelectCity name="city" placeholder="Guarulhos" />
         </div>
 
         <ButtonLoading

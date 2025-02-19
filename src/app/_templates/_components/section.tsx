@@ -20,7 +20,7 @@ export const Section = ({
     setNodeRef,
     transform,
     transition,
-    isDragging,
+    // isDragging,
   } = useSortable({ id, disabled });
 
   const style = {
@@ -29,7 +29,7 @@ export const Section = ({
       : undefined,
     transition,
     cursor: disabled ? "not-allowed" : "grab",
-    opacity: isDragging ? 0.5 : 1,
+    // opacity: isDragging ? 0.5 : 1,
   };
 
   return (
@@ -38,7 +38,7 @@ export const Section = ({
       style={style}
       {...attributes}
       {...listeners}
-      className={cn("cursor-move rounded p-4", className)}
+      className={cn("cursor-move rounded", className)}
     >
       {children}
     </div>

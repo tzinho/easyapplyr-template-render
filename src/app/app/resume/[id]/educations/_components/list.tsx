@@ -26,9 +26,9 @@ import { type InferSelectModel } from "drizzle-orm";
 import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import { Button, buttonVariants } from "~/components/ui/button";
-import { SortableItem } from "~/app/_components/sortable-item";
 import { type educations } from "~/server/db/schema";
 import { Skeleton } from "~/components/ui/skeleton";
+import { SortableItem } from "~/components/templates/sortable-item";
 
 export const List = () => {
   const [items, setItems] = useState<InferSelectModel<typeof educations>[]>([]);

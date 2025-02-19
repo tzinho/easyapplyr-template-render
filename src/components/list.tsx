@@ -19,10 +19,10 @@ import {
 } from "@dnd-kit/sortable";
 import { Eye, EyeOff, Trash2 } from "lucide-react";
 
-import { SortableItem } from "~/app/_components/sortable-item";
 import { type Section, type ItemType } from "~/types/template";
 import { Button } from "./ui/button";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { SortableItem } from "./templates/sortable-item";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ListProps<T = any> {

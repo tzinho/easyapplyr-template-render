@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import { cn } from "~/lib/utils";
 
 interface InputProps extends React.ComponentProps<"input"> {
   name: string;
@@ -37,7 +38,7 @@ export const Input = ({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="w-full">
+        <FormItem className={cn("w-full", className)}>
           <FormLabel>
             {label} {required && <span className="text-red-500">*</span>}
           </FormLabel>

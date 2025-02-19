@@ -27,9 +27,9 @@ import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
-import { SortableItem } from "~/app/_components/sortable-item";
 import { type experiences } from "~/server/db/schema";
 import { Skeleton } from "~/components/ui/skeleton";
+import { SortableItem } from "~/components/templates/sortable-item";
 
 export const List = () => {
   const params = useParams<{ id: string }>();
