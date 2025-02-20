@@ -166,7 +166,7 @@ export const ContactForm = ({
           isLoading={updateContact.isPending}
           className="self-end"
         >
-          Salvar
+          Salvar as informações de contato
         </ButtonLoading>
       </form>
     </Form>

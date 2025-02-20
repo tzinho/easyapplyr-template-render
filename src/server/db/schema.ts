@@ -84,11 +84,11 @@ export const experiences = createTable("experience", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
-  role: text("role"),
-  company: text("company"),
+  role: text("role").notNull(),
+  company: text("company").notNull(),
   where: text("where"),
   did: text("did"),
-  appear: boolean("appear"),
+  appear: boolean("appear").notNull(),
   order: integer("order").notNull(),
 });
 
