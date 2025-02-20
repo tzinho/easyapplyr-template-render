@@ -26,7 +26,7 @@ export const ListOfResumeTemplates = () => {
     );
 
   return (
-    <div className="grid grid-cols-1 justify-items-center gap-3 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       <ModalToCreateAResume>
         <Card className="flex h-[290px] w-[215.16px] cursor-pointer flex-col justify-between overflow-hidden border-dashed">
           <CardContent className="m-auto flex h-full w-full items-center justify-center">

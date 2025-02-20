@@ -16,7 +16,6 @@ export const experienceSchema = z.object({
   company: z.string({ message: "A empresa é obrigatória" }),
   where: z.string().optional(),
   did: z.string().optional(),
-  experiences: z.array(z.any()).optional(),
 });
 
 export const skillSchema = z.object({
