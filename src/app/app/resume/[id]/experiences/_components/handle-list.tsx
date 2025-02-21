@@ -8,10 +8,12 @@ import {
   Trash,
 } from "lucide-react";
 import { useFormContext, useWatch } from "react-hook-form";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   closestCorners,
   DndContext,
   type DragEndEvent,
+  DragOverlay,
   type DragStartEvent,
   KeyboardSensor,
   PointerSensor,
@@ -44,13 +46,14 @@ import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import { cn } from "~/lib/utils";
+import { type ExperienceSchema } from "~/validators";
 import { useState } from "react";
 
 interface ExperienceListProps {
   onAppend: any;
   onClick: any;
   onRemove: any;
-  onMove: any;
+  onMove: (actualIndex: number, nextIndex: number) => void;
 }
 
 export const ExperienceItem = ({
@@ -61,14 +64,14 @@ export const ExperienceItem = ({
   onRemove,
 }: {
   id: string;
-  value: string;
+  value: ExperienceSchema;
   onClick: (index: number) => void;
   index: number;
   onRemove: (index: number) => void;
 }) => {
   const disabled = !value._id;
-  const role = (value.role || "Experiência 1") as string;
-  const company = (value.company || "Empresa 1") as string;
+  const role = value.role || "Experiência 1";
+  const company = value.company || "Empresa 1";
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, disabled });
@@ -95,63 +98,53 @@ export const ExperienceItem = ({
           )}
           {...listeners}
         />
-        <div
-          onClick={() => onClick(index)}
-          className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1"
-        >
-          <div>
+        <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
+          <div onClick={() => onClick(index)} className="flex-1">
             <p className="text-sm">{role}</p>
             <span className="text-xs">{company}</span>
           </div>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Popover>
-                  <PopoverTrigger asChild>
+
+          <Popover>
+            <PopoverTrigger>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
                     <Button size="icon" className="h-5 w-5" variant="ghost">
                       <MoreHorizontal />
                     </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-fit px-3 py-2"
-                    onOpenAutoFocus={(e) => {
-                      console.log("called");
-                      e.preventDefault();
-                      e.stopPropagation();
-                      e.stopImmediatePropagation();
-                    }}
-                  >
-                    <div className="flex flex-col gap-1">
-                      <Button
-                        className="flex items-center justify-start gap-3"
-                        variant="ghost"
-                      >
-                        <EyeClosedIcon />
-                        <div className="flex items-center">
-                          <Label htmlFor="close" className="cursor-pointer">
-                            Esconder no currículo
-                          </Label>
-                          <Switch id="close" />
-                        </div>
-                      </Button>
-                      <Separator />
-                      <Button
-                        className="flex items-center justify-start gap-3"
-                        variant="ghost"
-                        onClick={() => onRemove(index)}
-                      >
-                        <Trash className="h-4 w-4" />
-                        <Label className="cursor-pointer">Deletar</Label>
-                      </Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Ações</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Ações</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </PopoverTrigger>
+            <PopoverContent className="w-fit px-3 py-2">
+              <div className="flex flex-col gap-1">
+                <Button
+                  className="flex items-center justify-start gap-3"
+                  variant="ghost"
+                >
+                  <EyeClosedIcon />
+                  <div className="flex items-center">
+                    <Label htmlFor="close" className="cursor-pointer">
+                      Esconder no currículo
+                    </Label>
+                    <Switch id="close" />
+                  </div>
+                </Button>
+                <Separator />
+                <Button
+                  className="flex items-center justify-start gap-3"
+                  variant="ghost"
+                  onClick={() => onRemove(index)}
+                >
+                  <Trash className="h-4 w-4" />
+                  <Label className="cursor-pointer">Deletar</Label>
+                </Button>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
     </div>
@@ -164,6 +157,7 @@ export const ExperienceList = ({
   onRemove,
   onMove,
 }: ExperienceListProps) => {
+  const [activeId, setActiveId] = useState<string | null>(null);
   const form = useFormContext();
   const fields = useWatch({
     control: form.control,
@@ -180,6 +174,12 @@ export const ExperienceList = ({
 
   const handleDragStart = (event: DragStartEvent) => {
     console.log("[handleDragStart]: ", event);
+    // const activeId = event.active.id as string;
+    // const section = resumeTemplate?.sections?.find((s) => s.id === sectionId);
+
+    // if (!section) return;
+
+    setActiveId(event.active.id as string);
   };
 
   const isSubmitting = !fields.every((field) => !!field._id);
@@ -192,21 +192,29 @@ export const ExperienceList = ({
     if (active.id === over.id) return;
 
     const actualIndex = fields.findIndex(
-      (item) => item.id === active.id,
+      (item) => item._id === active.id,
     ) as number;
 
-    const nextIndex = fields.findIndex((item) => item.id === over.id) as number;
+    // console.log("[ACTUALINDEX]", actualIndex);
+
+    const nextIndex = fields.findIndex(
+      (item) => item._id === over.id,
+    ) as number;
+
+    // console.log("[NEXTINDEX]", nextIndex);
+
     const newItems = arrayMove(fields as unknown[], actualIndex, nextIndex);
     const updateItems = newItems.map((item, order) => ({ ...item, order }));
+    console.log("[UPDATEITEMS]", updateItems);
 
-    console.log(
-      "[updateItems]: ",
-      updateItems.filter((item) => {
-        return [active.id, over.id].includes(item.id);
-      }),
-    );
+    // console.log(
+    //   "[updateItems]: ",
+    //   updateItems.filter((item) => {
+    //     return [active.id, over.id].includes(item.id);
+    //   }),
+    // );
 
-    onMove(updateItems);
+    onMove(actualIndex, nextIndex);
   };
 
   return (
@@ -239,13 +247,16 @@ export const ExperienceList = ({
         onDragEnd={handleDragEnd}
         sensors={sensors}
       >
-        <SortableContext items={fields} strategy={verticalListSortingStrategy}>
+        <SortableContext
+          items={fields.map((field) => field._id)}
+          strategy={verticalListSortingStrategy}
+        >
           <CardContent className="space-y-3">
             {fields.map((field, index) => {
               return (
                 <ExperienceItem
                   key={field.id}
-                  id={field.id}
+                  id={field._id}
                   value={field}
                   index={index}
                   onClick={onClick}
@@ -255,6 +266,20 @@ export const ExperienceList = ({
             })}
           </CardContent>
         </SortableContext>
+        <DragOverlay modifiers={[restrictToVerticalAxis]}>
+          {activeId ? (
+            <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
+              <div className="flex-1">
+                <p className="text-sm">
+                  {fields.find((field) => field._id === activeId)!.role}
+                </p>
+                <span className="text-xs">
+                  {fields.find((field) => field._id === activeId)!.company}
+                </span>
+              </div>
+            </div>
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </Card>
   );

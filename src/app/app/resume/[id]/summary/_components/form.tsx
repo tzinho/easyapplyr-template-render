@@ -405,8 +405,8 @@ export const SummaryForm = () => {
         onSubmit={form.handleSubmit(handleOnSubmit)}
         className="flex flex-1 flex-col"
       >
-        {/* <Textarea name="text" label="Sumário" rows={4} /> */}
-        <TextareaBullet name="text" label="Sumário" rows={4} />
+        <Textarea name="text" label="Sumário" rows={4} />
+        {/* <TextareaBullet name="text" label="Sumário" rows={4} /> */}
         <ButtonLoading
           isLoading={updateSummaryMutation.isPending}
           className="self-end"

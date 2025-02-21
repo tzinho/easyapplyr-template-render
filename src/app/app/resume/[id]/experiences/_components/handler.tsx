@@ -13,6 +13,7 @@ import { api } from "~/trpc/react";
 import { ExperienceList } from "./handle-list";
 import { ExperienceForm } from "./handle-form";
 import { type Experience } from "~/stores/resume-store";
+import { move } from "slate";
 
 interface HandlerProps {
   defaultValues: Omit<Experience, "id">[];
@@ -64,19 +65,16 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      experiences: defaultValues ?? [generateANewItem(0)],
-    },
+    defaultValues: { experiences: defaultValues ?? [generateANewItem(0)] },
   });
 
   // console.log("form", form.formState.errors);
 
-  const { fields, append, replace } = useFieldArray({
+  const { fields, append, replace, move } = useFieldArray({
     control: form.control,
     name: "experiences",
   });
 
-  console.log("[fields]: ", fields);
   const isSubmitting = !fields.every((field) => !!field._id);
 
   const handleOnClick = (index: number) => {
@@ -95,9 +93,19 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
   const handleOnRemove = (index: number) => {
     const item = fields.find((field, fieldIndex) => fieldIndex === index);
     const newItems = fields.filter((field, fieldIndex) => fieldIndex !== index);
-    if (!newItems.length) handleOnAppend();
+
+    const hasItems = newItems.length;
+    if (hasItems) {
+      if (currentVisible === index) {
+        setCurrentVisible(index - 1);
+      }
+    } else {
+      handleOnAppend();
+      setCurrentVisible(0);
+    }
+
     replace(newItems);
-    void experienceDelete.mutateAsync(item!._id);
+    // void experienceDelete.mutateAsync(item!._id);
   };
 
   const handleOnSubmit: SubmitHandler<z.infer<typeof schema>> = async (
@@ -131,7 +139,9 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
           onAppend={handleOnAppend}
           onClick={handleOnClick}
           onRemove={handleOnRemove}
-          onMove={(values: z.infer<typeof schema>[]) => replace(values)}
+          onMove={(actualIndex, nextIndex) => {
+            move(actualIndex, nextIndex);
+          }}
         />
       </div>
       <div className="flex-1">
