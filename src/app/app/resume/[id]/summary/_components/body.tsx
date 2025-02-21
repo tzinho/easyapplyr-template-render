@@ -13,7 +13,7 @@ export const Body = () => {
   return (
     <PageContentEditor>
       <SummaryForm />
-      <TemplatePreview resumeTemplate={resumeTemplate} isPreview />
+      <div className="flex-1">Insights</div>
     </PageContentEditor>
   );
 };
