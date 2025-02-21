@@ -1,6 +1,7 @@
 "use client";
 
 import { type SubmitHandler, useFormContext, useWatch } from "react-hook-form";
+
 import { Input } from "~/components/form/input";
 import { Textarea } from "~/components/form/textarea";
 import { ButtonLoading } from "~/components/ui/button-loading";
@@ -17,11 +18,6 @@ export const ExperienceForm = ({
 }: ExperienceFormProps) => {
   const form = useFormContext<{ role: string; company: string }>();
   const company = useWatch({ name: "company", control: form.control });
-
-  const experiences = useWatch({ control: form.control, name: "experiences" });
-
-  console.log("[current]: ", current);
-  console.log("[experiences]: ", experiences);
 
   return (
     <form

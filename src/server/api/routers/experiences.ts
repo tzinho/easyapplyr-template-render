@@ -36,7 +36,7 @@ export const experiencesRouter = createTRPCRouter({
         .orderBy(desc(experiences.order))
         .limit(1);
 
-      return await ctx.db
+      const [model] = await ctx.db
         .insert(experiences)
         .values({
           ...input,
@@ -47,6 +47,8 @@ export const experiencesRouter = createTRPCRouter({
               : 0,
         })
         .returning();
+
+      return model;
     }),
 
   list: publicProcedure
@@ -65,6 +67,7 @@ export const experiencesRouter = createTRPCRouter({
     }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
+    console.log("[input]: ", input);
     const experience = await ctx.db
       .delete(experiences)
       .where(eq(experiences.id, input))

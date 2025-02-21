@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
 import { Input } from "~/components/form/input";
@@ -21,11 +20,6 @@ export const ExperienceForm = ({
     control: form.control,
     name: "experiences",
   });
-
-  useEffect(() => {
-    console.log("**ExperienceForm**");
-    console.log("[currentVisible]: ", currentVisible);
-  }, []);
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

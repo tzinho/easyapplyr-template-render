@@ -43,6 +43,8 @@ import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
+import { cn } from "~/lib/utils";
+import { useState } from "react";
 
 interface ExperienceListProps {
   onAppend: any;
@@ -56,17 +58,20 @@ export const ExperienceItem = ({
   value,
   onClick,
   index,
+  onRemove,
 }: {
   id: string;
   value: string;
   onClick: (index: number) => void;
   index: number;
+  onRemove: (index: number) => void;
 }) => {
+  const disabled = !value._id;
   const role = (value.role || "Experiência 1") as string;
   const company = (value.company || "Empresa 1") as string;
 
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
+    useSortable({ id, disabled });
 
   const style = {
     transform: transform
@@ -84,7 +89,10 @@ export const ExperienceItem = ({
     >
       <div className="group flex w-full items-center gap-1">
         <GripVertical
-          className="h-4 w-4 cursor-grab opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          className={cn(
+            "h-4 w-4 opacity-0 transition-opacity duration-200",
+            !disabled && "cursor-grab group-hover:opacity-100",
+          )}
           {...listeners}
         />
         <div
@@ -104,7 +112,15 @@ export const ExperienceItem = ({
                       <MoreHorizontal />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-fit px-3 py-2">
+                  <PopoverContent
+                    className="w-fit px-3 py-2"
+                    onOpenAutoFocus={(e) => {
+                      console.log("called");
+                      e.preventDefault();
+                      e.stopPropagation();
+                      e.stopImmediatePropagation();
+                    }}
+                  >
                     <div className="flex flex-col gap-1">
                       <Button
                         className="flex items-center justify-start gap-3"
@@ -154,8 +170,6 @@ export const ExperienceList = ({
     name: "experiences",
   });
 
-  console.log("[fields::]: ", fields);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),
@@ -168,7 +182,7 @@ export const ExperienceList = ({
     console.log("[handleDragStart]: ", event);
   };
 
-  const isInsertingANewItem = fields.every((field) => !!field.resumeId);
+  const isSubmitting = !fields.every((field) => !!field._id);
 
   const handleDragEnd = (event: DragEndEvent) => {
     console.log("[handleDragEnd]: ", event);
@@ -207,7 +221,7 @@ export const ExperienceList = ({
                   size="icon"
                   className="h-5 w-5"
                   onClick={onAppend}
-                  disabled={!isInsertingANewItem}
+                  disabled={isSubmitting}
                 >
                   <Plus className="h-5 w-5" />
                 </Button>
@@ -235,6 +249,7 @@ export const ExperienceList = ({
                   value={field}
                   index={index}
                   onClick={onClick}
+                  onRemove={onRemove}
                 />
               );
             })}

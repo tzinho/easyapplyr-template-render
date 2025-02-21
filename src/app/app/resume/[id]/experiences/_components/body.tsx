@@ -13,9 +13,14 @@ export const Body = () => {
 
   if (experiences.isLoading) return <PageLoading />;
 
+  const defaultValues = experiences.data!.length ? experiences.data!.map((experience) => {
+    const { id, ...rest } = experience;
+    return { ...rest, _id: experience.id };
+  }) : null;
+
   return (
     <PageContentEditor>
-      <Handler defaultValues={experiences.data!} />
+      <Handler defaultValues={defaultValues} />
     </PageContentEditor>
   );
 };

@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { useFieldArray, useForm } from "react-hook-form";
+import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { Form } from "~/components/ui/form";
 import { type ExperienceSchema } from "~/validators";
@@ -12,16 +13,28 @@ import { api } from "~/trpc/react";
 import { ExperienceList } from "./handle-list";
 import { ExperienceForm } from "./handle-form";
 import { type Experience } from "~/stores/resume-store";
-import { toast } from "sonner";
 
 interface HandlerProps {
-  defaultValues: Experience[];
+  defaultValues: Omit<Experience, "id">[];
 }
+
+const generateANewItem = (order: number) => {
+  return {
+    role: null,
+    company: null,
+    where: "",
+    did: "",
+    _id: "",
+    resumeId: "",
+    order,
+    appear: true,
+  } as ExperienceSchema;
+};
 
 const schema = z.object({
   experiences: z.array(
     z.object({
-      id: z.string(),
+      _id: z.string(),
       appear: z.boolean(),
       where: z.string().nullish(),
       role: z.string({ message: "A função é obrigatória!" }),
@@ -36,91 +49,79 @@ const schema = z.object({
 export const Handler = ({ defaultValues }: HandlerProps) => {
   const { id } = useParams<{ id: string }>();
   const [currentVisible, setCurrentVisible] = useState<number>(0);
+
   const experienceCreate = api.experiences.create.useMutation({
-    onSuccess() {
-      toast.success("Experiência adicionada com sucesso!");
-    },
+    onSuccess: () => toast.success("Experiência adicionada com sucesso!"),
   });
+
   const experienceUpdate = api.experiences.update.useMutation({
-    onSuccess() {
-      toast.success("Experiência atualizada com sucesso!");
-    },
+    onSuccess: () => toast.success("Experiência atualizada com sucesso!"),
+  });
+
+  const experienceDelete = api.experiences.delete.useMutation({
+    onSuccess: () => toast.success("Experiência deletada com sucesso!"),
   });
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      experiences: defaultValues ?? [
-        {
-          role: "",
-          company: "",
-          where: "",
-          did: "",
-          resumeId: "",
-          appear: true,
-          order: 0,
-        } as ExperienceSchema,
-      ],
+      experiences: defaultValues ?? [generateANewItem(0)],
     },
   });
 
   // console.log("form", form.formState.errors);
 
-  const { fields, append, remove, replace } = useFieldArray({
+  const { fields, append, replace } = useFieldArray({
     control: form.control,
     name: "experiences",
   });
 
+  console.log("[fields]: ", fields);
+  const isSubmitting = !fields.every((field) => !!field._id);
+
   const handleOnClick = (index: number) => {
-    if (
-      !fields.every((field) => !!field.resumeId) &&
-      index !== fields.length - 1
-    ) {
-      replace(fields.filter((_, itemIndex) => itemIndex !== fields.length - 1));
-    }
+    const lastIndex = fields.length - 1;
+    const isTheLastIndex = index !== lastIndex;
+    if (isSubmitting && isTheLastIndex)
+      replace(fields.filter((_, itemIndex) => itemIndex !== lastIndex));
     setCurrentVisible(index);
   };
 
   const handleOnAppend = () => {
-    console.log("[handleOnAppend]");
-    append({
-      role: "",
-      company: "",
-      where: "",
-      did: "",
-      id: "",
-      resumeId: "",
-      order: fields.length,
-      appear: true,
-    });
-
+    append(generateANewItem(fields.length));
     setCurrentVisible(fields.length);
   };
 
   const handleOnRemove = (index: number) => {
-    console.log("[handleOnRemove]");
-    remove(index);
-    console.log("[index]: ", index);
-    console.log("[length]: ", fields.length);
-    console.log("[field]: ", fields[index]);
-    if (fields.length === 1) handleOnAppend();
+    const item = fields.find((field, fieldIndex) => fieldIndex === index);
+    const newItems = fields.filter((field, fieldIndex) => fieldIndex !== index);
+    if (!newItems.length) handleOnAppend();
+    replace(newItems);
+    void experienceDelete.mutateAsync(item!._id);
   };
 
-  const handleOnSubmit = (values) => {
-    console.log("[values]: ", values);
-    const experience = values.experiences[currentVisible];
-    console.log("[experience]: ", experience);
+  const handleOnSubmit: SubmitHandler<z.infer<typeof schema>> = async (
+    values,
+  ) => {
+    let experiences = values.experiences;
+    const experience = values.experiences[currentVisible]!;
+
     if (experience.resumeId) {
-      console.log("updating...");
-      void experienceUpdate.mutateAsync(experience);
+      void experienceUpdate.mutateAsync({ ...experience, id: experience._id });
     } else {
-      console.log("creating...");
-      void experienceCreate.mutateAsync({
+      const responseAPI = await experienceCreate.mutateAsync({
         ...experience,
+        id: experience._id,
         resumeId: id,
       });
+
+      experiences = experiences.map((experience) => {
+        if (experience._id) return experience;
+        return { ...experience, resumeId: id, id: responseAPI?.id };
+      });
     }
-    replace(values.experiences);
+
+    replace(experiences);
   };
 
   return (
@@ -130,7 +131,7 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
           onAppend={handleOnAppend}
           onClick={handleOnClick}
           onRemove={handleOnRemove}
-          onMove={(values) => replace(values)}
+          onMove={(values: z.infer<typeof schema>[]) => replace(values)}
         />
       </div>
       <div className="flex-1">
