@@ -1,21 +1,22 @@
 "use client";
 
-import { useFormContext, useWatch } from "react-hook-form";
+import { type SubmitHandler, useFormContext, useWatch } from "react-hook-form";
 
 import { Input } from "~/components/form/input";
 import { Textarea } from "~/components/form/textarea";
 import { ButtonLoading } from "~/components/ui/button-loading";
 
 interface ExperienceFormProps {
-  onSubmit: any;
-  currentVisible: any;
+  onSubmit: SubmitHandler<any>;
+  activeIndex: string | null;
 }
 
 export const ExperienceForm = ({
   onSubmit,
-  currentVisible,
+  activeIndex,
 }: ExperienceFormProps) => {
   const form = useFormContext();
+
   const fields = useWatch({
     control: form.control,
     name: "experiences",
@@ -25,7 +26,11 @@ export const ExperienceForm = ({
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
       <div className="relative min-h-[460px]">
         {fields.map((field, index) => {
-          const isActive = currentVisible === index;
+          const isActive = field._id === activeIndex;
+          const currentVisible = fields.findIndex(
+            (field) => field._id === activeIndex,
+          );
+
           const zIndex = fields.length - Math.abs(currentVisible - index);
           const company =
             form.watch(`experiences.${index}.company`) || "Empresa 1";
@@ -33,7 +38,7 @@ export const ExperienceForm = ({
             form.watch(`experiences.${index}.role`) || "Experiência 1";
 
           return (
-            <div key={field.id}>
+            <div key={field._id}>
               <div
                 className="absolute inset-0 space-y-4 rounded-lg bg-white transition-all duration-300"
                 style={{

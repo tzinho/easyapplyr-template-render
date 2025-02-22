@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,7 +13,6 @@ import { api } from "~/trpc/react";
 import { ExperienceList } from "./handle-list";
 import { ExperienceForm } from "./handle-form";
 import { type Experience } from "~/stores/resume-store";
-import { move } from "slate";
 
 interface HandlerProps {
   defaultValues: Omit<Experience, "id">[];
@@ -49,7 +48,7 @@ const schema = z.object({
 
 export const Handler = ({ defaultValues }: HandlerProps) => {
   const { id } = useParams<{ id: string }>();
-  const [currentVisible, setCurrentVisible] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState<string | null>(null);
 
   const experienceCreate = api.experiences.create.useMutation({
     onSuccess: () => toast.success("Experiência adicionada com sucesso!"),
@@ -68,43 +67,48 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
     defaultValues: { experiences: defaultValues ?? [generateANewItem(0)] },
   });
 
-  // console.log("form", form.formState.errors);
-
   const { fields, append, replace, move } = useFieldArray({
     control: form.control,
     name: "experiences",
   });
 
-  const isSubmitting = !fields.every((field) => !!field._id);
+  useEffect(() => {
+    if (fields.length && !activeIndex) setActiveIndex(fields[0]!._id);
+  }, [fields.length]);
 
-  const handleOnClick = (index: number) => {
+  const handleOnClick = (activeIndex: string) => {
+    const isSubmitting = !fields.every((field) => !!field._id);
     const lastIndex = fields.length - 1;
-    const isTheLastIndex = index !== lastIndex;
-    if (isSubmitting && isTheLastIndex)
-      replace(fields.filter((_, itemIndex) => itemIndex !== lastIndex));
-    setCurrentVisible(index);
+    const isTheLastIndex =
+      fields.findIndex((field) => field._id === activeIndex) !== lastIndex;
+    // if (isSubmitting && isTheLastIndex)
+    //   replace(fields.filter((field) => itemIndex !== lastIndex));
+    setActiveIndex(activeIndex);
   };
+
+  useEffect(() => {
+    console.log("change");
+  }, [fields.length, activeIndex]);
 
   const handleOnAppend = () => {
     append(generateANewItem(fields.length));
-    setCurrentVisible(fields.length);
+    console.log("[handleOnAppend]: ", fields);
+    setActiveIndex(fields[fields.length - 1]!._id);
   };
 
-  const handleOnRemove = (index: number) => {
-    const item = fields.find((field, fieldIndex) => fieldIndex === index);
-    const newItems = fields.filter((field, fieldIndex) => fieldIndex !== index);
-
+  const handleOnRemove = (activeItemIndex: string) => {
+    const newItems = fields.filter((field) => field._id !== activeItemIndex);
     const hasItems = newItems.length;
+    replace(newItems);
+
     if (hasItems) {
-      if (currentVisible === index) {
-        setCurrentVisible(index - 1);
-      }
+      if (activeIndex === activeItemIndex)
+        setActiveIndex(fields[fields.length - 1]!._id);
     } else {
       handleOnAppend();
-      setCurrentVisible(0);
+      setActiveIndex(fields[0]!._id);
     }
 
-    replace(newItems);
     // void experienceDelete.mutateAsync(item!._id);
   };
 
@@ -112,7 +116,9 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
     values,
   ) => {
     let experiences = values.experiences;
-    const experience = values.experiences[currentVisible]!;
+    const experience = values.experiences.find(
+      (experience) => experience._id === activeIndex,
+    )!;
 
     if (experience.resumeId) {
       void experienceUpdate.mutateAsync({ ...experience, id: experience._id });
@@ -139,16 +145,14 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
           onAppend={handleOnAppend}
           onClick={handleOnClick}
           onRemove={handleOnRemove}
-          onMove={(actualIndex, nextIndex) => {
+          onMove={(actualIndex: number, nextIndex: number) => {
             move(actualIndex, nextIndex);
+            // setActiveIndex(fields[0]!._id);
           }}
         />
       </div>
       <div className="flex-1">
-        <ExperienceForm
-          currentVisible={currentVisible}
-          onSubmit={handleOnSubmit}
-        />
+        <ExperienceForm activeIndex={activeIndex} onSubmit={handleOnSubmit} />
       </div>
     </Form>
   );
