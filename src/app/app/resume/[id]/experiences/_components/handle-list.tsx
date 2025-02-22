@@ -49,6 +49,7 @@ export const ExperienceList = ({
   const [activeId, setActiveId] = useState<string | null>(null);
   const form = useFormContext();
   const fields = useWatch({ control: form.control, name: "experiences" });
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -101,69 +102,70 @@ export const ExperienceList = ({
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Suas experiências</CardTitle>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="icon"
-                  className="h-5 w-5"
-                  onClick={onAppend}
-                  disabled={isSubmitting}
-                >
-                  <Plus className="h-5 w-5" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Adicionar uma experiência</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-      </CardHeader>
-      <DndContext
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-        sensors={sensors}
-      >
-        <SortableContext
-          items={fields.map((field) => field._id)}
-          strategy={verticalListSortingStrategy}
+    <>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <CardTitle>Suas experiências</CardTitle>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="icon"
+                    className="h-5 w-5"
+                    onClick={onAppend}
+                    disabled={isSubmitting}
+                  >
+                    <Plus className="h-5 w-5" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Adicionar uma experiência</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+        </CardHeader>
+        <DndContext
+          collisionDetection={closestCorners}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+          sensors={sensors}
         >
-          <CardContent className="space-y-3">
-            {fields.map((field, index) => {
-              return (
-                <Item
-                  key={field.id}
-                  id={field._id}
-                  value={field}
-                  index={index}
-                  onClick={onClick}
-                  onRemove={onRemove}
-                />
-              );
-            })}
-          </CardContent>
-        </SortableContext>
-        <DragOverlay modifiers={[restrictToVerticalAxis]}>
-          {activeId ? (
-            <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
-              <div className="flex-1">
-                <p className="text-sm">
-                  {fields.find((field) => field._id === activeId)!.role}
-                </p>
-                <span className="text-xs">
-                  {fields.find((field) => field._id === activeId)!.company}
-                </span>
+          <SortableContext
+            items={fields.map((field) => field._id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <CardContent className="space-y-3">
+              {fields.map((field, index) => {
+                return (
+                  <Item
+                    key={field.activeIndex}
+                    id={field._id}
+                    value={field}
+                    onClick={onClick}
+                    onRemove={onRemove}
+                  />
+                );
+              })}
+            </CardContent>
+          </SortableContext>
+          <DragOverlay modifiers={[restrictToVerticalAxis]}>
+            {activeId ? (
+              <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
+                <div className="flex-1">
+                  <p className="text-sm">
+                    {fields.find((field) => field._id === activeId)!.role}
+                  </p>
+                  <span className="text-xs">
+                    {fields.find((field) => field._id === activeId)!.company}
+                  </span>
+                </div>
               </div>
-            </div>
-          ) : null}
-        </DragOverlay>
-      </DndContext>
-    </Card>
+            ) : null}
+          </DragOverlay>
+        </DndContext>
+      </Card>
+    </>
   );
 };

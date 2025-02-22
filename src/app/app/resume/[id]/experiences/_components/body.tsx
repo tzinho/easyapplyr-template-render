@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 
 import { PageContentEditor } from "~/components/page";
 import { api } from "~/trpc/react";
@@ -13,10 +14,12 @@ export const Body = () => {
 
   if (experiences.isLoading) return <PageLoading />;
 
-  const defaultValues = experiences.data!.length ? experiences.data!.map((experience) => {
-    const { id, ...rest } = experience;
-    return { ...rest, _id: experience.id };
-  }) : null;
+  const defaultValues = experiences.data!.length
+    ? experiences.data!.map((experience) => {
+        const { id, ...rest } = experience;
+        return { ...rest, _id: experience.id, activeIndex: uuidv4() };
+      })
+    : null;
 
   return (
     <PageContentEditor>

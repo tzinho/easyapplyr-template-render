@@ -5,15 +5,18 @@ import { type SubmitHandler, useFormContext, useWatch } from "react-hook-form";
 import { Input } from "~/components/form/input";
 import { Textarea } from "~/components/form/textarea";
 import { ButtonLoading } from "~/components/ui/button-loading";
+import { cn } from "~/lib/utils";
 
 interface ExperienceFormProps {
   onSubmit: SubmitHandler<any>;
   activeIndex: string | null;
+  isLoading: boolean;
 }
 
 export const ExperienceForm = ({
   onSubmit,
   activeIndex,
+  isLoading,
 }: ExperienceFormProps) => {
   const form = useFormContext();
 
@@ -24,21 +27,28 @@ export const ExperienceForm = ({
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-      <div className="relative min-h-[460px]">
+      <div
+        className={cn(
+          "relative min-h-[53vh]",
+          Object.keys(form.formState.errors).length && "min-h-[59vh]",
+        )}
+      >
         {fields.map((field, index) => {
-          const isActive = field._id === activeIndex;
+          const isActive = field.activeIndex === activeIndex;
           const currentVisible = fields.findIndex(
-            (field) => field._id === activeIndex,
+            (field) => field.activeIndex === activeIndex,
           );
 
           const zIndex = fields.length - Math.abs(currentVisible - index);
           const company =
-            form.watch(`experiences.${index}.company`) || "Empresa 1";
+            (form.watch(`experiences.${index}.company`) as string) ||
+            `Empresa ${fields.length}`;
           const role =
-            form.watch(`experiences.${index}.role`) || "Experiência 1";
+            (form.watch(`experiences.${index}.role`) as string) ||
+            `Experiência ${fields.length}`;
 
           return (
-            <div key={field._id}>
+            <div key={field.activeIndex}>
               <div
                 className="absolute inset-0 space-y-4 rounded-lg bg-white transition-all duration-300"
                 style={{
@@ -79,7 +89,7 @@ export const ExperienceForm = ({
         })}
       </div>
 
-      <ButtonLoading className="w-full">
+      <ButtonLoading className="w-full" isLoading={isLoading}>
         Salvar na lista de experiências
       </ButtonLoading>
     </form>

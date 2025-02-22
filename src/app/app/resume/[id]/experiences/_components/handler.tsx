@@ -6,45 +6,48 @@ import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 import { Form } from "~/components/ui/form";
-import { type ExperienceSchema } from "~/validators";
 import { api } from "~/trpc/react";
 import { ExperienceList } from "./handle-list";
 import { ExperienceForm } from "./handle-form";
 import { type Experience } from "~/stores/resume-store";
 
 interface HandlerProps {
-  defaultValues: Omit<Experience, "id">[];
+  defaultValues: Omit<Experience, "id"> & { activeIndex: string }[];
 }
 
+const experienceSchema = z.object({
+  _id: z.string(),
+  activeIndex: z.string(),
+  appear: z.boolean(),
+  where: z.string().nullish(),
+  role: z.string().min(1, "A função é obrigatório!"),
+  company: z.string().min(1, "A empresa é obrigatória!"),
+  did: z.string().nullish(),
+  resumeId: z.string(),
+  order: z.number(),
+});
+
+const schema = z.object({
+  experiences: z.array(experienceSchema),
+});
+
 const generateANewItem = (order: number) => {
+  const activeIndex = uuidv4();
   return {
-    role: null,
-    company: null,
+    role: "",
+    company: "",
     where: "",
     did: "",
     _id: "",
+    activeIndex,
     resumeId: "",
     order,
     appear: true,
-  } as ExperienceSchema;
+  } as z.infer<typeof experienceSchema>;
 };
-
-const schema = z.object({
-  experiences: z.array(
-    z.object({
-      _id: z.string(),
-      appear: z.boolean(),
-      where: z.string().nullish(),
-      role: z.string({ message: "A função é obrigatória!" }),
-      company: z.string({ message: "A empresa é obrigatória!" }),
-      did: z.string().nullish(),
-      resumeId: z.string(),
-      order: z.number(),
-    }),
-  ),
-});
 
 export const Handler = ({ defaultValues }: HandlerProps) => {
   const { id } = useParams<{ id: string }>();
@@ -64,7 +67,9 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: { experiences: defaultValues ?? [generateANewItem(0)] },
+    defaultValues: {
+      experiences: defaultValues ?? [generateANewItem(0)],
+    },
   });
 
   const { fields, append, replace, move } = useFieldArray({
@@ -73,43 +78,47 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
   });
 
   useEffect(() => {
-    if (fields.length && !activeIndex) setActiveIndex(fields[0]!._id);
+    if (fields.length && !activeIndex) setActiveIndex(fields[0]!.activeIndex);
   }, [fields.length]);
 
   const handleOnClick = (activeIndex: string) => {
-    const isSubmitting = !fields.every((field) => !!field._id);
-    const lastIndex = fields.length - 1;
-    const isTheLastIndex =
-      fields.findIndex((field) => field._id === activeIndex) !== lastIndex;
+    console.log("touched", form.formState.touchedFields);
+    console.log("isdirty", form.formState.isDirty);
+    if (form.formState.isDirty) {
+    }
+    // const isSubmitting = !fields.every((field) => !!field._id);
+    // const lastIndex = fields.length - 1;
+    // const isTheLastIndex =
+    //   fields.findIndex((field) => field.activeIndex === activeIndex) !==
+    //   lastIndex;
     // if (isSubmitting && isTheLastIndex)
     //   replace(fields.filter((field) => itemIndex !== lastIndex));
     setActiveIndex(activeIndex);
   };
 
-  useEffect(() => {
-    console.log("change");
-  }, [fields.length, activeIndex]);
-
   const handleOnAppend = () => {
-    append(generateANewItem(fields.length));
-    console.log("[handleOnAppend]: ", fields);
-    setActiveIndex(fields[fields.length - 1]!._id);
+    const newItem = generateANewItem(fields.length);
+    append(newItem);
+    setActiveIndex(newItem.activeIndex);
   };
 
   const handleOnRemove = (activeItemIndex: string) => {
-    const newItems = fields.filter((field) => field._id !== activeItemIndex);
+    const newItems = fields.filter(
+      (field) => field.activeIndex !== activeItemIndex,
+    );
     const hasItems = newItems.length;
     replace(newItems);
 
     if (hasItems) {
       if (activeIndex === activeItemIndex)
-        setActiveIndex(fields[fields.length - 1]!._id);
+        setActiveIndex(fields[fields.length - 1]!.activeIndex);
     } else {
       handleOnAppend();
-      setActiveIndex(fields[0]!._id);
+      setActiveIndex(fields[0]!.activeIndex);
     }
+    const item = fields.find((field) => field.activeIndex === activeItemIndex);
 
-    // void experienceDelete.mutateAsync(item!._id);
+    void experienceDelete.mutateAsync(item!._id);
   };
 
   const handleOnSubmit: SubmitHandler<z.infer<typeof schema>> = async (
@@ -117,7 +126,7 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
   ) => {
     let experiences = values.experiences;
     const experience = values.experiences.find(
-      (experience) => experience._id === activeIndex,
+      (experience) => experience.activeIndex === activeIndex,
     )!;
 
     if (experience.resumeId) {
@@ -125,13 +134,12 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
     } else {
       const responseAPI = await experienceCreate.mutateAsync({
         ...experience,
-        id: experience._id,
         resumeId: id,
       });
 
       experiences = experiences.map((experience) => {
         if (experience._id) return experience;
-        return { ...experience, resumeId: id, id: responseAPI?.id };
+        return { ...experience, resumeId: id, _id: responseAPI?.id };
       });
     }
 
@@ -152,7 +160,11 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
         />
       </div>
       <div className="flex-1">
-        <ExperienceForm activeIndex={activeIndex} onSubmit={handleOnSubmit} />
+        <ExperienceForm
+          activeIndex={activeIndex}
+          onSubmit={handleOnSubmit}
+          isLoading={experienceCreate.isPending || experienceUpdate.isPending}
+        />
       </div>
     </Form>
   );
