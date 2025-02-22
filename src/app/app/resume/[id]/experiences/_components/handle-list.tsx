@@ -38,6 +38,7 @@ interface ExperienceListProps {
   onClick: (activeIndex: string) => void;
   onRemove: (activeIndex: string) => void;
   onMove: (actualIndex: number, nextIndex: number) => void;
+  activeIndex: string;
 }
 
 export const ExperienceList = ({
@@ -45,11 +46,11 @@ export const ExperienceList = ({
   onClick,
   onRemove,
   onMove,
+  activeIndex,
 }: ExperienceListProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const form = useFormContext();
   const fields = useWatch({ control: form.control, name: "experiences" });
-  const [openAlert, setOpenAlert] = useState<boolean>(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -60,7 +61,6 @@ export const ExperienceList = ({
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    console.log("[handleDragStart]: ", event);
     const activeId = event.active.id as string;
     // const section = resumeTemplate?.sections?.find((s) => s.id === sectionId);
     if (fields.find((field) => field._id === activeId)) {
@@ -73,7 +73,6 @@ export const ExperienceList = ({
   const isSubmitting = !fields.every((field) => !!field._id);
 
   const handleDragEnd = (event: DragEndEvent) => {
-    console.log("[handleDragEnd]: ", event);
     const { active, over } = event;
 
     if (!over) return;
@@ -144,7 +143,9 @@ export const ExperienceList = ({
                     id={field._id}
                     value={field}
                     onClick={onClick}
+                    index={index}
                     onRemove={onRemove}
+                    isActive={field.activeIndex === activeIndex}
                   />
                 );
               })}

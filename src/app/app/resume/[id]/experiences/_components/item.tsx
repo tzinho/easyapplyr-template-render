@@ -43,17 +43,22 @@ export const Item = ({
   value,
   onClick,
   onRemove,
+  index,
+  isActive,
 }: {
   id: string;
   value: ExperienceSchema & { activeIndex: string };
   onClick: (activeIndex: string) => void;
   onRemove: (activeIndex: string) => void;
+  index: number;
+  isActive: number;
 }) => {
   const form = useFormContext();
   const disabled = !value._id;
-  const role = value.role || "Experiência 1";
-  const company = value.company || "Empresa 1";
+  const role = value.role || `Experiência ${index + 1}`;
+  const company = value.company || `Empresa ${index + 1}`;
   const [openAlert, setOpenAlert] = useState<boolean>(false);
+  console.log("isSubmitted", form.formState.isSubmitted);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, disabled });
@@ -104,7 +109,15 @@ export const Item = ({
           <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
             <div
               onClick={() => {
-                if (form.formState.isDirty) {
+                if (isActive) return;
+
+                if (
+                  form.formState.isDirty &&
+                  !isActive &&
+                  Object.values(form.formState.touchedFields).some((item) => {
+                    return !!item;
+                  })
+                ) {
                   setOpenAlert(true);
                 } else {
                   onClick(value.activeIndex);
@@ -143,7 +156,11 @@ export const Item = ({
                       <Label htmlFor="close" className="cursor-pointer">
                         Esconder no currículo
                       </Label>
-                      <Switch id="close" disabled={disabled} />
+                      <Switch
+                        id="close"
+                        disabled={disabled}
+                        defaultChecked={!value.appear}
+                      />
                     </div>
                   </Button>
                   <Separator />

@@ -8,11 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
-import { Form } from "~/components/ui/form";
 import { api } from "~/trpc/react";
+import { type Experience } from "~/stores/resume-store";
+import { Form } from "~/components/ui/form";
 import { ExperienceList } from "./handle-list";
 import { ExperienceForm } from "./handle-form";
-import { type Experience } from "~/stores/resume-store";
 
 interface HandlerProps {
   defaultValues: Omit<Experience, "id"> & { activeIndex: string }[];
@@ -49,7 +49,7 @@ const generateANewItem = (order: number) => {
   } as z.infer<typeof experienceSchema>;
 };
 
-export const Handler = ({ defaultValues }: HandlerProps) => {
+export const HandlerList = ({ defaultValues }: HandlerProps) => {
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
 
@@ -82,17 +82,12 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
   }, [fields.length]);
 
   const handleOnClick = (activeIndex: string) => {
-    console.log("touched", form.formState.touchedFields);
-    console.log("isdirty", form.formState.isDirty);
-    if (form.formState.isDirty) {
+    const isSubmitting = !fields.every((field) => !!field._id);
+
+    console.log("[isSubmitting]: ", isSubmitting);
+    if (isSubmitting) {
+      replace(fields.filter((field) => !!field._id));
     }
-    // const isSubmitting = !fields.every((field) => !!field._id);
-    // const lastIndex = fields.length - 1;
-    // const isTheLastIndex =
-    //   fields.findIndex((field) => field.activeIndex === activeIndex) !==
-    //   lastIndex;
-    // if (isSubmitting && isTheLastIndex)
-    //   replace(fields.filter((field) => itemIndex !== lastIndex));
     setActiveIndex(activeIndex);
   };
 
@@ -153,10 +148,10 @@ export const Handler = ({ defaultValues }: HandlerProps) => {
           onAppend={handleOnAppend}
           onClick={handleOnClick}
           onRemove={handleOnRemove}
-          onMove={(actualIndex: number, nextIndex: number) => {
-            move(actualIndex, nextIndex);
-            // setActiveIndex(fields[0]!._id);
-          }}
+          activeIndex={activeIndex!}
+          onMove={(actualIndex: number, nextIndex: number) =>
+            move(actualIndex, nextIndex)
+          }
         />
       </div>
       <div className="flex-1">
