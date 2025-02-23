@@ -3,9 +3,14 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { type SubmitHandler, useForm, useFormContext } from "react-hook-form";
-import { createEditor, Range, Node, type Descendant, Editor } from "slate";
-import { Bold, Italic, Underline, Link, X } from "lucide-react";
-import { Editable, Slate, withReact } from "slate-react";
+import { createEditor, Range, Node, type Descendant } from "slate";
+import {
+  Editable,
+  type RenderElementProps,
+  type RenderLeafProps,
+  Slate,
+  withReact,
+} from "slate-react";
 import { withHistory } from "slate-history";
 import { toast } from "sonner";
 
@@ -24,177 +29,8 @@ import { type Summary } from "~/stores/resume-store";
 import { api } from "~/trpc/react";
 import { type SummarySchema } from "~/validators";
 import { Button } from "~/components/ui/button";
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { Input } from "~/components/ui/input";
-
-interface EditorToolbarProps {
-  editor: Editor;
-  show: boolean;
-  position: { top: number; left: number } | null;
-}
-
-export const EditorToolbar = ({
-  editor,
-  show,
-  position,
-}: EditorToolbarProps) => {
-  const [isLinkPopoverOpen, setIsLinkPopoverOpen] = useState(false);
-  const [linkUrl, setLinkUrl] = useState("");
-
-  if (!show || !position) return null;
-
-  const toggleMark = (format: string) => {
-    const isActive = isMarkActive(editor, format);
-    if (isActive) {
-      Editor.removeMark(editor, format);
-    } else {
-      Editor.addMark(editor, format, true);
-    }
-  };
-
-  const isMarkActive = (editor: Editor, format: string) => {
-    const marks = Editor.marks(editor);
-    return marks ? marks[format] === true : false;
-  };
-
-  const handleLinkSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (linkUrl) {
-      Editor.addMark(editor, "link", linkUrl);
-    }
-    setIsLinkPopoverOpen(false);
-    setLinkUrl("");
-  };
-
-  const removeLink = () => {
-    Editor.removeMark(editor, "link");
-    setIsLinkPopoverOpen(false);
-  };
-
-  const getCurrentLink = () => {
-    const marks = Editor.marks(editor);
-    return marks?.link;
-  };
-
-  return (
-    <div
-      className="fixed z-50 rounded-lg border border-gray-200 bg-white/90 p-1 shadow-lg backdrop-blur-sm transition-all duration-200 ease-in-out"
-      style={{
-        top: `${position.top - 40}px`,
-        left: `${position.left}px`,
-      }}
-    >
-      <TooltipProvider>
-        <div className="flex gap-1">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleMark("bold")}
-                className={`hover:bg-gray-100 ${
-                  isMarkActive(editor, "bold") ? "bg-gray-100" : ""
-                }`}
-              >
-                <Bold className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Bold</p>
-            </TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleMark("italic")}
-                className={`hover:bg-gray-100 ${
-                  isMarkActive(editor, "italic") ? "bg-gray-100" : ""
-                }`}
-              >
-                <Italic className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Italic</p>
-            </TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => toggleMark("underline")}
-                className={`hover:bg-gray-100 ${
-                  isMarkActive(editor, "underline") ? "bg-gray-100" : ""
-                }`}
-              >
-                <Underline className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Underline</p>
-            </TooltipContent>
-          </Tooltip>
-
-          <Popover open={isLinkPopoverOpen} onOpenChange={setIsLinkPopoverOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className={`hover:bg-gray-100 ${
-                  isMarkActive(editor, "link") ? "bg-gray-100" : ""
-                }`}
-              >
-                <Link className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80 p-3">
-              <form onSubmit={handleLinkSubmit} className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <Input
-                    type="url"
-                    placeholder="Enter URL..."
-                    value={linkUrl}
-                    onChange={(e) => setLinkUrl(e.target.value)}
-                    className="flex-1"
-                  />
-                  {getCurrentLink() && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={removeLink}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-                <Button type="submit" size="sm">
-                  {getCurrentLink() ? "Update Link" : "Add Link"}
-                </Button>
-              </form>
-            </PopoverContent>
-          </Popover>
-        </div>
-      </TooltipProvider>
-    </div>
-  );
-};
+import { type Element } from "slate";
+import { EditorToolbar } from "./toolbar";
 
 interface TextareaBulletProps extends React.ComponentProps<"textarea"> {
   name: string;
@@ -203,6 +39,8 @@ interface TextareaBulletProps extends React.ComponentProps<"textarea"> {
   description?: string;
   label: string;
 }
+
+const BULLET = "• ";
 
 const serializeToString = (nodes: Descendant[]): string => {
   return nodes.map((n) => Node.string(n as Node)).join("\n");
@@ -255,9 +93,9 @@ const TextareaBullet = ({
   ) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      const lastNode = editor.children[editor.children.length - 1]!;
-      if (lastNode.children[0].text.trim() !== "•") {
-        editor.insertNode({ type: "paragraph", children: [{ text: "• " }] });
+      const lastNode = editor.children[editor.children.length - 1] as Element;
+      if ((lastNode.children[0] as Text).text.trim() !== "•") {
+        editor.insertNode({ type: "paragraph", children: [{ text: BULLET }] });
       }
     }
   };
@@ -266,11 +104,11 @@ const TextareaBullet = ({
 
   console.log("[initialValue]: ", initialValue);
 
-  const renderLeaf = useCallback((props: any) => {
+  const renderLeaf = useCallback((props: RenderLeafProps) => {
     return <Leaf {...props} />;
   }, []);
 
-  const renderElement = useCallback((props: any) => {
+  const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
       default:
         return <DefaultElement {...props} />;
@@ -304,8 +142,9 @@ const TextareaBullet = ({
                     if (selection && !Range.isCollapsed(selection)) {
                       console.log("update");
                       updateToolbarPosition();
-                      setSelection(selection)
+                      setSelection(selection);
                     } else {
+                      setSelection(null);
                       console.log("insert");
                     }
                   }}
@@ -322,7 +161,7 @@ const TextareaBullet = ({
                     renderLeaf={renderLeaf}
                     renderElement={renderElement}
                     placeholder={placeholder}
-\                    className="min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                    className="min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                     {...field}
                     {...props}
                   />
@@ -342,7 +181,7 @@ const DefaultElement = (props: any) => {
   return <p {...props.attributes}>{props.children}</p>;
 };
 
-const Leaf = ({ attributes, children, leaf }: any) => {
+const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }
@@ -404,8 +243,7 @@ export const SummaryForm = () => {
         onSubmit={form.handleSubmit(handleOnSubmit)}
         className="flex flex-1 flex-col"
       >
-        <Textarea name="text" label="Sumário" rows={4} />
-        {/* <TextareaBullet name="text" label="Sumário" rows={4} /> */}
+        <TextareaBullet name="text" label="Sumário" rows={4} />
         <ButtonLoading
           isLoading={updateSummaryMutation.isPending}
           className="self-end"

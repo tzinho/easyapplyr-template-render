@@ -1,6 +1,5 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
 import { type SubmitHandler, useFormContext } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -66,7 +65,6 @@ export const ExperienceForm = ({
 
             const isActive = field.activeIndex === activeIndex;
 
-            // const zIndex = fields.length - Math.abs(currentVisible - index);
             const company =
               (form.watch(`experiences.${index}.company`) as string) ||
               `Empresa ${fields.length}`;
@@ -143,11 +141,3 @@ export const ExperienceForm = ({
     </form>
   );
 };
-
-// export const ExperienceForm = memo(Form, (oldProps, newProps) => {
-//   // console.log("oldProps", oldProps);
-//   // console.log("newProps", newProps);
-//   if (oldProps.activeIndex !== newProps.activeIndex) return false;
-//   if (oldProps.fields.length !== newProps.fields.length) return false;
-//   return true;
-// });

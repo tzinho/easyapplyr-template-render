@@ -4,11 +4,14 @@ import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useSortable } from "@dnd-kit/sortable";
 import {
+  CircleCheckBig,
+  CircleX,
   EyeClosedIcon,
   GripVertical,
   MoreHorizontal,
   Trash,
 } from "lucide-react";
+import { useIsFirstRender } from "@uidotdev/usehooks";
 
 import { Label } from "~/components/ui/label";
 import {
@@ -37,6 +40,188 @@ import {
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
+import { index } from "drizzle-orm/mysql-core";
+
+const buzzwords = [
+  "inovação",
+  "transformação digital",
+  "inteligência artificial",
+  "machine learning",
+  "big data",
+  "cloud computing",
+  "blockchain",
+  "metaverso",
+  "realidade aumentada",
+  "realidade virtual",
+  "internet das coisas",
+  "cybersegurança",
+  "tecnologia disruptiva",
+  "api",
+  "plataforma",
+  "algoritmo",
+  "agilidade",
+  "escalabilidade",
+  "data driven",
+  "metodologias ágeis",
+  "startup",
+  "empreendedorismo",
+  "sinergia",
+  "otimização",
+  "performance",
+  "impacto",
+  "sustentabilidade",
+  "colaboração",
+  "empoderamento",
+  "liderança",
+  "proativo",
+  "resiliência",
+  "pensamento crítico",
+  "networking",
+  "mentoria",
+  "cultura organizacional",
+  "roi",
+  "retorno sobre o investimento",
+  "experiência do usuário",
+  "ux",
+  "ui",
+  "engajamento",
+  "branding",
+  "marketing digital",
+  "conteúdo relevante",
+  "influenciador digital",
+  "storytelling",
+  "posicionamento de marca",
+  "comunidade",
+  "tráfego orgânico",
+  "seo",
+  "otimização para mecanismos de busca",
+  "mindset",
+  "competências",
+  "habilidades",
+  "desenvolvimento pessoal",
+  "protagonismo",
+  "flexibilidade",
+  "versatilidade",
+  "inclusão",
+  "diversidade",
+  "propósito",
+  "jornada",
+];
+
+const analyzeActiveVoice = (bullets: string[]) => {
+  const passiveIndicators = [
+    "foi",
+    "foram",
+    "sido",
+    "sendo",
+    "é",
+    "são",
+    "era",
+    "eram",
+  ];
+  const hasPassiveVoice = bullets.some((b) =>
+    passiveIndicators.some((word) => new RegExp(`\\b${word}\\b`, "i").test(b)),
+  );
+
+  return {
+    pass: !hasPassiveVoice,
+    title: "Use uma voz ativa",
+    message: hasPassiveVoice
+      ? "Considere usar mais voz ativa em seus itens."
+      : "Bom uso de voz ativa!",
+  };
+};
+
+const analyzeBuzzwords = (bullets: string[]) => {
+  const hasBuzzwords = bullets.some((b) =>
+    buzzwords.some((word) => b.toLowerCase().includes(word)),
+  );
+
+  return {
+    pass: !hasBuzzwords,
+    title: "Remova as palavras da moda",
+    message: hasBuzzwords
+      ? "Considere substituir palavras da moda por descrições mais específicas e significativas."
+      : "Bom trabalho evitando palavras da moda genéricas!",
+  };
+};
+
+const analyzePersonalPronouns = (bullets: string[]) => {
+  const pronouns = [
+    "eu",
+    "me",
+    "meu",
+    "minha",
+    "meus",
+    "minhas",
+    "nós",
+    "nosso",
+    "nossa",
+    "nossos",
+    "nossas",
+  ];
+  const hasPronouns = bullets.some((b) =>
+    pronouns.some((pronoun) => new RegExp(`\\b${pronoun}\\b`, "i").test(b)),
+  );
+
+  return {
+    pass: !hasPronouns,
+    title: "Remova os pronomes pessoais",
+    message: hasPronouns
+      ? "Remova os pronomes pessoais para manter um tom profissional."
+      : "Bom trabalho por evitar pronomes pessoais!",
+  };
+};
+
+const analyzeQuantification = (bullets: string[]) => {
+  const hasNumbers = /\d/.test(bullets.join(""));
+  return {
+    pass: hasNumbers,
+    title: "Inserir quantificação",
+    message: hasNumbers
+      ? "Bom uso de dados numéricos!"
+      : "Tente incluir números para quantificar suas conquistas (ex: aumentou as vendas em 25%).",
+  };
+};
+
+const analyzeNumberOfBullets = (bullets: string[]) => {
+  const pass = bullets.length >= 3 && bullets.length <= 10;
+  return {
+    pass,
+    title: "Quantidade de items",
+    message:
+      bullets.length < 3
+        ? "Adicione mais itens (tente ter pelo menos 3)."
+        : bullets.length > 10
+          ? "Considere reduzir o número de itens (tente ter no máximo 10)."
+          : "Bom número de itens!",
+  };
+};
+
+const Insights = ({ text }: { text: string }) => {
+  const results = [
+    analyzePersonalPronouns([text]),
+    analyzeBuzzwords([text]),
+    analyzeActiveVoice([text]),
+    analyzeQuantification([text]),
+    analyzeNumberOfBullets([text]),
+  ];
+
+  return (
+    <ul>
+      {results.map((result, index) => (
+        <li key={index} className="flex items-center gap-1 text-xs">
+          {result.pass ? (
+            <CircleCheckBig size={12} className="stroke-green-500" />
+          ) : (
+            <CircleX size={12} className="stroke-red-500" />
+          )}
+          {result.title}
+        </li>
+      ))}
+    </ul>
+  );
+};
 
 export const Item = ({
   id,
@@ -66,8 +251,14 @@ export const Item = ({
     `Empresa ${index + 1}`;
   const [openAlert, setOpenAlert] = useState<boolean>(false);
 
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id, disabled });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id, disabled });
 
   const style = {
     transform: transform
@@ -115,30 +306,30 @@ export const Item = ({
           <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
             <div
               onClick={() => {
-                console.log("isDirty", form.formState.isDirty);
-                console.log("touchedFields", form.formState.touchedFields);
                 if (isActive) return;
-                if (isSubmitting && !form.formState.isDirty) {
-                  onClick(value.activeIndex);
-                  return;
-                }
+                onClick(value.activeIndex);
+                // if (isSubmitting && !form.formState.isDirty) {
+                //   onClick(value.activeIndex);
+                //   return;
+                // }
 
-                if (
-                  form.formState.isDirty &&
-                  !isActive &&
-                  Object.values(form.formState.touchedFields).some((item) => {
-                    return !!item;
-                  })
-                ) {
-                  setOpenAlert(true);
-                } else {
-                  onClick(value.activeIndex);
-                }
+                // if (
+                //   form.formState.isDirty &&
+                //   !isActive &&
+                //   Object.values(form.formState.touchedFields).some((item) => {
+                //     return !!item;
+                //   })
+                // ) {
+                //   setOpenAlert(true);
+                // } else {
+                //   onClick(value.activeIndex);
+                // }
               }}
               className="flex-1"
             >
               <p className="text-sm">{role}</p>
               <span className="text-xs">{company}</span>
+              {isActive && value.did && <Insights text={value.did} />}
             </div>
 
             <Popover>
