@@ -5,10 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 
 import { PageContentEditor } from "~/components/page";
 import { api } from "~/trpc/react";
-import { HandlerList } from "./handler";
+import { HandlerList } from "./handler-list";
 import { PageLoading } from "~/components/page-loading";
 
 export const Body = () => {
+  console.log("**Body**");
   const { id } = useParams<{ id: string }>();
   const experiences = api.experiences.list.useQuery({ resumeId: id });
 

@@ -44,21 +44,27 @@ export const Item = ({
   onClick,
   onRemove,
   index,
-  isActive,
+  activeIndex,
+  isSubmitting,
 }: {
   id: string;
   value: ExperienceSchema & { activeIndex: string };
   onClick: (activeIndex: string) => void;
   onRemove: (activeIndex: string) => void;
   index: number;
-  isActive: number;
+  activeIndex: string;
+  isSubmitting: boolean;
 }) => {
+  const isActive = value.activeIndex === activeIndex;
   const form = useFormContext();
   const disabled = !value._id;
-  const role = value.role || `Experiência ${index + 1}`;
-  const company = value.company || `Empresa ${index + 1}`;
+  const role =
+    (form.watch(`experiences.${index}.role`) as string) ||
+    `Experiência ${index + 1}`;
+  const company =
+    (form.watch(`experiences.${index}.company`) as string) ||
+    `Empresa ${index + 1}`;
   const [openAlert, setOpenAlert] = useState<boolean>(false);
-  console.log("isSubmitted", form.formState.isSubmitted);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, disabled });
@@ -109,7 +115,13 @@ export const Item = ({
           <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
             <div
               onClick={() => {
+                console.log("isDirty", form.formState.isDirty);
+                console.log("touchedFields", form.formState.touchedFields);
                 if (isActive) return;
+                if (isSubmitting && !form.formState.isDirty) {
+                  onClick(value.activeIndex);
+                  return;
+                }
 
                 if (
                   form.formState.isDirty &&

@@ -39,6 +39,7 @@ interface ExperienceListProps {
   onRemove: (activeIndex: string) => void;
   onMove: (actualIndex: number, nextIndex: number) => void;
   activeIndex: string;
+  fields: any[];
 }
 
 export const ExperienceList = ({
@@ -46,11 +47,10 @@ export const ExperienceList = ({
   onClick,
   onRemove,
   onMove,
+  fields,
   activeIndex,
 }: ExperienceListProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const form = useFormContext();
-  const fields = useWatch({ control: form.control, name: "experiences" });
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -78,13 +78,9 @@ export const ExperienceList = ({
     if (!over) return;
     if (active.id === over.id) return;
 
-    const actualIndex = fields.findIndex(
-      (item) => item._id === active.id,
-    ) as number;
+    const actualIndex = fields.findIndex((item) => item._id === active.id);
 
-    const nextIndex = fields.findIndex(
-      (item) => item._id === over.id,
-    ) as number;
+    const nextIndex = fields.findIndex((item) => item._id === over.id);
 
     const newItems = arrayMove(fields as unknown[], actualIndex, nextIndex);
     const updateItems = newItems.map((item, order) => ({ ...item, order }));
@@ -139,13 +135,14 @@ export const ExperienceList = ({
               {fields.map((field, index) => {
                 return (
                   <Item
-                    key={field.activeIndex}
+                    key={field.id}
                     id={field._id}
                     value={field}
                     onClick={onClick}
                     index={index}
                     onRemove={onRemove}
-                    isActive={field.activeIndex === activeIndex}
+                    activeIndex={activeIndex}
+                    isSubmitting={isSubmitting}
                   />
                 );
               })}

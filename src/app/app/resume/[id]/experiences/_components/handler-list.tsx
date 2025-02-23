@@ -50,6 +50,7 @@ const generateANewItem = (order: number) => {
 };
 
 export const HandlerList = ({ defaultValues }: HandlerProps) => {
+  console.log("**HandlerList**");
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
 
@@ -72,7 +73,7 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
     },
   });
 
-  const { fields, append, replace, move } = useFieldArray({
+  const { fields, append, replace, move, remove } = useFieldArray({
     control: form.control,
     name: "experiences",
   });
@@ -84,11 +85,12 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
   const handleOnClick = (activeIndex: string) => {
     const isSubmitting = !fields.every((field) => !!field._id);
 
-    console.log("[isSubmitting]: ", isSubmitting);
+    setActiveIndex(activeIndex);
+
     if (isSubmitting) {
+      // remove(fields.length - 1);
       replace(fields.filter((field) => !!field._id));
     }
-    setActiveIndex(activeIndex);
   };
 
   const handleOnAppend = () => {
@@ -102,7 +104,10 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
       (field) => field.activeIndex !== activeItemIndex,
     );
     const hasItems = newItems.length;
-    replace(newItems);
+    const index = fields.findIndex(
+      (field) => field.activeIndex === activeItemIndex,
+    );
+    remove(index);
 
     if (hasItems) {
       if (activeIndex === activeItemIndex)
@@ -111,9 +116,8 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
       handleOnAppend();
       setActiveIndex(fields[0]!.activeIndex);
     }
-    const item = fields.find((field) => field.activeIndex === activeItemIndex);
 
-    void experienceDelete.mutateAsync(item!._id);
+    // void experienceDelete.mutateAsync(item!._id);
   };
 
   const handleOnSubmit: SubmitHandler<z.infer<typeof schema>> = async (
@@ -149,6 +153,7 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
           onClick={handleOnClick}
           onRemove={handleOnRemove}
           activeIndex={activeIndex!}
+          fields={fields}
           onMove={(actualIndex: number, nextIndex: number) =>
             move(actualIndex, nextIndex)
           }
@@ -158,6 +163,7 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
         <ExperienceForm
           activeIndex={activeIndex}
           onSubmit={handleOnSubmit}
+          fields={fields}
           isLoading={experienceCreate.isPending || experienceUpdate.isPending}
         />
       </div>
