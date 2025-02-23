@@ -40,8 +40,6 @@ interface TextareaBulletProps extends React.ComponentProps<"textarea"> {
   label: string;
 }
 
-const BULLET = "• ";
-
 const serializeToString = (nodes: Descendant[]): string => {
   return nodes.map((n) => Node.string(n as Node)).join("\n");
 };
@@ -82,22 +80,17 @@ const TextareaBullet = ({
     });
   }, []);
 
-  const handleLinkClick = (url: string) => {
-    toast.info("Link clicked!", {
-      description: `URL: ${url}`,
-    });
-  };
-
-  const handleOnKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (
+  const handleOnKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (
     event,
   ) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      const lastNode = editor.children[editor.children.length - 1] as Element;
-      if ((lastNode.children[0] as Text).text.trim() !== "•") {
-        editor.insertNode({ type: "paragraph", children: [{ text: BULLET }] });
-      }
-    }
+    // console.log("handleOnKeyDown", event.key);
+    // const lastNode = editor.children[editor.children.length - 1] as Element;
+    // if (event.key === "Enter") {
+    //   event.preventDefault();
+    //   if ((lastNode?.children?.[0] as Text).text.trim() !== "•") {
+    //     editor.insertNode({ type: "paragraph", children: [{ text: BULLET }] });
+    //   }
+    // }
   };
 
   const initialValue = useMemo(() => deserializeFromString(defaultValue), []);
@@ -105,11 +98,15 @@ const TextareaBullet = ({
   console.log("[initialValue]: ", initialValue);
 
   const renderLeaf = useCallback((props: RenderLeafProps) => {
+    console.log("renderLeaf", props);
     return <Leaf {...props} />;
   }, []);
 
   const renderElement = useCallback((props: RenderElementProps) => {
+    console.log("renderElement", props);
     switch (props.element.type) {
+      case "bulleted-list":
+        (props) => <ul {...props.attributes}>{props.children}</ul>;
       default:
         return <DefaultElement {...props} />;
     }
@@ -136,16 +133,16 @@ const TextareaBullet = ({
                   editor={editor}
                   initialValue={initialValue}
                   onChange={(value) => {
+                    console.log("value", value);
                     const content = serializeToString(value);
+                    console.log("content", content);
                     field.onChange(content);
                     const { selection } = editor;
                     if (selection && !Range.isCollapsed(selection)) {
-                      console.log("update");
                       updateToolbarPosition();
                       setSelection(selection);
                     } else {
                       setSelection(null);
-                      console.log("insert");
                     }
                   }}
                 >
@@ -157,7 +154,7 @@ const TextareaBullet = ({
                   <Editable
                     spellCheck
                     autoCapitalize="sentences"
-                    onKeyDown={handleOnKeyDown}
+                    // onKeyDown={handleOnKeyDown}
                     renderLeaf={renderLeaf}
                     renderElement={renderElement}
                     placeholder={placeholder}
@@ -177,8 +174,15 @@ const TextareaBullet = ({
   );
 };
 
-const DefaultElement = (props: any) => {
-  return <p {...props.attributes}>{props.children}</p>;
+const DefaultElement = (props: RenderElementProps) => {
+  return (
+    <li
+      {...props.attributes}
+      className="relative ml-[10px] leading-[1.35em] before:absolute before:left-[-10px] before:content-['•']"
+    >
+      {props.children}
+    </li>
+  );
 };
 
 const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
@@ -219,7 +223,7 @@ export const SummaryForm = () => {
 
   const form = useForm({
     defaultValues: {
-      text: "• Welcome to the bullet editor\n• Press Enter to add new bullets\n• Select text to format it",
+      text: "Welcome to the bullet editor\nPress Enter to add new bullets\nSelect text to format it",
     },
   });
 
