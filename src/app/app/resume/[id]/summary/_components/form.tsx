@@ -1,9 +1,15 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "next/navigation";
 import { type SubmitHandler, useForm, useFormContext } from "react-hook-form";
-import { createEditor, Range, Node, type Descendant } from "slate";
+import { createEditor, Range, Node, type Descendant, Transforms } from "slate";
 import {
   Editable,
   type RenderElementProps,
@@ -29,7 +35,6 @@ import { type Summary } from "~/stores/resume-store";
 import { api } from "~/trpc/react";
 import { type SummarySchema } from "~/validators";
 import { Button } from "~/components/ui/button";
-import { type Element } from "slate";
 import { EditorToolbar } from "./toolbar";
 
 interface TextareaBulletProps extends React.ComponentProps<"textarea"> {
@@ -51,6 +56,105 @@ const deserializeFromString = (str: string): Descendant[] => {
   }));
 };
 
+const SlateToContentEditable = ({ initialValue }: { initialValue: any[] }) => {
+  const [editor] = useState(() => withReact(createEditor()));
+  const [slateValue, setSlateValue] = useState(initialValue);
+  const contentEditableRef = useRef(null);
+  const slateRef = useRef(null);
+
+  console.log("slateValue", slateValue);
+
+  useEffect(() => {
+    // Sync Slate to contentEditable on Slate changes
+    const textContent = slateValue
+      .filter((node) => node.type === "bulleted-list")
+      .map((node) =>
+        node.children
+          .filter((item) => item.type === "list-item")
+          .map((item) =>
+            item.children.map((textNode) => textNode.text).join(""),
+          )
+          .join("\n"),
+      )
+      .join("\n");
+
+    if (contentEditableRef.current) {
+      contentEditableRef.current.innerHTML = generateHTML(slateValue);
+    }
+  }, [slateValue]);
+
+  useEffect(() => {
+    // Sync contentEditable to Slate on initial load
+    if (contentEditableRef.current) {
+      contentEditableRef.current.innerHTML = generateHTML(slateValue);
+    }
+  }, []);
+
+  const generateHTML = (value) => {
+    const listItems = value
+      .filter((node) => node.type === "bulleted-list")
+      .map((node) =>
+        node.children
+          .filter((item) => item.type === "list-item")
+          .map(
+            (item, index) =>
+              `<li value="${index + 1}" class="relative ml-[10px] before:content-['•'] before:absolute before:left-[-10px] leading-[1.35em]" dir="ltr"><span data-lexical-text="true">${item.children.map((textNode) => textNode.text).join("")}</span></li>`,
+          )
+          .join(""),
+      )
+      .join("");
+
+    return `<ul class="list-none">${listItems}</ul>`;
+  };
+
+  const handleContentChange = (e) => {
+    // Parse contentEditable HTML and update Slate
+    const html = contentEditableRef.current.innerHTML;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const listItems = doc.querySelectorAll("li");
+
+    const newSlateValue = [
+      {
+        type: "bulleted-list",
+        children: Array.from(listItems).map((li) => ({
+          type: "list-item",
+          children: [{ text: li.textContent }],
+        })),
+      },
+    ];
+
+    setSlateValue(newSlateValue);
+    Transforms.removeNodes(editor, {
+      at: [0],
+      match: (n) => n.type === "bulleted-list",
+    });
+    Transforms.insertNodes(editor, newSlateValue[0], { at: [0] });
+  };
+
+  return (
+    <div>
+      <div
+        ref={contentEditableRef}
+        contentEditable="true"
+        onInput={handleContentChange}
+        suppressContentEditableWarning
+        style={{ border: "1px solid #ccc", padding: "10px" }}
+      />
+      <div style={{ display: "none" }}>
+        <Slate
+          editor={editor}
+          value={slateValue || initialValue}
+          onChange={setSlateValue}
+          ref={slateRef}
+        >
+          <Editable />
+        </Slate>
+      </div>
+    </div>
+  );
+};
+
 const TextareaBullet = ({
   name,
   label,
@@ -67,6 +171,8 @@ const TextareaBullet = ({
   const form = useFormContext();
   const defaultValue = form.getValues(name) as string;
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const contentEditableRef = useRef(null);
+  const [slateValue, setSlateValue] = useState(defaultValue);
 
   const updateToolbarPosition = useCallback(() => {
     const sel = window.getSelection()!;
@@ -79,19 +185,6 @@ const TextareaBullet = ({
       left: rect.left + window.scrollX,
     });
   }, []);
-
-  const handleOnKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (
-    event,
-  ) => {
-    // console.log("handleOnKeyDown", event.key);
-    // const lastNode = editor.children[editor.children.length - 1] as Element;
-    // if (event.key === "Enter") {
-    //   event.preventDefault();
-    //   if ((lastNode?.children?.[0] as Text).text.trim() !== "•") {
-    //     editor.insertNode({ type: "paragraph", children: [{ text: BULLET }] });
-    //   }
-    // }
-  };
 
   const initialValue = useMemo(() => deserializeFromString(defaultValue), []);
 
@@ -112,6 +205,31 @@ const TextareaBullet = ({
     }
   }, []);
 
+  const handleContentChange = (e) => {
+    // Parse contentEditable HTML and update Slate
+    const html = contentEditableRef.current.innerHTML;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const listItems = doc.querySelectorAll("li");
+
+    const newSlateValue = [
+      {
+        type: "bulleted-list",
+        children: Array.from(listItems).map((li) => ({
+          type: "list-item",
+          children: [{ text: li.textContent }],
+        })),
+      },
+    ];
+
+    setSlateValue(newSlateValue);
+    Transforms.removeNodes(editor, {
+      at: [0],
+      match: (n) => n.type === "bulleted-list",
+    });
+    Transforms.insertNodes(editor, newSlateValue[0], { at: [0] });
+  };
+
   return (
     <FormField
       name={name}
@@ -128,7 +246,14 @@ const TextareaBullet = ({
               </Button>
             </div>
             <FormControl>
-              <div className="relative">
+              <div
+                ref={contentEditableRef}
+                contentEditable="true"
+                onInput={handleContentChange}
+                suppressContentEditableWarning
+                style={{ border: "1px solid #ccc", padding: "10px" }}
+              />
+              <div style={{ display: "none" }}>
                 <Slate
                   editor={editor}
                   initialValue={initialValue}
@@ -241,13 +366,30 @@ export const SummaryForm = () => {
     });
   };
 
+  const initialValue = [
+    {
+      type: "bulleted-list",
+      children: [
+        {
+          type: "list-item",
+          children: [{ text: "Item 1" }],
+        },
+        {
+          type: "list-item",
+          children: [{ text: "Item 2" }],
+        },
+      ],
+    },
+  ];
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleOnSubmit)}
         className="flex flex-1 flex-col"
       >
-        <TextareaBullet name="text" label="Sumário" rows={4} />
+        {/* <TextareaBullet name="text" label="Sumário" rows={4} /> */}
+        <SlateToContentEditable initialValue={initialValue} />
         <ButtonLoading
           isLoading={updateSummaryMutation.isPending}
           className="self-end"
