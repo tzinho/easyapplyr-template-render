@@ -29,12 +29,12 @@ export const Body = () => {
 
   const showNext = () => {
     if (currentIndex < templates.length - 1)
-      setSelectedTemplate(templatesCategory[currentIndex + 1]);
+      setSelectedTemplate(templatesCategory[currentIndex + 1]!);
   };
 
   const showPrevious = () => {
     if (currentIndex > 0)
-      setSelectedTemplate(templatesCategory[currentIndex - 1]);
+      setSelectedTemplate(templatesCategory[currentIndex - 1]!);
   };
 
   const handleZoomIn = () => {
@@ -76,7 +76,9 @@ export const Body = () => {
           <Preview
             key={template.id}
             template={template}
-            handleOnSelected={(template) => setSelectedTemplate(template)}
+            handleOnSelected={(template: Template) =>
+              setSelectedTemplate(template)
+            }
           />
         ))}
       </div>

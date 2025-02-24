@@ -3,7 +3,7 @@
 import { type SubmitHandler, useFormContext, useWatch } from "react-hook-form";
 
 import { Input } from "~/components/form/input";
-import { Textarea } from "~/components/form/textarea";
+import { TextareaList } from "~/components/form/textarea-list";
 import { ButtonLoading } from "~/components/ui/button-loading";
 
 interface ExperienceFormProps {
@@ -34,7 +34,7 @@ export const ExperienceForm = ({
         name={`experiences.${current}.where`}
         label={`Onde está localizada a ${company ? company : "empresa A"}?`}
       />
-      <Textarea
+      <TextareaList
         name={`experiences.${current}.did`}
         label={`O que você fez na ${company ? company : "empresa A"}?`}
       />

@@ -28,8 +28,8 @@ import { cn } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { type experiences } from "~/server/db/schema";
-import { Skeleton } from "~/components/ui/skeleton";
 import { SortableItem } from "~/components/templates/sortable-item";
+import { PageLoading } from "~/components/page-loading";
 
 export const List = () => {
   const params = useParams<{ id: string }>();
@@ -75,15 +75,7 @@ export const List = () => {
     void experienceDeleteMutation.mutateAsync(id);
   };
 
-  if (experiencesList.isLoading)
-    return (
-      <div className="flex flex-col gap-5">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-      </div>
-    );
+  if (experiencesList.isLoading) return <PageLoading />;
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;

@@ -67,3 +67,12 @@
 - **Each Template has a default sections:** I need to find a way to define the default sections in each template and when my user changes the chosen template i need to copy the default sections to resume
 
 - **If there are no items on the required section, the section is hidden on the resume:** I need to validate this case on the template render
+
+**Code**
+
+```javascript
+editor.insertNode({
+  type: "list-item",
+  children: [{ text: "" }],
+});
+```

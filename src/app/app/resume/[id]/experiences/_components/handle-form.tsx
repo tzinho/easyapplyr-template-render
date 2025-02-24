@@ -7,6 +7,7 @@ import { Input } from "~/components/form/input";
 import { Textarea } from "~/components/form/textarea";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { cn } from "~/lib/utils";
+import { TextareaList } from "~/components/form/textarea-list";
 
 interface ExperienceFormProps {
   onSubmit: SubmitHandler<any>;
@@ -23,7 +24,9 @@ const getStackStyles = (
   const diff = itemIndex - currentIndex;
   const scale = 1 - Math.abs(diff) * 0.05;
   const y = diff * 10;
-  const opacity = 1 - Math.abs(diff) * 0.2;
+  const opacity = 1 - Math.abs(diff) * 1;
+  // previously
+  // const opacity = 1 - Math.abs(diff) * 0.2;
   const zIndex = total - Math.abs(diff);
 
   return {
@@ -44,13 +47,11 @@ export const ExperienceForm = ({
   const form = useFormContext();
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-      <div
-        className={cn(
-          "relative min-h-[53vh]",
-          Object.keys(form.formState.errors).length && "min-h-[59vh]",
-        )}
-      >
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="h-[485px] space-y-6"
+    >
+      <div className={cn("relative min-h-[485px]")}>
         <AnimatePresence initial={false} mode="popLayout">
           {fields.map((field, index) => {
             const currentVisible = fields.findIndex(
@@ -107,37 +108,41 @@ export const ExperienceForm = ({
                 <p>
                   {role} <span className="text-xs">{company}</span>
                 </p>
+
                 <Input
                   label={`Qual a sua função na(o) ${company}?`}
                   name={`experiences.${index}.role`}
                   className="focus-visible:ring-2"
                   required
                 />
+
                 <Input
                   label="Em qual empresa você trabalhou?"
                   name={`experiences.${index}.company`}
                   className="focus-visible:ring-2"
                   required
                 />
+
                 <Input
                   name={`experiences.${index}.where`}
                   label={`Onde está localizada a ${company}?`}
                   className="focus-visible:ring-2"
                 />
-                <Textarea
+
+                <TextareaList
                   name={`experiences.${index}.did`}
                   label={`O que você fez na(o) ${company}?`}
                   className="min-h-[120px] focus-visible:ring-2"
                 />
+
+                <ButtonLoading className="mt-3 w-full" isLoading={isLoading}>
+                  Salvar na lista de experiências
+                </ButtonLoading>
               </motion.div>
             );
           })}
         </AnimatePresence>
       </div>
-
-      <ButtonLoading className="w-full" isLoading={isLoading}>
-        Salvar na lista de experiências
-      </ButtonLoading>
     </form>
   );
 };

@@ -11,8 +11,8 @@ import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Skill } from "~/stores/resume-store";
-import { Skeleton } from "~/components/ui/skeleton";
 import { PageContentEditor } from "~/components/page";
+import { PageLoading } from "~/components/page-loading";
 
 export const Body = () => {
   const { resumeTemplate, setResumeTemplate, deleteSkillTemplate } =
@@ -49,15 +49,7 @@ export const Body = () => {
     },
   });
 
-  if (!resumeTemplate)
-    return (
-      <div className="flex flex-col gap-5">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-      </div>
-    );
+  if (!resumeTemplate) return <PageLoading />;
 
   return (
     <PageContentEditor>

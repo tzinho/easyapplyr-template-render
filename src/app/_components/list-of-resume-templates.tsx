@@ -7,23 +7,15 @@ import { api } from "~/trpc/react";
 import { ResumePreview } from "./resume-preview";
 import { AlertToDeleteAResume } from "./alert-to-delete-a-resume";
 import { ModalToCreateAResume } from "./modal-to-create-a-resume";
-import { Skeleton } from "~/components/ui/skeleton";
 import { Card, CardContent } from "~/components/ui/card";
+import { PageLoading } from "~/components/page-loading";
 
 export const ListOfResumeTemplates = () => {
   const [selectedResumeTemplate, setSelectedResumeTemplate] =
     useState<Resume | null>(null);
   const resumesTemplates = api.resumes.list.useQuery();
 
-  if (resumesTemplates.isLoading)
-    return (
-      <div className="grid grid-cols-1 justify-items-center gap-3 md:grid-cols-2 lg:grid-cols-4">
-        <Skeleton className="h-[290px] w-[215.16px]" />
-        <Skeleton className="h-[290px] w-[215.16px]" />
-        <Skeleton className="h-[290px] w-[215.16px]" />
-        <Skeleton className="h-[290px] w-[215.16px]" />
-      </div>
-    );
+  if (resumesTemplates.isLoading) return <PageLoading />;
 
   return (
     <div className="grid grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

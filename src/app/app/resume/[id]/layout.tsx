@@ -8,7 +8,7 @@ import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Resume } from "~/stores/resume-store";
 import { useStore } from "~/store";
 import { useIsMobile } from "~/hooks/use-mobile";
-import { Skeleton } from "~/components/ui/skeleton";
+import { PageLoading } from "~/components/page-loading";
 
 export default function Layout({ children }: PropsWithChildren) {
   const { id } = useParams<{ id: string }>();
@@ -29,16 +29,7 @@ export default function Layout({ children }: PropsWithChildren) {
 
   return (
     <div className="flex flex-col gap-3">
-      {resume.isLoading ? (
-        <div className="w-full space-y-4 p-4 md:p-6">
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-      ) : (
-        children
-      )}
+      {resume.isLoading ? <PageLoading /> : children}
     </div>
   );
 }

@@ -27,8 +27,8 @@ import { api } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { type educations } from "~/server/db/schema";
-import { Skeleton } from "~/components/ui/skeleton";
 import { SortableItem } from "~/components/templates/sortable-item";
+import { PageLoading } from "~/components/page-loading";
 
 export const List = () => {
   const [items, setItems] = useState<InferSelectModel<typeof educations>[]>([]);
@@ -67,15 +67,7 @@ export const List = () => {
     void educationDeleteMutation.mutateAsync(id);
   };
 
-  if (educationsList.isLoading)
-    return (
-      <div className="flex flex-col gap-5">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-      </div>
-    );
+  if (educationsList.isLoading) return <PageLoading />;
 
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
