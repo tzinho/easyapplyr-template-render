@@ -4,6 +4,7 @@
 import { relations } from "drizzle-orm";
 import {
   boolean,
+  date,
   integer,
   pgTableCreator,
   smallint,
@@ -87,6 +88,8 @@ export const experiences = createTable("experience", {
   role: text("role").notNull(),
   company: text("company").notNull(),
   where: text("where"),
+  startAt: date("startAt").notNull(),
+  endAt: date("endAt"),
   did: text("did"),
   appear: boolean("appear").notNull(),
   order: integer("order").notNull(),

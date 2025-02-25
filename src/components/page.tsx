@@ -91,7 +91,12 @@ interface PageContentProps extends Readonly<PropsWithChildren> {
 
 const PageContent = ({ children, isLoading, className }: PageContentProps) => {
   return (
-    <main className={cn("w-full space-y-4 p-4 md:px-56 md:py-6", className)}>
+    <main
+      className={cn(
+        "w-full space-y-4 p-4 sm:px-24 md:px-40 md:py-6",
+        className,
+      )}
+    >
       {isLoading ? <PageLoading /> : children}
     </main>
   );

@@ -11,7 +11,7 @@ import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Summary } from "~/stores/resume-store";
 import { api } from "~/trpc/react";
 import { type SummarySchema } from "~/validators";
-import { TextareaList } from "~/components/form/textarea-list";
+import { Textarea } from "~/components/form/textarea";
 
 export const SummaryForm = ({ defaultValues }: { defaultValues: Summary }) => {
   const params = useParams<{ id: string }>();
@@ -40,7 +40,7 @@ export const SummaryForm = ({ defaultValues }: { defaultValues: Summary }) => {
         onSubmit={form.handleSubmit(handleOnSubmit)}
         className="flex flex-1 flex-col"
       >
-        <TextareaList name="text" label="Sumário" placeholder="Sumário" />
+        <Textarea name="text" label="Sumário" placeholder="Sumário" rows={4} />
         <ButtonLoading
           isLoading={updateSummaryMutation.isPending}
           className="self-end"

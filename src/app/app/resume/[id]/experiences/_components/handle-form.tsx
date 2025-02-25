@@ -4,10 +4,10 @@ import { type SubmitHandler, useFormContext } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { Input } from "~/components/form/input";
-import { Textarea } from "~/components/form/textarea";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { cn } from "~/lib/utils";
 import { TextareaList } from "~/components/form/textarea-list";
+import { DateTimeRangePicker } from "~/components/form/datetime-range-picker";
 
 interface ExperienceFormProps {
   onSubmit: SubmitHandler<any>;
@@ -43,7 +43,6 @@ export const ExperienceForm = ({
   isLoading,
   fields,
 }: ExperienceFormProps) => {
-  console.log("**ExperienceForm**");
   const form = useFormContext();
 
   return (
@@ -128,6 +127,8 @@ export const ExperienceForm = ({
                   label={`Onde está localizada a ${company}?`}
                   className="focus-visible:ring-2"
                 />
+
+                <DateTimeRangePicker prefix="experiences" index={index} />
 
                 <TextareaList
                   name={`experiences.${index}.did`}

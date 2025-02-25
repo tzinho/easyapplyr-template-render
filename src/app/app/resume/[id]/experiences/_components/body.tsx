@@ -9,7 +9,6 @@ import { HandlerList } from "./handler-list";
 import { PageLoading } from "~/components/page-loading";
 
 export const Body = () => {
-  console.log("**Body**");
   const { id } = useParams<{ id: string }>();
   const experiences = api.experiences.list.useQuery({ resumeId: id });
 

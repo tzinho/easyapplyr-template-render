@@ -27,6 +27,8 @@ const experienceSchema = z.object({
   company: z.string().min(1, "A empresa é obrigatória!"),
   did: z.string().nullish(),
   resumeId: z.string(),
+  startAt: z.date().nullish(),
+  endAt: z.date().nullish(),
   order: z.number(),
 });
 
@@ -50,7 +52,6 @@ const generateANewItem = (order: number) => {
 };
 
 export const HandlerList = ({ defaultValues }: HandlerProps) => {
-  console.log("**HandlerList**");
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
 

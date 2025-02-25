@@ -75,7 +75,6 @@ export const TextareaList = ({
       control={form.control}
       name={name}
       render={({ field }) => {
-        console.log("field.value", field.value);
         const onKeyDown = (event: React.KeyboardEvent) => {
           if (event.key === "Enter") {
             event.preventDefault();

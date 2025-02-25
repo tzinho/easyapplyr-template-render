@@ -15,6 +15,8 @@ export const experienceSchema = z.object({
   role: z.string({ message: "A função é obrigatória" }),
   company: z.string({ message: "A empresa é obrigatória" }),
   where: z.string().nullish(),
+  startAt: z.coerce.date().nullish(),
+  endAt: z.coerce.date().nullish(),
   did: z.string().nullish(),
 });
 
