@@ -18,6 +18,13 @@ interface HandlerProps {
   defaultValues: Omit<Experience, "id"> & { activeIndex: string }[];
 }
 
+const dateStringSchema = z.date().transform((date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+});
+
 const experienceSchema = z.object({
   _id: z.string(),
   activeIndex: z.string(),
@@ -27,8 +34,8 @@ const experienceSchema = z.object({
   company: z.string().min(1, "A empresa é obrigatória!"),
   did: z.string().nullish(),
   resumeId: z.string(),
-  startAt: z.date().nullish(),
-  endAt: z.date().nullish(),
+  startAt: z.string().nullish(),
+  endAt: z.string().nullish(),
   order: z.number(),
 });
 
@@ -43,6 +50,8 @@ const generateANewItem = (order: number) => {
     company: "",
     where: "",
     did: "",
+    startAt: null,
+    endAt: null,
     _id: "",
     activeIndex,
     resumeId: "",
@@ -73,6 +82,8 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
       experiences: defaultValues ?? [generateANewItem(0)],
     },
   });
+
+  console.log("[errors]: ", form.formState.errors);
 
   const { fields, append, replace, move, remove } = useFieldArray({
     control: form.control,

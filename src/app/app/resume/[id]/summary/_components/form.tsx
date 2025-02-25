@@ -40,7 +40,12 @@ export const SummaryForm = ({ defaultValues }: { defaultValues: Summary }) => {
         onSubmit={form.handleSubmit(handleOnSubmit)}
         className="flex flex-1 flex-col"
       >
-        <Textarea name="text" label="Sumário" placeholder="Sumário" rows={4} />
+        <Textarea
+          name="text"
+          label="Escreva o melhor sumário possível"
+          placeholder="Experiente executivo global em estágio inicial com graduação em economia e matemática da Universidade de Wisconsin. Paixão por construir empresas inspiradoras que as pessoas adoram por meio de design, desenvolvimento, branding e grandes apostas."
+          rows={4}
+        />
         <ButtonLoading
           isLoading={updateSummaryMutation.isPending}
           className="self-end"

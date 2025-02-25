@@ -203,6 +203,16 @@ export const resumeRouter = createTRPCRouter({
     });
   }),
 
+  getSections: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const resumeSections = await ctx.db
+        .select()
+        .from(sections)
+        .where(eq(sections.resumeId, input));
+      return resumeSections;
+    }),
+
   duplicate: publicProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {

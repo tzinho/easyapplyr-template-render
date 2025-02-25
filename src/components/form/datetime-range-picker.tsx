@@ -76,10 +76,14 @@ const MonthPicker = ({
           whileTap={{ scale: 0.98 }}
           onClick={() => {
             const newDate = new Date(currentYear, index);
-            onChange(newDate);
+            const year = newDate.getFullYear();
+            const day = String(newDate.getDate() + 1).padStart(2, "0");
+            onChange(
+              `${year}-${String(index + 1).padStart(2, "0")}-${day}T03:00:00Z`,
+            );
           }}
           className={`rounded p-[2px] text-sm transition-colors ${
-            value?.getMonth() === index
+            new Date(value)?.getMonth() === index
               ? "bg-primary text-primary-foreground"
               : "hover:bg-primary hover:text-primary-foreground"
           }`}
@@ -120,8 +124,8 @@ export const DateTimeRangePicker = ({
     control: form.control,
   });
 
-  console.log("startDate", startDate.value);
-  console.log("endDate", endDate.value);
+  // console.log("startDate", startDate.value);
+  // console.log("endDate", endDate.value);
 
   const [isPresent, setIsPresent] = useState<boolean>(false);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -142,8 +146,8 @@ export const DateTimeRangePicker = ({
                 className="roundedpx-4 w-[140px] cursor-pointer py-2 outline-none ring-blue-500 focus:ring-2"
                 value={
                   startDate.value
-                    ? `${months[startDate.value?.getMonth()]?.slice(0, 3)} ${startDate.value?.getFullYear()}`
-                    : null
+                    ? `${months[new Date(startDate.value)?.getMonth()]?.slice(0, 3)} ${new Date(startDate.value)?.getFullYear()}`
+                    : ""
                 }
               />
             </div>
@@ -177,8 +181,8 @@ export const DateTimeRangePicker = ({
                   isPresent
                     ? "Presente"
                     : endDate.value
-                      ? `${months[endDate.value?.getMonth()]?.slice(0, 3)} ${endDate.value?.getFullYear()}`
-                      : null
+                      ? `${months[new Date(endDate.value)?.getMonth()]?.slice(0, 3)} ${new Date(endDate.value)?.getFullYear()}`
+                      : ""
                 }
               />
             </div>

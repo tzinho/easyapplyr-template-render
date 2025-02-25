@@ -101,7 +101,7 @@ export const TextareaList = ({
                       renderElement={renderElement}
                       onKeyDown={onKeyDown}
                       placeholder={placeholder}
-                      className="min-h-[200px] outline-none"
+                      className="min-h-[100px] outline-none"
                     />
                   </ul>
                 </Slate>

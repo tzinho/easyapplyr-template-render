@@ -67,7 +67,6 @@ export const experiencesRouter = createTRPCRouter({
     }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    console.log("[input]: ", input);
     const experience = await ctx.db
       .delete(experiences)
       .where(eq(experiences.id, input))
@@ -90,7 +89,7 @@ export const experiencesRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      console.log("input", input);
+      console.log("[update]: ", input);
       const { id, ...data } = input;
       const experience = await ctx.db
         .update(experiences)

@@ -1,17 +1,17 @@
 "use client";
 
-import { MoreHorizontal, Plus } from "lucide-react";
+import { useState } from "react";
+import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import {
@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { useIsMobile } from "~/hooks/use-mobile";
+import { api } from "~/trpc/react";
 
 type LinkEditPage = {
   label: string;
@@ -88,13 +89,13 @@ const getLinksEditPages = ({ id }: { id: string }) => {
   return links;
 };
 
-export const SelectPage = ({ links }: { links: LinkEditPage[] }) => {
+export const SelectPage = ({ required, notRequired }: NavProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  const initial = links.find((link) => link.href === pathname)!;
+  const initial = required.find((link) => link.href === pathname)!;
 
   const handleOnChange = (value: string) => {
-    const selected = links.find((link) => link.value === value)!;
+    const selected = required.find((link) => link.value === value)!;
     router.push(selected.href);
   };
 
@@ -106,9 +107,19 @@ export const SelectPage = ({ links }: { links: LinkEditPage[] }) => {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {links.map((link) => (
+            {required.map((link) => (
               <SelectItem key={link.value} value={link.value}>
                 <Link href={link.href}>{link.label}</Link>
+              </SelectItem>
+            ))}
+            {notRequired.map((link) => (
+              <SelectItem key={link.value} value={link.value}>
+                <Link href={link.href}>
+                  {link.label}
+                  <Badge className="ml-20 cursor-pointer">
+                    Adicionar seção
+                  </Badge>
+                </Link>
               </SelectItem>
             ))}
           </SelectGroup>
@@ -118,17 +129,19 @@ export const SelectPage = ({ links }: { links: LinkEditPage[] }) => {
   );
 };
 
-export const LinkPage = ({ links }: { links: LinkEditPage[] }) => {
-  const visibleLinks = links.filter((link) => link.appear);
-  const hiddenLinks = links.filter((link) => !link.appear);
+interface NavProps {
+  required: LinkEditPage[];
+  notRequired: LinkEditPage[];
+}
 
+export const LinkPage = ({ required, notRequired }: NavProps) => {
   const toggleSection = (link: LinkEditPage) => {
     console.log("[toggleSection]: ", link);
   };
 
   return (
-    <div className="mb-5 flex items-center justify-center gap-5">
-      {visibleLinks.map((link) => (
+    <div className="flex items-center justify-center gap-5">
+      {required.map((link) => (
         <Link key={link.value} href={link.href}>
           <Button className="h-6 text-xs">{link.label}</Button>
         </Link>
@@ -145,7 +158,7 @@ export const LinkPage = ({ links }: { links: LinkEditPage[] }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            {links.map((link) => (
+            {notRequired.map((link) => (
               <DropdownMenuItem
                 key={link.value}
                 className="flex items-center space-x-2"
@@ -173,9 +186,26 @@ export const LinkPage = ({ links }: { links: LinkEditPage[] }) => {
 
 export const Nav = () => {
   const { id } = useParams<{ id: string }>();
-  const links = getLinksEditPages({ id });
+  const [links, setLinks] = useState(getLinksEditPages({ id }));
+  const sections = api.resumes.getSections.useQuery(id);
+  console.log("[sections]: ", sections.data);
+  const appSections = [
+    "contact",
+    "experiences",
+    "educations",
+    "skills",
+    "summary",
+    "projects",
+    "courseworks",
+    "involvements",
+    "languages",
+  ];
+
+  const required = links.filter((link) => link.required);
+  const notRequired = links.filter((link) => !link.required);
   const isMobile = useIsMobile();
 
-  if (isMobile) return <SelectPage links={links} />;
-  return <LinkPage links={links} />;
+  if (isMobile)
+    return <SelectPage required={required} notRequired={notRequired} />;
+  return <LinkPage required={required} notRequired={notRequired} />;
 };

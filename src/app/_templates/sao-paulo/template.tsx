@@ -46,7 +46,9 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id} disabled={section.disabled}>
-            <li className="list-disc">{item.role}</li>
+            <li className="list-disc">
+              {item.role} - {item.company}
+            </li>
           </Item>
         ))
       }
