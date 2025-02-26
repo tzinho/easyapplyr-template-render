@@ -1,10 +1,12 @@
 "use client";
 
 import type React from "react";
-import { type KeyboardEvent, useCallback, useMemo, useState } from "react";
+import { type KeyboardEvent, useCallback, useMemo } from "react";
 import {
   createEditor,
   Transforms,
+  Editor,
+  Node,
   type Descendant,
   Element as SlateElement,
 } from "slate";
@@ -13,6 +15,7 @@ import {
   Editable,
   withReact,
   type RenderElementProps,
+  type RenderLeafProps,
 } from "slate-react";
 import { useFormContext } from "react-hook-form";
 
@@ -23,14 +26,14 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { Editor } from "slate";
-import { Node } from "slate";
+import { withHistory } from "slate-history";
 
 interface TextareaListProps {
   name: string;
   label?: string;
   placeholder?: string;
   className?: string;
+  highlightWords?: string[];
 }
 
 const emptyValue: Descendant[] = [
@@ -51,6 +54,20 @@ const ListItem = ({ attributes, children }: RenderElementProps) => {
   );
 };
 
+const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
+  if (leaf.highlight) {
+    return (
+      <span
+        {...attributes}
+        className="relative cursor-pointer rounded bg-yellow-100 px-1 transition-colors hover:bg-yellow-200 dark:bg-yellow-900/50 dark:hover:bg-yellow-900/70"
+      >
+        {children}
+      </span>
+    );
+  }
+  return <span {...attributes}>{children}</span>;
+};
+
 const slateToString = (value: Descendant[]): string => {
   return value
     .map((node) => {
@@ -68,15 +85,58 @@ const slateToString = (value: Descendant[]): string => {
 };
 
 // Add a utility function to convert string to Slate value
-const stringToSlate = (text: string): Descendant[] => {
+const stringToSlate = (
+  text: string,
+  highlightWords: string[] = [],
+): Descendant[] => {
   if (!text || text.trim() === "") {
     return emptyValue;
   }
 
-  return text.split("\n").map((line) => ({
-    type: "list-item",
-    children: [{ text: line }],
-  }));
+  return text.split("\n").map((line) => {
+    const children: any[] = [];
+    let lastIndex = 0;
+
+    // Find all matches for highlight words
+    highlightWords.forEach((word) => {
+      const regex = new RegExp(word, "gi");
+      let match;
+
+      while ((match = regex.exec(line)) !== null) {
+        // Add non-highlighted text before match
+        if (match.index > lastIndex) {
+          children.push({
+            text: line.slice(lastIndex, match.index),
+          });
+        }
+
+        // Add highlighted text
+        children.push({
+          text: match[0],
+          highlight: true,
+        });
+
+        lastIndex = match.index + match[0].length;
+      }
+    });
+
+    // Add remaining text
+    if (lastIndex < line.length) {
+      children.push({
+        text: line.slice(lastIndex),
+      });
+    }
+
+    // If no highlights were found, use the whole line
+    if (children.length === 0) {
+      children.push({ text: line });
+    }
+
+    return {
+      type: "list-item",
+      children,
+    };
+  });
 };
 
 const withBullets = (editor: Editor) => {
@@ -128,8 +188,12 @@ export const TextareaList = ({
   label,
   placeholder,
   className,
+  highlightWords = [],
 }: TextareaListProps) => {
-  const editor = useMemo(() => withBullets(withReact(createEditor())), []);
+  const editor = useMemo(
+    () => withHistory(withBullets(withReact(createEditor()))),
+    [],
+  );
   const form = useFormContext();
 
   const renderElement = useCallback((props: RenderElementProps) => {
@@ -140,6 +204,10 @@ export const TextareaList = ({
       default:
         return <p {...props.attributes}>{props.children}</p>;
     }
+  }, []);
+
+  const renderLeaf = useCallback((props: RenderLeafProps) => {
+    return <Leaf {...props} />;
   }, []);
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -198,7 +266,7 @@ export const TextareaList = ({
         if (field.value) {
           // If field.value is a string, convert it to Slate format
           if (typeof field.value === "string") {
-            initialValue = stringToSlate(field.value);
+            initialValue = stringToSlate(field.value, highlightWords);
           }
           // If it's already an array (Slate format), use it directly
           else if (Array.isArray(field.value) && field.value.length > 0) {
@@ -229,6 +297,7 @@ export const TextareaList = ({
                   <ul className="outline-none">
                     <Editable
                       renderElement={renderElement}
+                      renderLeaf={renderLeaf}
                       onKeyDown={onKeyDown}
                       placeholder={placeholder}
                       className="min-h-[100px] outline-none"

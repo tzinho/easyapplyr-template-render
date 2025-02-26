@@ -139,6 +139,7 @@ export const ExperienceForm = ({
                   name={`experiences.${index}.did`}
                   label={`O que você fez na(o) ${company}?`}
                   className="min-h-[120px] focus-visible:ring-2"
+                  highlightWords={["25%"]}
                 />
 
                 <ButtonLoading className="mt-3 w-full" isLoading={isLoading}>
