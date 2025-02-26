@@ -11,7 +11,6 @@ import {
   MoreHorizontal,
   Trash,
 } from "lucide-react";
-import { useIsFirstRender } from "@uidotdev/usehooks";
 
 import { Label } from "~/components/ui/label";
 import {
@@ -40,7 +39,6 @@ import {
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
-import { index } from "drizzle-orm/mysql-core";
 
 const buzzwords = [
   "inovação",
@@ -133,9 +131,14 @@ const analyzeActiveVoice = (bullets: string[]) => {
 };
 
 const analyzeBuzzwords = (bullets: string[]) => {
-  const hasBuzzwords = bullets.some((b) =>
-    buzzwords.some((word) => b.toLowerCase().includes(word)),
-  );
+  const hasBuzzwords = bullets.some((bullet) => {
+    const wordsInBullet = bullet.toLowerCase().split(/\b/); // Split using word boundaries
+    const cleanedWords = wordsInBullet.filter((word) => word.trim() !== ""); // Remove empty strings
+
+    return buzzwords.some((buzzword) => {
+      return cleanedWords.includes(buzzword);
+    });
+  });
 
   return {
     pass: !hasBuzzwords,
@@ -199,12 +202,13 @@ const analyzeNumberOfBullets = (bullets: string[]) => {
 };
 
 const Insights = ({ text }: { text: string }) => {
+  const value = text.split("\n");
   const results = [
-    analyzePersonalPronouns([text]),
-    analyzeBuzzwords([text]),
-    analyzeActiveVoice([text]),
-    analyzeQuantification([text]),
-    analyzeNumberOfBullets([text]),
+    analyzePersonalPronouns(value),
+    analyzeBuzzwords(value),
+    analyzeActiveVoice(value),
+    analyzeQuantification(value),
+    analyzeNumberOfBullets(value),
   ];
 
   return (
@@ -251,14 +255,8 @@ export const Item = ({
     `Empresa ${index + 1}`;
   const [openAlert, setOpenAlert] = useState<boolean>(false);
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id, disabled });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id, disabled });
 
   const style = {
     transform: transform

@@ -12,6 +12,8 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { Input } from "../ui/input";
+import { index } from "drizzle-orm/mysql-core";
+import { cn } from "~/lib/utils";
 
 const months = [
   "Janeiro",
@@ -31,6 +33,7 @@ const months = [
 interface DateTimeRangePickerProps {
   prefix: string;
   index: number;
+  label: string;
 }
 
 interface MonthPickerProps {
@@ -82,11 +85,13 @@ const MonthPicker = ({
               `${year}-${String(index + 1).padStart(2, "0")}-${day}T03:00:00Z`,
             );
           }}
-          className={`rounded p-[2px] text-sm transition-colors ${
+          className={cn(
+            "rounded p-[2px] text-sm transition-colors",
             new Date(value)?.getMonth() === index
               ? "bg-primary text-primary-foreground"
-              : "hover:bg-primary hover:text-primary-foreground"
-          }`}
+              : "hover:bg-primary hover:text-primary-foreground",
+            currentView === "end" && isPresent && "pointer-events-none",
+          )}
         >
           {month.slice(0, 3)}
         </motion.button>
@@ -99,7 +104,15 @@ const MonthPicker = ({
           checked={isPresent}
           onCheckedChange={(checked) => {
             setIsPresent(checked);
-            if (checked) onChange(new Date());
+            if (checked) {
+              const newDate = new Date();
+              const year = newDate.getFullYear();
+              const month = newDate.getMonth();
+              const day = String(newDate.getDate()).padStart(2, "0");
+              onChange(
+                `${year}-${String(month + 1).padStart(2, "0")}-${day}T03:00:00Z`,
+              );
+            }
           }}
         />
       </div>
@@ -110,9 +123,9 @@ const MonthPicker = ({
 export const DateTimeRangePicker = ({
   prefix,
   index,
+  label,
 }: DateTimeRangePickerProps) => {
   const form = useFormContext();
-  console.log(form.getValues());
 
   const { field: startDate } = useController({
     name: `${prefix}.${index}.startAt`,
@@ -135,15 +148,15 @@ export const DateTimeRangePicker = ({
   };
 
   return (
-    <div className="space-y-2 py-1">
-      <h3 className="text-sm font-medium">Qual o período que trabalhou?</h3>
+    <div className="w-full space-y-2 py-1">
+      <h3 className="text-sm font-medium">{label}</h3>
       <div className="flex items-center space-x-2">
         <Popover>
           <PopoverTrigger asChild>
             <div className="relative">
               <Input
                 readOnly
-                className="roundedpx-4 w-[140px] cursor-pointer py-2 outline-none ring-blue-500 focus:ring-2"
+                className="w-full cursor-pointer px-4 py-2 outline-none ring-blue-500 focus:ring-2"
                 value={
                   startDate.value
                     ? `${months[new Date(startDate.value)?.getMonth()]?.slice(0, 3)} ${new Date(startDate.value)?.getFullYear()}`
@@ -175,7 +188,7 @@ export const DateTimeRangePicker = ({
             <div className="relative">
               <Input
                 readOnly
-                className="w-[140px] cursor-pointer rounded px-4 py-2 outline-none ring-blue-500 focus:ring-2"
+                className="w-full cursor-pointer px-4 py-2 outline-none ring-blue-500 focus:ring-2"
                 {...endDate}
                 value={
                   isPresent

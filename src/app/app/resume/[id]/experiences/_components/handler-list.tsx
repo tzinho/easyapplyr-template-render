@@ -18,13 +18,6 @@ interface HandlerProps {
   defaultValues: Omit<Experience, "id"> & { activeIndex: string }[];
 }
 
-const dateStringSchema = z.date().transform((date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-});
-
 const experienceSchema = z.object({
   _id: z.string(),
   activeIndex: z.string(),
@@ -83,9 +76,7 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
     },
   });
 
-  console.log("[errors]: ", form.formState.errors);
-
-  const { fields, append, replace, move, remove } = useFieldArray({
+  const { fields, append, replace, move } = useFieldArray({
     control: form.control,
     name: "experiences",
   });
@@ -119,17 +110,19 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
     const index = fields.findIndex(
       (field) => field.activeIndex === activeItemIndex,
     );
-    remove(index);
+    const item = fields[index];
+    void experienceDelete.mutateAsync(item!._id);
 
     if (hasItems) {
-      if (activeIndex === activeItemIndex)
-        setActiveIndex(fields[fields.length - 1]!.activeIndex);
-    } else {
-      handleOnAppend();
-      setActiveIndex(fields[0]!.activeIndex);
-    }
+      replace(newItems);
 
-    // void experienceDelete.mutateAsync(item!._id);
+      if (activeIndex === activeItemIndex)
+        setActiveIndex(newItems[newItems.length - 1]!.activeIndex);
+    } else {
+      const newItem = generateANewItem(fields.length);
+      setActiveIndex(newItem.activeIndex);
+      replace([newItem]);
+    }
   };
 
   const handleOnSubmit: SubmitHandler<z.infer<typeof schema>> = async (
@@ -156,6 +149,8 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
 
     replace(experiences);
   };
+
+  console.log("[result]: ", fields.length);
 
   return (
     <Form {...form}>

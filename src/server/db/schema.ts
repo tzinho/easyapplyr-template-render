@@ -88,7 +88,7 @@ export const experiences = createTable("experience", {
   role: text("role").notNull(),
   company: text("company").notNull(),
   where: text("where"),
-  startAt: date("startAt").notNull(),
+  startAt: date("startAt"),
   endAt: date("endAt"),
   did: text("did"),
   appear: boolean("appear").notNull(),

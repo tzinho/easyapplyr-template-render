@@ -51,6 +51,7 @@ export const ExperienceList = ({
   activeIndex,
 }: ExperienceListProps) => {
   const [activeId, setActiveId] = useState<string | null>(null);
+  console.log("[ExperienceList]: ", fields);
 
   const sensors = useSensors(
     useSensor(PointerSensor),

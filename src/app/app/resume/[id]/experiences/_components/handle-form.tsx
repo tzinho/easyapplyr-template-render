@@ -122,13 +122,17 @@ export const ExperienceForm = ({
                   required
                 />
 
-                <div>
+                <div className="flex gap-3 sm:flex-col md:flex-row">
                   <Input
                     name={`experiences.${index}.where`}
                     label={`Onde está localizada a ${company}?`}
                     className="focus-visible:ring-2"
                   />
-                  <DateTimeRangePicker prefix="experiences" index={index} />
+                  <DateTimeRangePicker
+                    prefix="experiences"
+                    index={index}
+                    label={`Qual o período trabalhou na(o) ${company}?`}
+                  />
                 </div>
 
                 <TextareaList

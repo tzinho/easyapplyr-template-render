@@ -93,7 +93,7 @@ const PageContent = ({ children, isLoading, className }: PageContentProps) => {
   return (
     <main
       className={cn(
-        "sm:px-30 w-full space-y-4 p-4 md:px-56 md:py-6",
+        "sm:px-30 w-full space-y-4 p-4 md:px-32 md:py-6",
         className,
       )}
     >

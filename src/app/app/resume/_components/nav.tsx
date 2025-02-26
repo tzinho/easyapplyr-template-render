@@ -202,14 +202,14 @@ export const Nav = () => {
     return getLinksEditPages({ id });
   });
   const sections = api.resumes.getSections.useQuery(id);
-  console.log("[sections]: ", sections.data);
+  // console.log("[sections]: ", sections.data);
 
   useEffect(() => {
     if (sections.data) {
       const resultLinks = appSections.map((section) => {
         return section;
       });
-      console.log("resultLinks", resultLinks);
+      // console.log("resultLinks", resultLinks);
     }
   }, [sections.isLoading]);
 
