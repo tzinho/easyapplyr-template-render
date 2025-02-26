@@ -122,13 +122,14 @@ export const ExperienceForm = ({
                   required
                 />
 
-                <Input
-                  name={`experiences.${index}.where`}
-                  label={`Onde está localizada a ${company}?`}
-                  className="focus-visible:ring-2"
-                />
-
-                <DateTimeRangePicker prefix="experiences" index={index} />
+                <div>
+                  <Input
+                    name={`experiences.${index}.where`}
+                    label={`Onde está localizada a ${company}?`}
+                    className="focus-visible:ring-2"
+                  />
+                  <DateTimeRangePicker prefix="experiences" index={index} />
+                </div>
 
                 <TextareaList
                   name={`experiences.${index}.did`}

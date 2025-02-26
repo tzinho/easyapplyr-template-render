@@ -251,6 +251,7 @@ export const sections = createTable("section", {
   type: text("type"),
   title: text("title"),
   disabled: boolean("disabled"),
+  removable: boolean("removable"),
   appear: boolean("appear"),
   column: integer("column"),
   order: integer("order").notNull(),

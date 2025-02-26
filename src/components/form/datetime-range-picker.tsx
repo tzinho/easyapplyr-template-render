@@ -135,7 +135,7 @@ export const DateTimeRangePicker = ({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 py-1">
       <h3 className="text-sm font-medium">Qual o período que trabalhou?</h3>
       <div className="flex items-center space-x-2">
         <Popover>

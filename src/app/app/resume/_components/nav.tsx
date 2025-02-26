@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
@@ -184,22 +184,34 @@ export const LinkPage = ({ required, notRequired }: NavProps) => {
   );
 };
 
+const appSections = [
+  "contact",
+  "experiences",
+  "educations",
+  "skills",
+  "summary",
+  "projects",
+  "courseworks",
+  "involvements",
+  "languages",
+];
+
 export const Nav = () => {
   const { id } = useParams<{ id: string }>();
-  const [links, setLinks] = useState(getLinksEditPages({ id }));
+  const [links, setLinks] = useState(() => {
+    return getLinksEditPages({ id });
+  });
   const sections = api.resumes.getSections.useQuery(id);
   console.log("[sections]: ", sections.data);
-  const appSections = [
-    "contact",
-    "experiences",
-    "educations",
-    "skills",
-    "summary",
-    "projects",
-    "courseworks",
-    "involvements",
-    "languages",
-  ];
+
+  useEffect(() => {
+    if (sections.data) {
+      const resultLinks = appSections.map((section) => {
+        return section;
+      });
+      console.log("resultLinks", resultLinks);
+    }
+  }, [sections.isLoading]);
 
   const required = links.filter((link) => link.required);
   const notRequired = links.filter((link) => !link.required);
