@@ -8,6 +8,8 @@ import { ButtonLoading } from "~/components/ui/button-loading";
 import { cn } from "~/lib/utils";
 import { TextareaList } from "~/components/form/textarea-list";
 import { DateTimeRangePicker } from "~/components/form/datetime-range-picker";
+import { memo } from "react";
+import { Badge } from "~/components/ui/badge";
 
 interface ExperienceFormProps {
   onSubmit: SubmitHandler<any>;
@@ -37,12 +39,13 @@ const getStackStyles = (
   };
 };
 
-export const ExperienceForm = ({
+const Form = ({
   onSubmit,
   activeIndex,
   isLoading,
   fields,
 }: ExperienceFormProps) => {
+  console.log("**ExperienceForm**");
   const form = useFormContext();
 
   return (
@@ -72,9 +75,11 @@ export const ExperienceForm = ({
               (form.watch(`experiences.${index}.role`) as string) ||
               `Experiência ${fields.length}`;
 
+            const appear = form.watch(`experiences.${index}.appear`) as boolean;
+
             return (
               <motion.div
-                key={field.id}
+                key={field.activeIndex}
                 initial={{
                   scale: 0.95,
                   opacity: 0,
@@ -104,9 +109,12 @@ export const ExperienceForm = ({
                 }}
                 className="rounded-xl border bg-background/95 p-6 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
               >
-                <p>
-                  {role} <span className="text-xs">{company}</span>
-                </p>
+                <div className="flex justify-between">
+                  <p>
+                    {role} <span className="text-xs">{company}</span>
+                  </p>
+                  {!appear && <Badge>Não mostra no curriculum</Badge>}
+                </div>
 
                 <Input
                   label={`Qual a sua função na(o) ${company}?`}
@@ -153,3 +161,5 @@ export const ExperienceForm = ({
     </form>
   );
 };
+
+export const ExperienceForm = memo(Form);

@@ -1,15 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { Plus } from "lucide-react";
-import { useFormContext, useWatch } from "react-hook-form";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   closestCorners,
   DndContext,
   type DragEndEvent,
-  DragOverlay,
-  type DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   TouchSensor,
@@ -38,6 +34,7 @@ interface ExperienceListProps {
   onClick: (activeIndex: string) => void;
   onRemove: (activeIndex: string) => void;
   onMove: (actualIndex: number, nextIndex: number) => void;
+  handleAppear: (activeIndex: string) => void;
   activeIndex: string;
   fields: any[];
 }
@@ -47,12 +44,10 @@ export const ExperienceList = ({
   onClick,
   onRemove,
   onMove,
+  handleAppear,
   fields,
   activeIndex,
 }: ExperienceListProps) => {
-  const [activeId, setActiveId] = useState<string | null>(null);
-  console.log("[ExperienceList]: ", fields);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),
@@ -60,16 +55,6 @@ export const ExperienceList = ({
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
-
-  const handleDragStart = (event: DragStartEvent) => {
-    const activeId = event.active.id as string;
-    // const section = resumeTemplate?.sections?.find((s) => s.id === sectionId);
-    if (fields.find((field) => field._id === activeId)) {
-      return;
-    }
-
-    setActiveId(activeId);
-  };
 
   const isSubmitting = !fields.every((field) => !!field._id);
 
@@ -85,16 +70,15 @@ export const ExperienceList = ({
 
     const newItems = arrayMove(fields as unknown[], actualIndex, nextIndex);
     const updateItems = newItems.map((item, order) => ({ ...item, order }));
-    console.log("[UPDATEITEMS]", updateItems);
 
-    // console.log(
-    //   "[updateItems]: ",
-    //   updateItems.filter((item) => {
-    //     return [active.id, over.id].includes(item.id);
-    //   }),
-    // );
-
-    onMove(actualIndex, nextIndex);
+    onMove(
+      actualIndex,
+      nextIndex,
+      updateItems.map((item) => ({
+        id: item._id,
+        order: item.order,
+      })),
+    );
   };
 
   return (
@@ -124,9 +108,9 @@ export const ExperienceList = ({
         </CardHeader>
         <DndContext
           collisionDetection={closestCorners}
-          onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
           sensors={sensors}
+          modifiers={[restrictToVerticalAxis]}
         >
           <SortableContext
             items={fields.map((field) => field._id)}
@@ -141,6 +125,7 @@ export const ExperienceList = ({
                     value={field}
                     onClick={onClick}
                     index={index}
+                    onAppear={handleAppear}
                     onRemove={onRemove}
                     activeIndex={activeIndex}
                     isSubmitting={isSubmitting}
@@ -149,20 +134,28 @@ export const ExperienceList = ({
               })}
             </CardContent>
           </SortableContext>
-          <DragOverlay modifiers={[restrictToVerticalAxis]}>
+          {/* <DragOverlay modifiers={[restrictToVerticalAxis]}>
             {activeId ? (
-              <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
-                <div className="flex-1">
-                  <p className="text-sm">
-                    {fields.find((field) => field._id === activeId)!.role}
-                  </p>
-                  <span className="text-xs">
-                    {fields.find((field) => field._id === activeId)!.company}
-                  </span>
+              <div className="group relative">
+                <div className="group flex w-full items-center gap-1">
+                  <GripVertical className="h-4 w-4 cursor-grab opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                  <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
+                    <div>
+                      <p className="text-sm">
+                        {fields.find((field) => field._id === activeId)!.role}
+                      </p>
+                      <span className="text-xs">
+                        {
+                          fields.find((field) => field._id === activeId)!
+                            .company
+                        }
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : null}
-          </DragOverlay>
+          </DragOverlay> */}
         </DndContext>
       </Card>
     </>

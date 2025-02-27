@@ -16,6 +16,7 @@ import { ExperienceForm } from "./handle-form";
 
 interface HandlerProps {
   defaultValues: Omit<Experience, "id"> & { activeIndex: string }[];
+  prefix: string;
 }
 
 const experienceSchema = z.object({
@@ -39,21 +40,21 @@ const schema = z.object({
 const generateANewItem = (order: number) => {
   const activeIndex = uuidv4();
   return {
+    _id: "",
     role: "",
     company: "",
     where: "",
     did: "",
-    startAt: null,
-    endAt: null,
-    _id: "",
     activeIndex,
     resumeId: "",
     order,
     appear: true,
+    startAt: null,
+    endAt: null,
   } as z.infer<typeof experienceSchema>;
 };
 
-export const HandlerList = ({ defaultValues }: HandlerProps) => {
+export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
 
@@ -69,6 +70,11 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
     onSuccess: () => toast.success("Experiência deletada com sucesso!"),
   });
 
+  const experienceChangeOrder = api.experiences.changeOrder.useMutation({
+    onSuccess: () =>
+      toast.success("Ordem das experiências alterada com sucesso!"),
+  });
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -76,7 +82,7 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
     },
   });
 
-  const { fields, append, replace, move } = useFieldArray({
+  const { fields, append, replace, move, update } = useFieldArray({
     control: form.control,
     name: "experiences",
   });
@@ -85,21 +91,45 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
     if (fields.length && !activeIndex) setActiveIndex(fields[0]!.activeIndex);
   }, [fields.length]);
 
-  const handleOnClick = (activeIndex: string) => {
+  const handleOnClick = (activeItemIndex: string) => {
+    if (form.formState.touchedFields?.experiences) {
+      const fieldIndex = fields.findIndex(
+        (field) => field.activeIndex === activeIndex,
+      );
+      const fieldOnArray =
+        form.formState.touchedFields?.experiences[fieldIndex];
+      if (Object.values(fieldOnArray!).some((value) => !!value)) {
+        console.log("The field had been edit");
+        return;
+      }
+    }
+
     const isSubmitting = !fields.every((field) => !!field._id);
 
-    setActiveIndex(activeIndex);
+    setActiveIndex(activeItemIndex);
 
     if (isSubmitting) {
-      // remove(fields.length - 1);
       replace(fields.filter((field) => !!field._id));
     }
+
+    form.reset(form.control._formValues, {
+      keepValues: true,
+      keepDirty: true,
+      keepErrors: true,
+      keepSubmitCount: true,
+    });
   };
 
   const handleOnAppend = () => {
     const newItem = generateANewItem(fields.length);
     append(newItem);
     setActiveIndex(newItem.activeIndex);
+    form.reset(form.control._formValues, {
+      keepValues: true,
+      keepDirty: true,
+      keepErrors: true,
+      keepSubmitCount: true,
+    });
   };
 
   const handleOnRemove = (activeItemIndex: string) => {
@@ -150,7 +180,15 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
     replace(experiences);
   };
 
-  console.log("[result]: ", fields.length);
+  const handleAppear = (activeIndex: string) => {
+    const fieldIndex = fields.findIndex(
+      (field) => field.activeIndex === activeIndex,
+    );
+    update(fieldIndex, {
+      ...fields[fieldIndex],
+      appear: !fields[fieldIndex].appear,
+    });
+  };
 
   return (
     <Form {...form}>
@@ -160,10 +198,16 @@ export const HandlerList = ({ defaultValues }: HandlerProps) => {
           onClick={handleOnClick}
           onRemove={handleOnRemove}
           activeIndex={activeIndex!}
+          handleAppear={handleAppear}
           fields={fields}
-          onMove={(actualIndex: number, nextIndex: number) =>
-            move(actualIndex, nextIndex)
-          }
+          onMove={(
+            actualIndex: number,
+            nextIndex: number,
+            updateItems: any,
+          ) => {
+            move(actualIndex, nextIndex);
+            void experienceChangeOrder.mutateAsync(updateItems);
+          }}
         />
       </div>
       <div className="flex-1">

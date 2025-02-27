@@ -137,9 +137,6 @@ export const DateTimeRangePicker = ({
     control: form.control,
   });
 
-  // console.log("startDate", startDate.value);
-  // console.log("endDate", endDate.value);
-
   const [isPresent, setIsPresent] = useState<boolean>(false);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 

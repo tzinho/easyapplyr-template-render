@@ -234,6 +234,7 @@ export const Item = ({
   onRemove,
   index,
   activeIndex,
+  onAppear,
   isSubmitting,
 }: {
   id: string;
@@ -242,6 +243,7 @@ export const Item = ({
   onRemove: (activeIndex: string) => void;
   index: number;
   activeIndex: string;
+  onAppear: (activeIndex) => void;
   isSubmitting: boolean;
 }) => {
   const isActive = value.activeIndex === activeIndex;
@@ -305,23 +307,8 @@ export const Item = ({
             <div
               onClick={() => {
                 if (isActive) return;
-                onClick(value.activeIndex);
-                // if (isSubmitting && !form.formState.isDirty) {
-                //   onClick(value.activeIndex);
-                //   return;
-                // }
 
-                // if (
-                //   form.formState.isDirty &&
-                //   !isActive &&
-                //   Object.values(form.formState.touchedFields).some((item) => {
-                //     return !!item;
-                //   })
-                // ) {
-                //   setOpenAlert(true);
-                // } else {
-                //   onClick(value.activeIndex);
-                // }
+                onClick(value.activeIndex);
               }}
               className="flex-1"
             >
@@ -351,6 +338,7 @@ export const Item = ({
                     className="flex items-center justify-start gap-3"
                     variant="ghost"
                     disabled={disabled}
+                    onClick={() => onAppear(value.activeIndex)}
                   >
                     <EyeClosedIcon />
                     <div className="flex items-center">
@@ -360,7 +348,7 @@ export const Item = ({
                       <Switch
                         id="close"
                         disabled={disabled}
-                        defaultChecked={!value.appear}
+                        checked={!value.appear}
                       />
                     </div>
                   </Button>

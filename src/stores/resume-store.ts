@@ -72,7 +72,6 @@ export const createResumeStore = (
     ...initState,
     setResumeTemplate: (resumeTemplate) => set(() => ({ resumeTemplate })),
     setOrderItemsTemplate: (data: Partial<Resume>) => {
-      console.log("[data]: ", data);
       set((state) => ({
         resumeTemplate: state.resumeTemplate
           ? { ...state.resumeTemplate, ...data }
