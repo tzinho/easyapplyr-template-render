@@ -28,6 +28,7 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Item } from "./item";
+import { memo } from "react";
 
 interface ExperienceListProps {
   onAppend: () => void;
@@ -39,7 +40,7 @@ interface ExperienceListProps {
   fields: any[];
 }
 
-export const ExperienceList = ({
+const List = ({
   onAppend,
   onClick,
   onRemove,
@@ -120,7 +121,7 @@ export const ExperienceList = ({
               {fields.map((field, index) => {
                 return (
                   <Item
-                    key={field.id}
+                    key={field.activeIndex}
                     id={field._id}
                     value={field}
                     onClick={onClick}
@@ -134,30 +135,10 @@ export const ExperienceList = ({
               })}
             </CardContent>
           </SortableContext>
-          {/* <DragOverlay modifiers={[restrictToVerticalAxis]}>
-            {activeId ? (
-              <div className="group relative">
-                <div className="group flex w-full items-center gap-1">
-                  <GripVertical className="h-4 w-4 cursor-grab opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-                  <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
-                    <div>
-                      <p className="text-sm">
-                        {fields.find((field) => field._id === activeId)!.role}
-                      </p>
-                      <span className="text-xs">
-                        {
-                          fields.find((field) => field._id === activeId)!
-                            .company
-                        }
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-          </DragOverlay> */}
         </DndContext>
       </Card>
     </>
   );
 };
+
+export const ExperienceList = memo(List);

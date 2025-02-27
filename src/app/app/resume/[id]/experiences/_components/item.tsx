@@ -39,6 +39,7 @@ import {
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
+import { Collapsible, CollapsibleContent } from "~/components/ui/collapsible";
 
 const buzzwords = [
   "inovação",
@@ -241,9 +242,9 @@ export const Item = ({
   value: ExperienceSchema & { activeIndex: string };
   onClick: (activeIndex: string) => void;
   onRemove: (activeIndex: string) => void;
+  onAppear: (activeIndex: string) => void;
   index: number;
   activeIndex: string;
-  onAppear: (activeIndex) => void;
   isSubmitting: boolean;
 }) => {
   const isActive = value.activeIndex === activeIndex;
@@ -289,10 +290,11 @@ export const Item = ({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <div
+      <Collapsible
         className="group relative"
         style={style}
         ref={setNodeRef}
+        open={isActive && value.appear && value.did}
         {...attributes}
       >
         <div className="group flex w-full items-center gap-1">
@@ -304,70 +306,77 @@ export const Item = ({
             {...listeners}
           />
           <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
-            <div
-              onClick={() => {
-                if (isActive) return;
+            <div className="flex w-full flex-col">
+              <div
+                onClick={() => {
+                  if (isActive) return;
 
-                onClick(value.activeIndex);
-              }}
-              className="flex-1"
-            >
-              <p className="text-sm">{role}</p>
-              <span className="text-xs">{company}</span>
-              {isActive && value.did && <Insights text={value.did} />}
-            </div>
-
-            <Popover>
-              <PopoverTrigger>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button size="icon" className="h-5 w-5" variant="ghost">
-                        <MoreHorizontal />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Ações</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </PopoverTrigger>
-              <PopoverContent className="w-fit px-3 py-2">
-                <div className="flex flex-col gap-1">
-                  <Button
-                    className="flex items-center justify-start gap-3"
-                    variant="ghost"
-                    disabled={disabled}
-                    onClick={() => onAppear(value.activeIndex)}
-                  >
-                    <EyeClosedIcon />
-                    <div className="flex items-center">
-                      <Label htmlFor="close" className="cursor-pointer">
-                        Esconder no currículo
-                      </Label>
-                      <Switch
-                        id="close"
-                        disabled={disabled}
-                        checked={!value.appear}
-                      />
-                    </div>
-                  </Button>
-                  <Separator />
-                  <Button
-                    className="flex items-center justify-start gap-3"
-                    variant="ghost"
-                    onClick={() => onRemove(value.activeIndex)}
-                    disabled={disabled}
-                  >
-                    <Trash className="h-4 w-4" />
-                    <Label className="cursor-pointer">Deletar</Label>
-                  </Button>
+                  onClick(value.activeIndex);
+                }}
+                className="flex w-full flex-1 items-center justify-between"
+              >
+                <div>
+                  <p className="text-sm">{role}</p>
+                  <span className="text-xs">{company}</span>
                 </div>
-              </PopoverContent>
-            </Popover>
+                <Popover>
+                  <PopoverTrigger>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            size="icon"
+                            className="h-5 w-5"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Ações</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-fit px-3 py-2">
+                    <div className="flex flex-col gap-1">
+                      <Button
+                        className="flex items-center justify-start gap-3"
+                        variant="ghost"
+                        disabled={disabled}
+                        onClick={() => onAppear(value.activeIndex)}
+                      >
+                        <EyeClosedIcon />
+                        <div className="flex items-center gap-3">
+                          Não mostrar no currículo
+                          <Switch
+                            id="close"
+                            disabled={disabled}
+                            checked={!value.appear}
+                          />
+                        </div>
+                      </Button>
+                      <Separator />
+                      <Button
+                        className="flex items-center justify-start gap-3"
+                        variant="ghost"
+                        onClick={() => onRemove(value.activeIndex)}
+                        disabled={disabled}
+                      >
+                        <Trash className="h-4 w-4 fill-red-500 stroke-red-500" />
+                        <Label className="cursor-pointer">Deletar</Label>
+                      </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <CollapsibleContent>
+                <Insights text={value.did} />
+              </CollapsibleContent>
+            </div>
           </div>
         </div>
-      </div>
+      </Collapsible>
     </>
   );
 };
