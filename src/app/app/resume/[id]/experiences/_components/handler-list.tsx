@@ -178,6 +178,15 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     }
 
     replace(experiences);
+
+    console.log("here");
+
+    form.reset(form.control._formValues, {
+      keepValues: true,
+      keepDirty: true,
+      keepErrors: true,
+      keepSubmitCount: true,
+    });
   };
 
   const handleAppear = (activeIndex: string) => {

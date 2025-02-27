@@ -9,6 +9,7 @@ export const templates = [
     title: "São Paulo",
     component: SaoPaulo.Template,
     defaultSections: SaoPaulo.defaultSections,
+    isPro: false,
     categories: ["pro"],
     settings: {
       fontSize: 13,
@@ -27,6 +28,7 @@ export const templates = [
     title: "Guarulhos",
     component: Guarulhos.Template,
     defaultSections: Guarulhos.defaultSections,
+    isPro: true,
     categories: ["pro", "marketing"],
     settings: {
       fontSize: 13,
@@ -45,6 +47,7 @@ export const templates = [
     title: "Praça oito",
     component: PracaOito.Template,
     defaultSections: PracaOito.defaultSections,
+    isPro: false,
     categories: ["pro"],
     settings: {
       fontSize: 13,

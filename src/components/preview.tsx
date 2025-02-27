@@ -5,6 +5,7 @@ import { ZoomIn } from "lucide-react";
 import { Card } from "./ui/card";
 import { fakeData } from "~/data";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 
 export const Preview = ({
   template,
@@ -46,10 +47,11 @@ export const Preview = ({
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between border-t bg-white p-3">
-        <div className="flex flex-col">
-          <span className="max-w-[160px] truncate text-sm font-medium">
+        <div className="flex w-full justify-between">
+          <span className="block max-w-[160px] truncate text-sm font-medium">
             {template.title}
           </span>
+          {template.isPro && <Badge>PRO</Badge>}
         </div>
       </div>
     </Card>
