@@ -78,6 +78,13 @@ const getLinksEditPages = ({ id }: { id: string }) => {
       appear: true,
     },
     {
+      label: "Cursos",
+      href: `/app/resume/${id}/courseworks`,
+      value: "courseworks",
+      required: true,
+      appear: true,
+    },
+    {
       label: "Visualização",
       href: `/app/resume/${id}/format`,
       value: "format",

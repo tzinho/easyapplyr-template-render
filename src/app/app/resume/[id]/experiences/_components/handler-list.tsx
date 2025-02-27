@@ -100,7 +100,7 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
         form.formState.touchedFields?.experiences[fieldIndex];
       if (Object.values(fieldOnArray!).some((value) => !!value)) {
         console.log("The field had been edit");
-        return;
+        // return;
       }
     }
 

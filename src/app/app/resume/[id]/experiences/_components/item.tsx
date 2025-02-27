@@ -297,10 +297,10 @@ export const Item = ({
         open={isActive && value.appear && value.did}
         {...attributes}
       >
-        <div className="group flex w-full items-center gap-1">
+        <div className="group flex w-full items-start gap-1">
           <GripVertical
             className={cn(
-              "h-4 w-4 opacity-0 transition-opacity duration-200",
+              "mt-4 h-4 w-4 opacity-0 transition-opacity duration-200",
               !disabled && "cursor-grab group-hover:opacity-100",
             )}
             {...listeners}
@@ -310,7 +310,6 @@ export const Item = ({
               <div
                 onClick={() => {
                   if (isActive) return;
-
                   onClick(value.activeIndex);
                 }}
                 className="flex w-full flex-1 items-center justify-between"
