@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { type SubmitHandler, useFormContext } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -8,7 +9,6 @@ import { ButtonLoading } from "~/components/ui/button-loading";
 import { cn } from "~/lib/utils";
 import { TextareaList } from "~/components/form/textarea-list";
 import { DateTimeRangePicker } from "~/components/form/datetime-range-picker";
-import { memo } from "react";
 import { Badge } from "~/components/ui/badge";
 
 interface ExperienceFormProps {
@@ -130,7 +130,7 @@ const Form = ({
                   required
                 />
 
-                <div className="flex gap-3 sm:flex-col md:flex-row">
+                <div className="flex flex-col gap-3 md:flex-row">
                   <Input
                     name={`experiences.${index}.where`}
                     label={`Onde está localizada a ${company}?`}
