@@ -11,6 +11,7 @@ import {
   MoreHorizontal,
   Trash,
 } from "lucide-react";
+import lodash from "lodash";
 
 import { Label } from "~/components/ui/label";
 import {
@@ -28,16 +29,6 @@ import {
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 import { type ExperienceSchema } from "~/validators";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { Collapsible, CollapsibleContent } from "~/components/ui/collapsible";
 
@@ -270,26 +261,6 @@ export const Item = ({
 
   return (
     <>
-      <AlertDialog
-        open={openAlert}
-        onOpenChange={(open: boolean) => setOpenAlert(open)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Clicando em confirmar você perde as atualizações que fez até
-              agora!
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={() => onClick(value.activeIndex)}>
-              Confirmar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
       <Collapsible
         className="group relative"
         style={style}

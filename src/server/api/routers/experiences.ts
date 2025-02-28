@@ -26,6 +26,15 @@ export const experiencesRouter = createTRPCRouter({
       });
     }),
 
+  toogleAppear: publicProcedure
+    .input(z.object({ id: z.string(), appear: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db
+        .update(experiences)
+        .set({ appear: input.appear })
+        .where(eq(experiences.id, input.id));
+    }),
+
   create: publicProcedure
     .input(experienceSchema.extend({ resumeId: z.string() }))
     .mutation(async ({ ctx, input }) => {

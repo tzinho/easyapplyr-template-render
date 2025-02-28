@@ -1,79 +1,54 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
+import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
+import lodash from "lodash";
 
-import { api } from "~/trpc/react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/components/ui/alert-dialog";
 import { type Experience } from "~/stores/resume-store";
 import { Form } from "~/components/ui/form";
 import { ExperienceList } from "./handle-list";
 import { ExperienceForm } from "./handle-form";
+import { schema, generateANewItem, useMutations } from "./hooks";
 
 interface HandlerProps {
   defaultValues: Omit<Experience, "id"> & { activeIndex: string }[];
   prefix: string;
 }
 
-const experienceSchema = z.object({
-  _id: z.string(),
-  activeIndex: z.string(),
-  appear: z.boolean(),
-  where: z.string().nullish(),
-  role: z.string().min(1, "A função é obrigatório!"),
-  company: z.string().min(1, "A empresa é obrigatória!"),
-  did: z.string().nullish(),
-  resumeId: z.string(),
-  startAt: z.string().nullish(),
-  endAt: z.string().nullish(),
-  order: z.number(),
-});
-
-const schema = z.object({
-  experiences: z.array(experienceSchema),
-});
-
-const generateANewItem = (order: number) => {
-  const activeIndex = uuidv4();
-  return {
-    _id: "",
-    role: "",
-    company: "",
-    where: "",
-    did: "",
-    activeIndex,
-    resumeId: "",
-    order,
-    appear: true,
-    startAt: null,
-    endAt: null,
-  } as z.infer<typeof experienceSchema>;
-};
-
 export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
+  const previousFieldsRef = useRef(null);
+  const [toActiveIndex, setToActiveIndex] = useState<string | null>(null);
 
-  const experienceCreate = api.experiences.create.useMutation({
-    onSuccess: () => toast.success("Experiência adicionada com sucesso!"),
-  });
+  const updatePreviousFields = (newFields) => {
+    const fieldsToSave = newFields.map((field) => {
+      const { id, ...rest } = field;
+      return rest;
+    });
+    previousFieldsRef.current = JSON.parse(JSON.stringify(fieldsToSave));
+  };
 
-  const experienceUpdate = api.experiences.update.useMutation({
-    onSuccess: () => toast.success("Experiência atualizada com sucesso!"),
-  });
-
-  const experienceDelete = api.experiences.delete.useMutation({
-    onSuccess: () => toast.success("Experiência deletada com sucesso!"),
-  });
-
-  const experienceChangeOrder = api.experiences.changeOrder.useMutation({
-    onSuccess: () =>
-      toast.success("Ordem das experiências alterada com sucesso!"),
-  });
+  const {
+    mutationToggle,
+    mutationCreate,
+    mutationUpdate,
+    mutationDelete,
+    mutationChangeOrder,
+  } = useMutations();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -87,49 +62,96 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     name: "experiences",
   });
 
+  const isSubmitting = !fields.every((field) => !!field._id);
+
+  useEffect(() => {
+    updatePreviousFields(form.getValues("experiences"));
+  }, []);
+
   useEffect(() => {
     if (fields.length && !activeIndex) setActiveIndex(fields[0]!.activeIndex);
   }, [fields.length]);
 
   const handleOnClick = (activeItemIndex: string) => {
+    console.log("previousFieldsRef.current", previousFieldsRef.current);
+    console.log(
+      'form.getValues("experiences")',
+      form.getValues("experiences").map((field) => {
+        const { id, ...rest } = field;
+        return rest;
+      }),
+    );
+    const isEqual = lodash.isEqual(
+      form.getValues("experiences").map((field) => {
+        const { id, ...rest } = field;
+        return rest;
+      }),
+      previousFieldsRef.current,
+    );
+
+    if (isSubmitting) {
+      console.log("isSubmitting ...", form.formState.touchedFields);
+      if (form.formState.touchedFields?.experiences) {
+        setToActiveIndex(activeItemIndex);
+        return;
+      } else {
+        replace(fields.filter((field) => !!field._id));
+      }
+      setActiveIndex(activeItemIndex);
+      form.reset(
+        { experiences: previousFieldsRef.current },
+        {
+          keepValues: true,
+          keepDirty: true,
+          keepErrors: true,
+          keepSubmitCount: true,
+        },
+      );
+      return;
+    }
+
+    if (!isEqual) {
+      console.log("not is equal");
+      setToActiveIndex(activeItemIndex);
+      return;
+    }
+
     if (form.formState.touchedFields?.experiences) {
+      console.log("editing...");
       const fieldIndex = fields.findIndex(
         (field) => field.activeIndex === activeIndex,
       );
       const fieldOnArray =
         form.formState.touchedFields?.experiences[fieldIndex];
       if (Object.values(fieldOnArray!).some((value) => !!value)) {
-        console.log("The field had been edit");
-        // return;
+        console.log("[form.control._formValues,]: ", form.control._formValues);
+        return;
       }
     }
 
-    const isSubmitting = !fields.every((field) => !!field._id);
-
     setActiveIndex(activeItemIndex);
-
-    if (isSubmitting) {
-      replace(fields.filter((field) => !!field._id));
-    }
-
-    form.reset(form.control._formValues, {
-      keepValues: true,
-      keepDirty: true,
-      keepErrors: true,
-      keepSubmitCount: true,
-    });
   };
 
   const handleOnAppend = () => {
     const newItem = generateANewItem(fields.length);
+    updatePreviousFields(form.getValues("experiences"));
     append(newItem);
-    setActiveIndex(newItem.activeIndex);
-    form.reset(form.control._formValues, {
+    form.reset(form.getValues(), {
       keepValues: true,
       keepDirty: true,
       keepErrors: true,
       keepSubmitCount: true,
     });
+    setActiveIndex(newItem.activeIndex);
+  };
+
+  const handleMove = (
+    actualIndex: number,
+    nextIndex: number,
+    updateItems: any,
+  ) => {
+    move(actualIndex, nextIndex);
+    void mutationChangeOrder.mutateAsync(updateItems);
   };
 
   const handleOnRemove = (activeItemIndex: string) => {
@@ -141,17 +163,19 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
       (field) => field.activeIndex === activeItemIndex,
     );
     const item = fields[index];
-    void experienceDelete.mutateAsync(item!._id);
+    void mutationDelete.mutateAsync(item!._id);
 
     if (hasItems) {
       replace(newItems);
 
       if (activeIndex === activeItemIndex)
         setActiveIndex(newItems[newItems.length - 1]!.activeIndex);
+      updatePreviousFields(newItems);
     } else {
       const newItem = generateANewItem(fields.length);
       setActiveIndex(newItem.activeIndex);
       replace([newItem]);
+      updatePreviousFields([newItem]);
     }
   };
 
@@ -164,9 +188,9 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     )!;
 
     if (experience.resumeId) {
-      void experienceUpdate.mutateAsync({ ...experience, id: experience._id });
+      void mutationUpdate.mutateAsync({ ...experience, id: experience._id });
     } else {
-      const responseAPI = await experienceCreate.mutateAsync({
+      const responseAPI = await mutationCreate.mutateAsync({
         ...experience,
         resumeId: id,
       });
@@ -178,21 +202,27 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     }
 
     replace(experiences);
+    updatePreviousFields(experiences);
 
-    console.log("here");
-
-    form.reset(form.control._formValues, {
-      keepValues: true,
-      keepDirty: true,
-      keepErrors: true,
-      keepSubmitCount: true,
-    });
+    form.reset(
+      { experiences },
+      {
+        keepValues: true,
+        keepDirty: true,
+        keepErrors: true,
+        keepSubmitCount: true,
+      },
+    );
   };
 
   const handleAppear = (activeIndex: string) => {
     const fieldIndex = fields.findIndex(
       (field) => field.activeIndex === activeIndex,
     );
+    void mutationToggle.mutateAsync({
+      id: fields[fieldIndex]._id,
+      appear: !fields[fieldIndex].appear,
+    });
     update(fieldIndex, {
       ...fields[fieldIndex],
       appear: !fields[fieldIndex].appear,
@@ -201,6 +231,35 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
 
   return (
     <Form {...form}>
+      <AlertDialog
+        open={!!toActiveIndex}
+        onOpenChange={() => setToActiveIndex(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Clicando em confirmar você perde as atualizações que fez até
+              agora!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (isSubmitting) {
+                  replace(fields.filter((field) => !!field._id));
+                }
+
+                updatePreviousFields(previousFieldsRef.current);
+                setActiveIndex(toActiveIndex);
+              }}
+            >
+              Confirmar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div className="w-full md:max-w-[306px]">
         <ExperienceList
           onAppend={handleOnAppend}
@@ -209,14 +268,7 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
           activeIndex={activeIndex!}
           handleAppear={handleAppear}
           fields={fields}
-          onMove={(
-            actualIndex: number,
-            nextIndex: number,
-            updateItems: any,
-          ) => {
-            move(actualIndex, nextIndex);
-            void experienceChangeOrder.mutateAsync(updateItems);
-          }}
+          onMove={handleMove}
         />
       </div>
       <div className="flex-1">
@@ -224,7 +276,7 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
           activeIndex={activeIndex}
           onSubmit={handleOnSubmit}
           fields={fields}
-          isLoading={experienceCreate.isPending || experienceUpdate.isPending}
+          isLoading={mutationCreate.isPending || mutationUpdate.isPending}
         />
       </div>
     </Form>

@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { Plus } from "lucide-react";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
@@ -28,7 +29,6 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Item } from "./item";
-import { memo } from "react";
 
 interface ExperienceListProps {
   onAppend: () => void;
@@ -38,6 +38,7 @@ interface ExperienceListProps {
   handleAppear: (activeIndex: string) => void;
   activeIndex: string;
   fields: any[];
+  currentState: any;
 }
 
 const List = ({
@@ -48,6 +49,7 @@ const List = ({
   handleAppear,
   fields,
   activeIndex,
+  currentState,
 }: ExperienceListProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),

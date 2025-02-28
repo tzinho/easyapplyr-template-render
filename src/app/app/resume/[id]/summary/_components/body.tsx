@@ -1,9 +1,10 @@
 "use client";
 
-import { PageContentEditor } from "~/components/page";
+import { useParams } from "next/navigation";
+
+import { PageContent } from "~/components/page";
 import { SummaryForm } from "./form";
 import { api } from "~/trpc/react";
-import { useParams } from "next/navigation";
 import { PageLoading } from "~/components/page-loading";
 
 export const Body = () => {
@@ -13,9 +14,8 @@ export const Body = () => {
   if (summary.isLoading) return <PageLoading />;
 
   return (
-    <PageContentEditor>
+    <PageContent>
       <SummaryForm defaultValues={summary.data!} />
-      <div className="flex-1">Insights</div>
-    </PageContentEditor>
+    </PageContent>
   );
 };
