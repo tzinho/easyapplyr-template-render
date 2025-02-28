@@ -73,14 +73,6 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
   }, [fields.length]);
 
   const handleOnClick = (activeItemIndex: string) => {
-    console.log("previousFieldsRef.current", previousFieldsRef.current);
-    console.log(
-      'form.getValues("experiences")',
-      form.getValues("experiences").map((field) => {
-        const { id, ...rest } = field;
-        return rest;
-      }),
-    );
     const isEqual = lodash.isEqual(
       form.getValues("experiences").map((field) => {
         const { id, ...rest } = field;
@@ -90,7 +82,6 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     );
 
     if (isSubmitting) {
-      console.log("isSubmitting ...", form.formState.touchedFields);
       if (form.formState.touchedFields?.experiences) {
         setToActiveIndex(activeItemIndex);
         return;
@@ -98,33 +89,22 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
         replace(fields.filter((field) => !!field._id));
       }
       setActiveIndex(activeItemIndex);
-      form.reset(
-        { experiences: previousFieldsRef.current },
-        {
-          keepValues: true,
-          keepDirty: true,
-          keepErrors: true,
-          keepSubmitCount: true,
-        },
-      );
       return;
     }
 
     if (!isEqual) {
-      console.log("not is equal");
       setToActiveIndex(activeItemIndex);
       return;
     }
 
     if (form.formState.touchedFields?.experiences) {
-      console.log("editing...");
       const fieldIndex = fields.findIndex(
         (field) => field.activeIndex === activeIndex,
       );
       const fieldOnArray =
         form.formState.touchedFields?.experiences[fieldIndex];
+
       if (Object.values(fieldOnArray!).some((value) => !!value)) {
-        console.log("[form.control._formValues,]: ", form.control._formValues);
         return;
       }
     }
@@ -136,12 +116,6 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     const newItem = generateANewItem(fields.length);
     updatePreviousFields(form.getValues("experiences"));
     append(newItem);
-    form.reset(form.getValues(), {
-      keepValues: true,
-      keepDirty: true,
-      keepErrors: true,
-      keepSubmitCount: true,
-    });
     setActiveIndex(newItem.activeIndex);
   };
 
@@ -203,16 +177,6 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
 
     replace(experiences);
     updatePreviousFields(experiences);
-
-    form.reset(
-      { experiences },
-      {
-        keepValues: true,
-        keepDirty: true,
-        keepErrors: true,
-        keepSubmitCount: true,
-      },
-    );
   };
 
   const handleAppear = (activeIndex: string) => {
