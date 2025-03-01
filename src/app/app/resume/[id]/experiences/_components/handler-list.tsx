@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { type z } from "zod";
@@ -11,7 +11,12 @@ import { type Experience } from "~/stores/resume-store";
 import { Form } from "~/components/ui/form";
 import { ExperienceList } from "./handle-list";
 import { ExperienceForm } from "./handle-form";
-import { schema, generateANewItem, useMutations } from "./hooks";
+import {
+  schema,
+  generateANewItem,
+  useMutations,
+  usePreviousValues,
+} from "./hooks";
 import { Confirm } from "./confirm";
 
 interface HandlerProps {
@@ -22,16 +27,9 @@ interface HandlerProps {
 export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
-  const previousFieldsRef = useRef(null);
   const [toActiveIndex, setToActiveIndex] = useState<string | null>(null);
 
-  const updatePreviousFields = (newFields) => {
-    const fieldsToSave = newFields.map((field) => {
-      const { id, ...rest } = field;
-      return rest;
-    });
-    previousFieldsRef.current = JSON.parse(JSON.stringify(fieldsToSave));
-  };
+  const { update: updatePreviousFields, previousValues } = usePreviousValues();
 
   const {
     mutationToggle,
@@ -48,7 +46,7 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     },
   });
 
-  const { fields, append, replace, move, update, remove } = useFieldArray({
+  const { fields, replace, move, update } = useFieldArray({
     control: form.control,
     name: "experiences",
   });
@@ -81,7 +79,7 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
         const { id, ...rest } = field;
         return rest;
       }),
-      previousFieldsRef.current,
+      previousValues,
     );
 
     if (!isEqual) {
@@ -108,7 +106,6 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     const newItem = generateANewItem(fields.length);
     updatePreviousFields(form.getValues("experiences"));
     replace([...fields, newItem]);
-    // append(newItem);
     form.reset(undefined, {
       keepTouched: false,
       keepDirty: false,

@@ -34,7 +34,7 @@ interface ExperienceListProps {
   onAppend: () => void;
   onClick: (activeIndex: string) => void;
   onRemove: (activeIndex: string) => void;
-  onMove: (actualIndex: number, nextIndex: number) => void;
+  onMove: (actualIndex: number, nextIndex: number, updateItems: any) => void;
   handleAppear: (activeIndex: string) => void;
   activeIndex: string;
   fields: any[];
