@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { MoreHorizontal } from "lucide-react";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
@@ -32,10 +31,6 @@ type LinkEditPage = {
   value: string;
   required?: boolean;
   appear?: boolean;
-};
-
-const generateLinks = (): LinkEditPage[] => {
-  return [];
 };
 
 const getLinksEditPages = ({ id }: { id: string }) => {

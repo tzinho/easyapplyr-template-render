@@ -7,21 +7,12 @@ import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import lodash from "lodash";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "~/components/ui/alert-dialog";
 import { type Experience } from "~/stores/resume-store";
 import { Form } from "~/components/ui/form";
 import { ExperienceList } from "./handle-list";
 import { ExperienceForm } from "./handle-form";
 import { schema, generateANewItem, useMutations } from "./hooks";
+import { Confirm } from "./confirm";
 
 interface HandlerProps {
   defaultValues: Omit<Experience, "id"> & { activeIndex: string }[];
@@ -57,7 +48,7 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     },
   });
 
-  const { fields, append, replace, move, update } = useFieldArray({
+  const { fields, append, replace, move, update, remove } = useFieldArray({
     control: form.control,
     name: "experiences",
   });
@@ -73,14 +64,6 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
   }, [fields.length]);
 
   const handleOnClick = (activeItemIndex: string) => {
-    const isEqual = lodash.isEqual(
-      form.getValues("experiences").map((field) => {
-        const { id, ...rest } = field;
-        return rest;
-      }),
-      previousFieldsRef.current,
-    );
-
     if (isSubmitting) {
       if (form.formState.touchedFields?.experiences) {
         setToActiveIndex(activeItemIndex);
@@ -88,9 +71,18 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
       } else {
         replace(fields.filter((field) => !!field._id));
       }
+
       setActiveIndex(activeItemIndex);
       return;
     }
+
+    const isEqual = lodash.isEqual(
+      form.getValues("experiences").map((field) => {
+        const { id, ...rest } = field;
+        return rest;
+      }),
+      previousFieldsRef.current,
+    );
 
     if (!isEqual) {
       setToActiveIndex(activeItemIndex);
@@ -115,7 +107,14 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
   const handleOnAppend = () => {
     const newItem = generateANewItem(fields.length);
     updatePreviousFields(form.getValues("experiences"));
-    append(newItem);
+    replace([...fields, newItem]);
+    // append(newItem);
+    form.reset(undefined, {
+      keepTouched: false,
+      keepDirty: false,
+      keepValues: true,
+    });
+
     setActiveIndex(newItem.activeIndex);
   };
 
@@ -176,6 +175,10 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     }
 
     replace(experiences);
+    form.reset(undefined, {
+      keepTouched: false,
+      keepValues: true,
+    });
     updatePreviousFields(experiences);
   };
 
@@ -195,35 +198,22 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
 
   return (
     <Form {...form}>
-      <AlertDialog
+      <Confirm
         open={!!toActiveIndex}
         onOpenChange={() => setToActiveIndex(null)}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Clicando em confirmar você perde as atualizações que fez até
-              agora!
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                if (isSubmitting) {
-                  replace(fields.filter((field) => !!field._id));
-                }
+        onClick={() => {
+          if (isSubmitting) {
+            replace(fields.filter((field) => !!field._id));
+          }
 
-                updatePreviousFields(previousFieldsRef.current);
-                setActiveIndex(toActiveIndex);
-              }}
-            >
-              Confirmar
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          form.reset(undefined, {
+            keepTouched: false,
+            keepValues: true,
+          });
+
+          setActiveIndex(toActiveIndex);
+        }}
+      />
       <div className="w-full md:max-w-[306px]">
         <ExperienceList
           onAppend={handleOnAppend}

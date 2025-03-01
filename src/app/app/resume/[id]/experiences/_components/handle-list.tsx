@@ -38,7 +38,6 @@ interface ExperienceListProps {
   handleAppear: (activeIndex: string) => void;
   activeIndex: string;
   fields: any[];
-  currentState: any;
 }
 
 const List = ({
@@ -49,7 +48,6 @@ const List = ({
   handleAppear,
   fields,
   activeIndex,
-  currentState,
 }: ExperienceListProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
