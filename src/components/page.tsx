@@ -1,7 +1,7 @@
 "use client";
 
 import React, { type PropsWithChildren } from "react";
-import { ArrowLeft, Search, SidebarClose } from "lucide-react";
+import { ArrowLeft, type LucideIcon, Search, SidebarClose } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { useStore } from "~/store";
@@ -116,7 +116,7 @@ export const PageContentEditor = ({
 interface PageNavbarSearchActionProps extends PropsWithChildren {
   title: string;
   subtitle?: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
 }
 
 export function PageNavbarSearchAction({

@@ -7,7 +7,6 @@ import {
   courseworks,
   educations,
   experiences,
-  involvements,
   languages,
   projects,
   resumes,
@@ -21,7 +20,6 @@ const itemsTypes = {
   educations,
   skills,
   courseworks,
-  involvements,
   languages,
   projects,
   experiences,
@@ -133,7 +131,6 @@ export const resumeRouter = createTRPCRouter({
         projects: true,
         experiences: true,
         courseworks: true,
-        involvements: true,
         certifications: true,
         skills: true,
         languages: true,
@@ -155,6 +152,10 @@ export const resumeRouter = createTRPCRouter({
         const template = getTemplate(input.templateId);
 
         const resumeId = resume[0]!.id;
+        /*
+  involvements: many(involvements),
+  languages: many(languages),
+*/
 
         const defaultSections = template.defaultSections.map((section) => {
           return {
@@ -181,7 +182,6 @@ export const resumeRouter = createTRPCRouter({
         projects: true,
         experiences: true,
         courseworks: true,
-        involvements: true,
         skills: true,
         languages: true,
         summary: true,

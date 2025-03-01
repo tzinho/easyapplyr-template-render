@@ -183,26 +183,6 @@ export const courseworkRelations = relations(courseworks, ({ one }) => ({
   }),
 }));
 
-export const involvements = createTable("involvement", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  resumeId: text("resumeId")
-    .notNull()
-    .references(() => resumes.id, { onDelete: "cascade" }),
-  role: text("role").notNull(),
-  organization: text("organization"),
-  appear: boolean("appear"),
-  order: integer("order").notNull(),
-});
-
-export const involvementRelations = relations(involvements, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [involvements.resumeId],
-    references: [resumes.id],
-  }),
-}));
-
 export const skills = createTable("skill", {
   id: text("id")
     .primaryKey()
@@ -288,7 +268,6 @@ export const resumeRelations = relations(resumes, ({ many, one }) => ({
   educations: many(educations),
   certifications: many(certifications),
   courseworks: many(courseworks),
-  involvements: many(involvements),
   summary: one(summaries),
   skills: many(skills),
   contact: one(contacts),

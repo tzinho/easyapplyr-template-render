@@ -1,10 +1,15 @@
-interface CourseworksProps {
-  params: Promise<{ id: string }>;
-}
+"use client";
 
-const Courseworks = async ({ params }: CourseworksProps) => {
-  const { id } = await params;
-  return null;
+import { Body } from "./_components/body";
+import { Header } from "./_components/header";
+
+const Courseworks = () => {
+  return (
+    <>
+      <Header />
+      <Body />
+    </>
+  );
 };
 
 export default Courseworks;

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MoreHorizontal } from "lucide-react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
@@ -31,6 +32,10 @@ type LinkEditPage = {
   value: string;
   required?: boolean;
   appear?: boolean;
+};
+
+const generateLinks = (): LinkEditPage[] => {
+  return [];
 };
 
 const getLinksEditPages = ({ id }: { id: string }) => {
@@ -81,6 +86,20 @@ const getLinksEditPages = ({ id }: { id: string }) => {
       label: "Cursos",
       href: `/app/resume/${id}/courseworks`,
       value: "courseworks",
+      required: true,
+      appear: true,
+    },
+    {
+      label: "Certificações",
+      href: `/app/resume/${id}/certifications`,
+      value: "certifications",
+      required: true,
+      appear: true,
+    },
+    {
+      label: "Línguas",
+      href: `/app/resume/${id}/languages`,
+      value: "languages",
       required: true,
       appear: true,
     },
@@ -147,7 +166,7 @@ export const LinkPage = ({ required, notRequired }: NavProps) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-5">
+    <div className="flex items-center justify-center gap-3">
       {required.map((link) => (
         <Link key={link.value} href={link.href}>
           <Button className="h-6 text-xs">{link.label}</Button>

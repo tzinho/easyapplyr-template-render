@@ -3,7 +3,7 @@
 import { Body } from "./_components/body";
 import { Header } from "./_components/header";
 
-const Educations = () => {
+const Certifications = () => {
   return (
     <>
       <Header />
@@ -12,4 +12,4 @@ const Educations = () => {
   );
 };
 
-export default Educations;
+export default Certifications;
