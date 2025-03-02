@@ -1,27 +1,10 @@
 "use client";
 
-import { useRef } from "react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { api } from "~/trpc/react";
-
-export const usePreviousValues = () => {
-  const previousValues = useRef<null | Record<string, unknown>[]>(null);
-
-  const update = (newFields: { id: string; [key: string]: unknown }[]) => {
-    const fieldsToSave = newFields.map((field) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id, ...rest } = field;
-      return rest;
-    });
-
-    previousValues.current = fieldsToSave as Record<string, unknown>[];
-  };
-
-  return { update, previousValues: previousValues.current };
-};
 
 export const experienceSchema = z.object({
   _id: z.string(),

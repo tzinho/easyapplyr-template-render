@@ -5,6 +5,14 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { educations } from "~/server/db/schema";
 
 export const educationsRouter = createTRPCRouter({
+  toogleAppear: publicProcedure
+    .input(z.object({ id: z.string(), appear: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db
+        .update(educations)
+        .set({ appear: input.appear })
+        .where(eq(educations.id, input.id));
+    }),
   changeOrder: publicProcedure
     .input(
       z.array(

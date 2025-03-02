@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { type z } from "zod";
@@ -10,32 +13,33 @@ import lodash from "lodash";
 
 import { type Experience } from "~/stores/resume-store";
 import { Form } from "~/components/ui/form";
-import { CardList } from "./handle-list";
-import { CardForm } from "./handle-form";
-import { schema, generateANewItem, useMutations } from "./hooks";
 import { Confirm } from "./confirm";
-import { Item } from "./item";
 import { usePreviousValues } from "~/hooks/use-previous";
 
 interface HandlerProps {
   defaultValues: Omit<Experience, "id"> & { activeIndex: string }[];
   prefix: string;
+  schema: any;
+  renderList: (props: any) => React.ReactNode;
+  renderForm: (props: any) => React.ReactNode;
+  generateANewItem: any;
+  mutations: any;
 }
 
-export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
+export const Handler = ({
+  defaultValues,
+  prefix,
+  renderList,
+  renderForm,
+  schema,
+  generateANewItem,
+  mutations,
+}: HandlerProps) => {
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
   const [toActiveIndex, setToActiveIndex] = useState<string | null>(null);
 
   const { update: updatePreviousFields, previousValues } = usePreviousValues();
-
-  const {
-    mutationToggle,
-    mutationCreate,
-    mutationUpdate,
-    mutationDelete,
-    mutationChangeOrder,
-  } = useMutations();
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -59,7 +63,7 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     if (fields.length && !activeIndex) setActiveIndex(fields[0]!.activeIndex);
   }, [fields.length]);
 
-  const handleOnClick = (activeItemIndex: string) => {
+  const onClick = (activeItemIndex: string) => {
     if (isSubmitting) {
       // eslint-disable-next-line @typescript-eslint/dot-notation
       if (form.formState.touchedFields?.[prefix]) {
@@ -100,33 +104,22 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     setActiveIndex(activeItemIndex);
   };
 
-  const resetForm = () => {
-    form.reset(undefined, {
-      keepTouched: false,
-      keepDirty: false,
-      keepValues: true,
-    });
-  };
-
-  const handleOnAppend = () => {
+  const onAppend = () => {
     const newItem = generateANewItem(fields.length);
     updatePreviousFields(form.getValues(prefix));
     replace([...fields, newItem]);
+
     resetForm();
 
     setActiveIndex(newItem.activeIndex);
   };
 
-  const handleMove = (
-    actualIndex: number,
-    nextIndex: number,
-    updateItems: any,
-  ) => {
+  const onMove = (actualIndex: number, nextIndex: number, updateItems: any) => {
     move(actualIndex, nextIndex);
-    void mutationChangeOrder.mutateAsync(updateItems);
+    void mutations.mutationChangeOrder.mutateAsync(updateItems);
   };
 
-  const handleOnRemove = (activeItemIndex: string) => {
+  const onRemove = (activeItemIndex: string) => {
     const newItems = fields.filter(
       (field) => field.activeIndex !== activeItemIndex,
     );
@@ -135,7 +128,7 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
       (field) => field.activeIndex === activeItemIndex,
     );
     const item = fields[index];
-    void mutationDelete.mutateAsync(item!._id);
+    void mutations.mutationDelete.mutateAsync(item!._id);
 
     if (hasItems) {
       replace(newItems);
@@ -159,14 +152,10 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
       (item) => item.activeIndex === activeIndex,
     )!;
 
-    console.log("handleOnSubmit", field);
-
     if (field.resumeId) {
-      console.log("editing");
-      void mutationUpdate.mutateAsync({ ...field, id: field._id });
+      void mutations.mutationUpdate.mutateAsync({ ...field, id: field._id });
     } else {
-      console.log("creating");
-      const responseAPI = await mutationCreate.mutateAsync({
+      const responseAPI = await mutations.mutationCreate.mutateAsync({
         ...field,
         resumeId: id,
       });
@@ -175,8 +164,6 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
         if (field._id) return field;
         return { ...field, resumeId: id, _id: responseAPI?.id };
       });
-
-      console.log("fieldsSubmit", fieldsSubmit);
     }
 
     replace(fieldsSubmit);
@@ -184,11 +171,11 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     updatePreviousFields(fieldsSubmit);
   };
 
-  const handleAppear = (activeIndex: string) => {
+  const onAppear = (activeIndex: string) => {
     const fieldIndex = fields.findIndex(
       (field) => field.activeIndex === activeIndex,
     );
-    void mutationToggle.mutateAsync({
+    void mutations.mutationToggle.mutateAsync({
       id: fields[fieldIndex]._id,
       appear: !fields[fieldIndex].appear,
     });
@@ -198,51 +185,45 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
     });
   };
 
+  const resetForm = () => {
+    form.reset(undefined, {
+      keepTouched: false,
+      keepDirty: false,
+      keepValues: true,
+    });
+  };
+
   return (
     <Form {...form}>
       <Confirm
         open={!!toActiveIndex}
         onOpenChange={() => setToActiveIndex(null)}
         onClick={() => {
-          if (isSubmitting) {
-            replace(fields.filter((field) => !!field._id));
-          }
-
+          if (isSubmitting) replace(fields.filter((field) => !!field._id));
           resetForm();
-
           setActiveIndex(toActiveIndex);
         }}
       />
       <div className="w-full md:max-w-[306px]">
-        <CardList
-          onAppend={handleOnAppend}
-          fields={fields}
-          onMove={handleMove}
-          title="Suas experiências"
-          actionInfoText="Adicionar uma experiência"
-          renderItem={(field, index) => {
-            return (
-              <Item
-                key={field.activeIndex}
-                id={field._id}
-                value={field}
-                onClick={handleOnClick}
-                index={index}
-                onAppear={handleAppear}
-                onRemove={handleOnRemove}
-                activeIndex={activeIndex!}
-              />
-            );
-          }}
-        />
+        {renderList({
+          fields,
+          activeIndex,
+          onAppend,
+          onMove,
+          onClick,
+          onAppear,
+          onRemove,
+        })}
       </div>
       <div className="flex-1">
-        <CardForm
-          activeIndex={activeIndex}
-          onSubmit={handleOnSubmit}
-          fields={fields}
-          isLoading={mutationCreate.isPending || mutationUpdate.isPending}
-        />
+        {renderForm({
+          activeIndex,
+          onSubmit: handleOnSubmit,
+          fields,
+          isLoading:
+            mutations.mutationCreate.isPending ||
+            mutations.mutationUpdate.isPending,
+        })}
       </div>
     </Form>
   );

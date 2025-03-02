@@ -23,7 +23,7 @@ export const Body = () => {
 
   return (
     <PageContentEditor>
-      <HandlerList defaultValues={defaultValues} />
+      <HandlerList defaultValues={defaultValues} prefix="experiences" />
     </PageContentEditor>
   );
 };

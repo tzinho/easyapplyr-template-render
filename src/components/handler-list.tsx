@@ -29,7 +29,7 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 
-interface ExperienceListProps {
+interface HandlerListProps {
   onAppend: () => void;
   onMove: (actualIndex: number, nextIndex: number, updateItems: any) => void;
   fields: any[];
@@ -45,7 +45,7 @@ const List = ({
   renderItem,
   title,
   actionInfoText,
-}: ExperienceListProps) => {
+}: HandlerListProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),

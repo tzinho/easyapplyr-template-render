@@ -109,8 +109,8 @@ export const projects = createTable("project", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
-  createdAt: timestamp("createdAt"),
-  endAt: timestamp("endAt"),
+  startAt: date("startAt"),
+  endAt: date("endAt"),
   appear: boolean("appear"),
   order: integer("order").notNull(),
 });
@@ -131,7 +131,9 @@ export const educations = createTable("education", {
     .references(() => resumes.id, { onDelete: "cascade" }),
   degree: text("degree").notNull(),
   institution: text("institution"),
-  year: text("year"),
+  startAt: date("startAt"),
+  where: text("where"),
+  endAt: date("endAt"),
   description: text("description"),
   appear: boolean("appear"),
   order: integer("order").notNull(),
@@ -152,6 +154,8 @@ export const certifications = createTable("certification", {
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
   appear: boolean("appear"),
+  startAt: date("startAt"),
+  endAt: date("endAt"),
   order: integer("order").notNull(),
 });
 
@@ -171,7 +175,8 @@ export const courseworks = createTable("coursework", {
     .references(() => resumes.id, { onDelete: "cascade" }),
   name: text("string"),
   where: text("string"),
-  when: text("string"),
+  startAt: date("startAt"),
+  endAt: date("endAt"),
   appear: boolean("appear"),
   order: integer("order").notNull(),
 });

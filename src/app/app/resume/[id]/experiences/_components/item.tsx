@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useSortable } from "@dnd-kit/sortable";
 import {
@@ -11,7 +10,6 @@ import {
   MoreHorizontal,
   Trash,
 } from "lucide-react";
-import lodash from "lodash";
 
 import { Label } from "~/components/ui/label";
 import {
@@ -227,7 +225,6 @@ export const Item = ({
   index,
   activeIndex,
   onAppear,
-  isSubmitting,
 }: {
   id: string;
   value: ExperienceSchema & { activeIndex: string };
@@ -236,7 +233,6 @@ export const Item = ({
   onAppear: (activeIndex: string) => void;
   index: number;
   activeIndex: string;
-  isSubmitting: boolean;
 }) => {
   const isActive = value.activeIndex === activeIndex;
   const form = useFormContext();
@@ -247,7 +243,6 @@ export const Item = ({
   const company =
     (form.watch(`experiences.${index}.company`) as string) ||
     `Empresa ${index + 1}`;
-  const [openAlert, setOpenAlert] = useState<boolean>(false);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, disabled });

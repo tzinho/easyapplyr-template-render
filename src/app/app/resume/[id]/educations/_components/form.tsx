@@ -11,9 +11,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "~/components/form/input";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { cn } from "~/lib/utils";
-import { TextareaList } from "~/components/form/textarea-list";
 import { DateTimeRangePicker } from "~/components/form/datetime-range-picker";
 import { Badge } from "~/components/ui/badge";
+import { Textarea } from "~/components/form/textarea";
 
 interface FormGenerics extends FieldValues {
   activeIndex: string;
@@ -36,8 +36,6 @@ const getStackStyles = (
   const scale = 1 - Math.abs(diff) * 0.05;
   const y = diff * 10;
   const opacity = 1 - Math.abs(diff) * 1;
-  // previously
-  // const opacity = 1 - Math.abs(diff) * 0.2;
   const zIndex = total - Math.abs(diff);
 
   return {
@@ -76,14 +74,14 @@ function Form<T extends FormGenerics>({
 
             const isActive = field.activeIndex === activeIndex;
 
-            const company =
-              form.watch(`experiences.${index}.company`) ||
-              `Empresa ${fields.length}`;
-            const role =
-              form.watch(`experiences.${index}.role`) ||
-              `Experiência ${fields.length}`;
+            const degree =
+              form.watch(`educations.${index}.degree`) ||
+              `Gray ${fields.length}`;
+            const institution =
+              form.watch(`educations.${index}.institution`) ||
+              `Intituição ${fields.length}`;
 
-            const appear = form.watch(`experiences.${index}.appear`);
+            const appear = form.watch(`educations.${index}.appear`);
 
             return (
               <motion.div
@@ -119,47 +117,46 @@ function Form<T extends FormGenerics>({
               >
                 <div className="flex justify-between">
                   <p>
-                    {role} <span className="text-xs">{company}</span>
+                    {degree} <span className="text-xs">{institution}</span>
                   </p>
                   {!appear && <Badge>Não mostra no currículo</Badge>}
                 </div>
 
                 <Input
-                  label={`Qual a sua função na(o) ${company}?`}
-                  name={`experiences.${index}.role`}
+                  label={`Qual o grau você conseguiu na(o) ${institution}?`}
+                  name={`educations.${index}.degree`}
                   className="focus-visible:ring-2"
                   required
                 />
 
                 <Input
-                  label="Em qual empresa você trabalhou?"
-                  name={`experiences.${index}.company`}
+                  label="Em qual instituição você conseguiu?"
+                  name={`educations.${index}.institution`}
                   className="focus-visible:ring-2"
                   required
                 />
 
                 <div className="flex flex-col gap-3 md:flex-row">
                   <Input
-                    name={`experiences.${index}.where`}
-                    label={`Onde está localizada a ${company}?`}
+                    name={`educations.${index}.where`}
+                    label={`Onde está localizada a ${institution}?`}
                     className="focus-visible:ring-2"
                   />
                   <DateTimeRangePicker
-                    prefix="experiences"
+                    prefix="educations"
                     index={index}
-                    label={`Qual o período trabalhou na(o) ${company}?`}
+                    label={`Qual o período frequentou a(o) ${institution}?`}
                   />
                 </div>
 
-                <TextareaList
-                  name={`experiences.${index}.did`}
-                  label={`O que você fez na(o) ${company}?`}
+                <Textarea
+                  name={`educations.${index}.description`}
+                  label={`Insira mais informações`}
                   className="min-h-[120px] focus-visible:ring-2"
-                  highlightWords={["25%"]}
                 />
 
                 <ButtonLoading className="mt-3 w-full" isLoading={isLoading}>
-                  Salvar na lista de experiências
+                  Salvar na lista de educações
                 </ButtonLoading>
               </motion.div>
             );

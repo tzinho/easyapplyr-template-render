@@ -37,7 +37,10 @@ const FormToCreateResume = () => {
     {
       onSuccess: (resume) => {
         void utils.resumes.list.invalidate();
-        toast({ title: "Currículo criado com sucesso!", description: "" });
+        toast({
+          title: "Currículo criado com sucesso!",
+          description: "Vamos editar ele?",
+        });
         if (resume) router.push(`/app/resume/${resume.id}/contact`);
       },
     },
