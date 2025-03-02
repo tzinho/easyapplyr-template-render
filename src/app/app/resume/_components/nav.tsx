@@ -67,8 +67,8 @@ const getLinksEditPages = ({ id }: { id: string }) => {
       label: "Projetos",
       href: `/app/resume/${id}/projects`,
       value: "projects",
-      required: false,
-      appear: false,
+      required: true,
+      appear: true,
     },
     {
       label: "Sumário",
