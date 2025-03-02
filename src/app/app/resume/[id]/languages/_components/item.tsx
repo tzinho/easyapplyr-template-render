@@ -47,8 +47,8 @@ export const Item = ({
   const isActive = value.activeIndex === activeIndex;
   const form = useFormContext();
   const disabled = !value._id;
-  const text =
-    (form.watch(`skills.${index}.text`) as string) || `Habilidade ${index + 1}`;
+  const name =
+    (form.watch(`languages.${index}.name`) as string) || `Língua ${index + 1}`;
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, disabled });
@@ -87,15 +87,10 @@ export const Item = ({
                 className="flex w-full flex-1 items-center justify-between"
               >
                 <div>
-                  <p className="text-sm">{text}</p>
+                  <p className="text-sm">{name}</p>
                 </div>
                 <Popover>
-                  <PopoverTrigger
-                  // onClick={(e) => {
-                  //   console.log("popover");
-                  //   e.stopPropagation();
-                  // }}
-                  >
+                  <PopoverTrigger>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>

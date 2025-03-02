@@ -153,6 +153,10 @@ export const certifications = createTable("certification", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
+  name: text("name"),
+  where: text("where"),
+  when: text("when"),
+  description: text("description"),
   appear: boolean("appear"),
   startAt: date("startAt"),
   endAt: date("endAt"),

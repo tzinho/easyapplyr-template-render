@@ -2,18 +2,10 @@ import { asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { courseworks } from "~/server/db/schema";
-import { courseworkSchema } from "~/validators";
+import { languages } from "~/server/db/schema";
+import { languageSchema } from "~/validators";
 
-export const courseworksRouter = createTRPCRouter({
-  toogleAppear: publicProcedure
-    .input(z.object({ id: z.string(), appear: z.boolean() }))
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.db
-        .update(courseworks)
-        .set({ appear: input.appear })
-        .where(eq(courseworks.id, input.id));
-    }),
+export const languagesRouter = createTRPCRouter({
   changeOrder: publicProcedure
     .input(
       z.array(
@@ -27,29 +19,34 @@ export const courseworksRouter = createTRPCRouter({
       await ctx.db.transaction(async (tx) => {
         for (const update of input) {
           await tx
-            .update(courseworks)
+            .update(languages)
             .set({ order: update.order })
-            .where(eq(courseworks.id, update.id));
+            .where(eq(languages.id, update.id));
         }
       });
     }),
 
+  toogleAppear: publicProcedure
+    .input(z.object({ id: z.string(), appear: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db
+        .update(languages)
+        .set({ appear: input.appear })
+        .where(eq(languages.id, input.id));
+    }),
+
   create: publicProcedure
-    .input(
-      courseworkSchema.extend({
-        resumeId: z.string(),
-      }),
-    )
+    .input(languageSchema.extend({ resumeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const maxOrder = await ctx.db
-        .select({ order: courseworks.order })
-        .from(courseworks)
-        .where(eq(courseworks.resumeId, input.resumeId))
-        .orderBy(desc(courseworks.order))
+        .select({ order: languages.order })
+        .from(languages)
+        .where(eq(languages.resumeId, input.resumeId))
+        .orderBy(desc(languages.order))
         .limit(1);
 
       const [model] = await ctx.db
-        .insert(courseworks)
+        .insert(languages)
         .values({
           ...input,
           appear: true,
@@ -70,40 +67,44 @@ export const courseworksRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const courseworksList = await ctx.db
+      const languagesList = await ctx.db
         .select()
-        .from(courseworks)
-        .where(eq(courseworks.resumeId, input.resumeId))
-        .orderBy(asc(courseworks.order));
-      return courseworksList;
+        .from(languages)
+        .where(eq(languages.resumeId, input.resumeId))
+        .orderBy(asc(languages.order));
+      return languagesList;
     }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
-    const coursework = await ctx.db
-      .delete(courseworks)
-      .where(eq(courseworks.id, input))
+    const language = await ctx.db
+      .delete(languages)
+      .where(eq(languages.id, input))
       .returning();
-    return coursework;
+    return language;
   }),
 
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
-    const education = await ctx.db.query.educations.findFirst({
-      where: eq(courseworks.id, input),
+    const language = await ctx.db.query.languages.findFirst({
+      where: eq(languages.id, input),
     });
 
-    return education;
+    return language;
   }),
 
   update: publicProcedure
-    .input(courseworkSchema)
+    .input(
+      languageSchema.extend({
+        id: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
-      const coursework = await ctx.db
-        .update(courseworks)
+      const language = await ctx.db
+        .update(languages)
         .set(data)
-        .where(eq(courseworks.id, id))
+        .where(eq(languages.id, id))
         .returning();
 
-      return coursework;
+      return language;
     }),
 });

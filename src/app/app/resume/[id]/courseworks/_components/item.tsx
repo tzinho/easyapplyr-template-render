@@ -61,6 +61,7 @@ export const Item = ({
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
     transition,
+    touchAction: "none",
   };
 
   return (
@@ -79,7 +80,7 @@ export const Item = ({
             )}
             {...listeners}
           />
-          <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border px-2 py-1">
+          <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border bg-white px-2 py-1">
             <div className="flex w-full flex-col">
               <div
                 onClick={() => {

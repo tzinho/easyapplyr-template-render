@@ -31,6 +31,15 @@ export const experienceSchema = z.object({
   did: z.string().nullish(),
 });
 
+export const certificationSchema = z.object({
+  name: z.string({ message: "O nome do certificado é obrigatório!" }),
+  where: z.string().nullish(),
+  when: z.string().nullish(),
+  description: z.string().nullish(),
+  startAt: dateSchema.nullish(),
+  endAt: dateSchema.nullish(),
+});
+
 export const skillSchema = z.object({
   text: z.string({ message: "A habilidade é obrigatória" }),
 });
@@ -79,6 +88,11 @@ export const resumeSchema = z.object({
   templateId: z.string(),
 });
 
+export const languageSchema = z.object({
+  name: z.string(),
+});
+
+export type LanguageSchema = z.infer<typeof languageSchema>;
 export type EducationSchema = z.infer<typeof educationSchema>;
 export type CourseWorkSchema = z.infer<typeof courseworkSchema>;
 export type ProjectSchema = z.infer<typeof projectSchema>;
