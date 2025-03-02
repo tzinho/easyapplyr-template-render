@@ -142,6 +142,8 @@ export const Handler = ({
       replace([newItem]);
       updatePreviousFields([newItem]);
     }
+
+    resetForm();
   };
 
   const handleOnSubmit: SubmitHandler<z.infer<typeof schema>> = async (

@@ -47,9 +47,10 @@ export const educationSchema = z.object({
 });
 
 export const courseworkSchema = z.object({
-  name: z.string({ message: "O nome do curso é obrigatório" }),
-  where: z.string().optional(),
-  when: z.string().optional(),
+  name: z.string({ message: "A função é obrigatória" }),
+  where: z.string().nullish(),
+  startAt: dateSchema.nullish(),
+  endAt: dateSchema.nullish(),
 });
 
 export const projectSchema = z.object({

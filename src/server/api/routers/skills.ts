@@ -5,7 +5,7 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { skills } from "~/server/db/schema";
 
 export const skillsRouter = createTRPCRouter({
-  hide: publicProcedure
+  toogleAppear: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -13,13 +13,14 @@ export const skillsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db
+      const [model] = await ctx.db
         .update(skills)
         .set({
           appear: input.appear,
         })
         .where(eq(skills.id, input.id))
         .returning();
+      return model;
     }),
   changeOrder: publicProcedure
     .input(
@@ -56,7 +57,7 @@ export const skillsRouter = createTRPCRouter({
         .orderBy(desc(skills.order))
         .limit(1);
 
-      return await ctx.db
+      const [model] = await ctx.db
         .insert(skills)
         .values({
           ...input,
@@ -67,6 +68,8 @@ export const skillsRouter = createTRPCRouter({
               : 0,
         })
         .returning();
+
+      return model;
     }),
 
   list: publicProcedure

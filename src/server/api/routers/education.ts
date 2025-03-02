@@ -50,7 +50,7 @@ export const educationsRouter = createTRPCRouter({
         .orderBy(desc(educations.order))
         .limit(1);
 
-      return await ctx.db
+      const [model] = await ctx.db
         .insert(educations)
         .values({
           ...input,
@@ -61,6 +61,8 @@ export const educationsRouter = createTRPCRouter({
               : 0,
         })
         .returning();
+
+      return model;
     }),
 
   list: publicProcedure

@@ -8,10 +8,8 @@ import {
 } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 
-import { Input } from "~/components/form/input";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { cn } from "~/lib/utils";
-import { DateTimeRangePicker } from "~/components/form/datetime-range-picker";
 import { Badge } from "~/components/ui/badge";
 import { Textarea } from "~/components/form/textarea";
 
@@ -74,14 +72,7 @@ function Form<T extends FormGenerics>({
 
             const isActive = field.activeIndex === activeIndex;
 
-            const degree =
-              form.watch(`educations.${index}.degree`) ||
-              `Grau ${fields.length}`;
-            const institution =
-              form.watch(`educations.${index}.institution`) ||
-              `Intituição ${fields.length}`;
-
-            const appear = form.watch(`educations.${index}.appear`);
+            const appear = form.watch(`skills.${index}.appear`);
 
             return (
               <motion.div
@@ -116,47 +107,17 @@ function Form<T extends FormGenerics>({
                 className="rounded-xl border bg-background/95 p-6 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
               >
                 <div className="flex justify-between">
-                  <p>
-                    {degree} <span className="text-xs">{institution}</span>
-                  </p>
                   {!appear && <Badge>Não mostra no currículo</Badge>}
                 </div>
 
-                <Input
-                  label={`Qual o grau você conseguiu na(o) ${institution}?`}
-                  name={`educations.${index}.degree`}
-                  className="focus-visible:ring-2"
-                  required
-                />
-
-                <Input
-                  label="Em qual instituição você conseguiu?"
-                  name={`educations.${index}.institution`}
-                  className="focus-visible:ring-2"
-                  required
-                />
-
-                <div className="flex flex-col gap-3 md:flex-row">
-                  <Input
-                    name={`educations.${index}.where`}
-                    label={`Onde está localizada a ${institution}?`}
-                    className="focus-visible:ring-2"
-                  />
-                  <DateTimeRangePicker
-                    prefix="educations"
-                    index={index}
-                    label={`Qual o período frequentou a(o) ${institution}?`}
-                  />
-                </div>
-
                 <Textarea
-                  name={`educations.${index}.description`}
-                  label={`Insira mais informações`}
+                  name={`skills.${index}.text`}
+                  label="Qual a habilidade?"
                   className="min-h-[120px] focus-visible:ring-2"
                 />
 
                 <ButtonLoading className="mt-3 w-full" isLoading={isLoading}>
-                  Salvar na lista de educações
+                  Salvar na lista de habilidades
                 </ButtonLoading>
               </motion.div>
             );

@@ -3,8 +3,17 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { courseworks } from "~/server/db/schema";
+import { courseworkSchema } from "~/validators";
 
 export const courseworksRouter = createTRPCRouter({
+  toogleAppear: publicProcedure
+    .input(z.object({ id: z.string(), appear: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db
+        .update(courseworks)
+        .set({ appear: input.appear })
+        .where(eq(courseworks.id, input.id));
+    }),
   changeOrder: publicProcedure
     .input(
       z.array(
@@ -27,11 +36,8 @@ export const courseworksRouter = createTRPCRouter({
 
   create: publicProcedure
     .input(
-      z.object({
+      courseworkSchema.extend({
         resumeId: z.string(),
-        name: z.string(),
-        where: z.string().optional(),
-        when: z.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -42,23 +48,35 @@ export const courseworksRouter = createTRPCRouter({
         .orderBy(desc(courseworks.order))
         .limit(1);
 
-      return await ctx.db
+      const [model] = await ctx.db
         .insert(courseworks)
         .values({
           ...input,
           appear: true,
-          order: Number(maxOrder[0]?.order) + 1 ?? 0,
+          order:
+            maxOrder[0]?.order !== undefined
+              ? Number(maxOrder[0]?.order) + 1
+              : 0,
         })
         .returning();
+
+      return model;
     }),
 
-  list: publicProcedure.query(async ({ ctx }) => {
-    const educationList = await ctx.db
-      .select()
-      .from(courseworks)
-      .orderBy(asc(courseworks.order));
-    return educationList;
-  }),
+  list: publicProcedure
+    .input(
+      z.object({
+        resumeId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const courseworksList = await ctx.db
+        .select()
+        .from(courseworks)
+        .where(eq(courseworks.resumeId, input.resumeId))
+        .orderBy(asc(courseworks.order));
+      return courseworksList;
+    }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     const coursework = await ctx.db

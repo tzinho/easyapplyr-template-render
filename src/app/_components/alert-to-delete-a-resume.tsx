@@ -41,7 +41,7 @@ export const AlertToDeleteAResume = ({
         <AlertDialogHeader>
           <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
           <AlertDialogDescription>
-            Excluindo o Currículo você perde todo o histórico de edições, tire
+            Excluindo o currículo você perde todo o histórico de edições, tire
             um tempo pra pensar sobre as implicações disso. Caso tenha certeza
             clique em confirmar.
           </AlertDialogDescription>

@@ -74,14 +74,14 @@ function Form<T extends FormGenerics>({
 
             const isActive = field.activeIndex === activeIndex;
 
-            const degree =
-              form.watch(`educations.${index}.degree`) ||
-              `Grau ${fields.length}`;
+            const name =
+              form.watch(`courseworks.${index}.name`) ||
+              `Curso ${fields.length}`;
             const institution =
-              form.watch(`educations.${index}.institution`) ||
+              form.watch(`courseworks.${index}.where`) ||
               `Intituição ${fields.length}`;
 
-            const appear = form.watch(`educations.${index}.appear`);
+            const appear = form.watch(`courseworks.${index}.appear`);
 
             return (
               <motion.div
@@ -117,46 +117,33 @@ function Form<T extends FormGenerics>({
               >
                 <div className="flex justify-between">
                   <p>
-                    {degree} <span className="text-xs">{institution}</span>
+                    {name} <span className="text-xs">{institution}</span>
                   </p>
                   {!appear && <Badge>Não mostra no currículo</Badge>}
                 </div>
 
                 <Input
                   label={`Qual o grau você conseguiu na(o) ${institution}?`}
-                  name={`educations.${index}.degree`}
+                  name={`courseworks.${index}.name`}
                   className="focus-visible:ring-2"
                   required
                 />
 
                 <Input
                   label="Em qual instituição você conseguiu?"
-                  name={`educations.${index}.institution`}
+                  name={`courseworks.${index}.where`}
                   className="focus-visible:ring-2"
                   required
                 />
 
-                <div className="flex flex-col gap-3 md:flex-row">
-                  <Input
-                    name={`educations.${index}.where`}
-                    label={`Onde está localizada a ${institution}?`}
-                    className="focus-visible:ring-2"
-                  />
-                  <DateTimeRangePicker
-                    prefix="educations"
-                    index={index}
-                    label={`Qual o período frequentou a(o) ${institution}?`}
-                  />
-                </div>
-
-                <Textarea
-                  name={`educations.${index}.description`}
-                  label={`Insira mais informações`}
-                  className="min-h-[120px] focus-visible:ring-2"
+                <DateTimeRangePicker
+                  prefix="courseworks"
+                  index={index}
+                  label={`Qual o período frequentou a(o) ${institution}?`}
                 />
 
                 <ButtonLoading className="mt-3 w-full" isLoading={isLoading}>
-                  Salvar na lista de educações
+                  Salvar na lista de cursos
                 </ButtonLoading>
               </motion.div>
             );

@@ -159,13 +159,9 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
       (item) => item.activeIndex === activeIndex,
     )!;
 
-    console.log("handleOnSubmit", field);
-
     if (field.resumeId) {
-      console.log("editing");
       void mutationUpdate.mutateAsync({ ...field, id: field._id });
     } else {
-      console.log("creating");
       const responseAPI = await mutationCreate.mutateAsync({
         ...field,
         resumeId: id,
@@ -175,8 +171,6 @@ export const HandlerList = ({ defaultValues, prefix }: HandlerProps) => {
         if (field._id) return field;
         return { ...field, resumeId: id, _id: responseAPI?.id };
       });
-
-      console.log("fieldsSubmit", fieldsSubmit);
     }
 
     replace(fieldsSubmit);

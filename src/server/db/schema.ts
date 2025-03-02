@@ -173,8 +173,8 @@ export const courseworks = createTable("coursework", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
-  name: text("string"),
-  where: text("string"),
+  name: text("name"),
+  where: text("where"),
   startAt: date("startAt"),
   endAt: date("endAt"),
   appear: boolean("appear"),
