@@ -6,6 +6,14 @@ import { projects } from "~/server/db/schema";
 import { projectSchema } from "~/validators";
 
 export const projectsRouter = createTRPCRouter({
+  toogleAppear: publicProcedure
+    .input(z.object({ id: z.string(), appear: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db
+        .update(projects)
+        .set({ appear: input.appear })
+        .where(eq(projects.id, input.id));
+    }),
   changeOrder: publicProcedure
     .input(
       z.array(
@@ -50,13 +58,20 @@ export const projectsRouter = createTRPCRouter({
         .returning();
     }),
 
-  list: publicProcedure.query(async ({ ctx }) => {
-    const educationList = await ctx.db
-      .select()
-      .from(projects)
-      .orderBy(asc(projects.order));
-    return educationList;
-  }),
+  list: publicProcedure
+    .input(
+      z.object({
+        resumeId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const projectsList = await ctx.db
+        .select()
+        .from(projects)
+        .where(eq(projects.resumeId, input.resumeId))
+        .orderBy(asc(projects.order));
+      return projectsList;
+    }),
 
   delete: publicProcedure.input(z.string()).mutation(async ({ ctx, input }) => {
     const project = await ctx.db

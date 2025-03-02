@@ -47,11 +47,13 @@ export const Item = ({
   const isActive = value.activeIndex === activeIndex;
   const form = useFormContext();
   const disabled = !value._id;
-  const name =
-    (form.watch(`courseworks.${index}.name`) as string) || `Curso ${index + 1}`;
-  const where =
-    (form.watch(`courseworks.${index}.where`) as string) ||
-    `Instituição ${index + 1}`;
+
+  const title =
+    (form.watch(`projects.${index}.title`) as string) || `Projeto ${index + 1}`;
+
+  const organization =
+    (form.watch(`projects.${index}.organization`) as string) ||
+    `Organização ${index + 1}`;
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id, disabled });
@@ -90,8 +92,8 @@ export const Item = ({
                 className="flex w-full flex-1 items-center justify-between"
               >
                 <div>
-                  <p className="text-sm">{name}</p>
-                  <span className="text-xs">{where}</span>
+                  <p className="text-sm">{title}</p>
+                  <span className="text-xs">{organization}</span>
                 </div>
                 <Popover>
                   <PopoverTrigger>

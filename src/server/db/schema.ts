@@ -109,6 +109,9 @@ export const projects = createTable("project", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
+  title: text("name").notNull(),
+  organization: text("organization"),
+  url: text("url"),
   startAt: date("startAt"),
   endAt: date("endAt"),
   appear: boolean("appear"),

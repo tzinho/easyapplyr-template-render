@@ -72,7 +72,7 @@ export const Item = ({
         <div className="group flex w-full items-start gap-1">
           <GripVertical
             className={cn(
-              "mt-4 h-4 w-4 opacity-0 transition-opacity duration-200",
+              "mt-2 h-4 w-4 opacity-0 transition-opacity duration-200",
               !disabled && "cursor-grab group-hover:opacity-100",
             )}
             {...listeners}
