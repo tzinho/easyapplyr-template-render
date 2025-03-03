@@ -53,13 +53,6 @@ export const contacts = createTable("contact", {
   city: text("city"),
 });
 
-export const contactsRelations = relations(contacts, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [contacts.resumeId],
-    references: [resumes.id],
-  }),
-}));
-
 export const summaries = createTable("summary", {
   id: text("id")
     .primaryKey()
@@ -71,13 +64,6 @@ export const summaries = createTable("summary", {
   text: text("text").notNull(),
 });
 
-export const summariesRelations = relations(summaries, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [summaries.resumeId],
-    references: [resumes.id],
-  }),
-}));
-
 export const experiences = createTable("experience", {
   id: text("id")
     .primaryKey()
@@ -88,19 +74,12 @@ export const experiences = createTable("experience", {
   role: text("role").notNull(),
   company: text("company").notNull(),
   where: text("where"),
-  startAt: date("startAt"),
-  endAt: date("endAt"),
   did: text("did"),
   appear: boolean("appear").notNull(),
   order: integer("order").notNull(),
+  startAt: date("startAt"),
+  endAt: date("endAt"),
 });
-
-export const experiencesRelations = relations(experiences, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [experiences.resumeId],
-    references: [resumes.id],
-  }),
-}));
 
 export const projects = createTable("project", {
   id: text("id")
@@ -112,18 +91,11 @@ export const projects = createTable("project", {
   title: text("name").notNull(),
   organization: text("organization"),
   url: text("url"),
+  appear: boolean("appear").default(true),
+  order: integer("order").notNull(),
   startAt: date("startAt"),
   endAt: date("endAt"),
-  appear: boolean("appear"),
-  order: integer("order").notNull(),
 });
-
-export const projectsRelations = relations(projects, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [projects.resumeId],
-    references: [resumes.id],
-  }),
-}));
 
 export const educations = createTable("education", {
   id: text("id")
@@ -134,20 +106,13 @@ export const educations = createTable("education", {
     .references(() => resumes.id, { onDelete: "cascade" }),
   degree: text("degree").notNull(),
   institution: text("institution"),
-  startAt: date("startAt"),
   where: text("where"),
-  endAt: date("endAt"),
   description: text("description"),
-  appear: boolean("appear"),
+  appear: boolean("appear").default(true),
   order: integer("order").notNull(),
+  startAt: date("startAt"),
+  endAt: date("endAt"),
 });
-
-export const educationsRelations = relations(educations, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [educations.resumeId],
-    references: [resumes.id],
-  }),
-}));
 
 export const certifications = createTable("certification", {
   id: text("id")
@@ -160,18 +125,11 @@ export const certifications = createTable("certification", {
   where: text("where"),
   when: text("when"),
   description: text("description"),
-  appear: boolean("appear"),
+  appear: boolean("appear").default(true),
   startAt: date("startAt"),
   endAt: date("endAt"),
   order: integer("order").notNull(),
 });
-
-export const certificationsRelations = relations(certifications, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [certifications.resumeId],
-    references: [resumes.id],
-  }),
-}));
 
 export const courseworks = createTable("coursework", {
   id: text("id")
@@ -182,18 +140,11 @@ export const courseworks = createTable("coursework", {
     .references(() => resumes.id, { onDelete: "cascade" }),
   name: text("name"),
   where: text("where"),
+  appear: boolean("appear").default(true),
+  order: integer("order").notNull(),
   startAt: date("startAt"),
   endAt: date("endAt"),
-  appear: boolean("appear"),
-  order: integer("order").notNull(),
 });
-
-export const courseworkRelations = relations(courseworks, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [courseworks.resumeId],
-    references: [resumes.id],
-  }),
-}));
 
 export const skills = createTable("skill", {
   id: text("id")
@@ -203,16 +154,9 @@ export const skills = createTable("skill", {
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
   text: text("text").notNull(),
-  appear: boolean("appear").notNull(),
+  appear: boolean("appear").default(true),
   order: integer("order").notNull(),
 });
-
-export const skillsRelations = relations(skills, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [skills.resumeId],
-    references: [resumes.id],
-  }),
-}));
 
 export const languages = createTable("language", {
   id: text("id")
@@ -222,16 +166,9 @@ export const languages = createTable("language", {
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
-  appear: boolean("appear"),
+  appear: boolean("appear").default(true),
   order: integer("order").notNull(),
 });
-
-export const languageRelations = relations(languages, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [languages.resumeId],
-    references: [resumes.id],
-  }),
-}));
 
 export const sections = createTable("section", {
   id: text("id")
@@ -240,21 +177,14 @@ export const sections = createTable("section", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
-  type: text("type"),
+  type: text("type").notNull(),
   title: text("title"),
   disabled: boolean("disabled"),
   removable: boolean("removable"),
-  appear: boolean("appear"),
-  column: integer("column"),
+  appear: boolean("appear").notNull(),
+  column: integer("column").notNull(),
   order: integer("order").notNull(),
 });
-
-export const sectionsRelations = relations(sections, ({ one }) => ({
-  resume: one(resumes, {
-    fields: [sections.resumeId],
-    references: [resumes.id],
-  }),
-}));
 
 export const settings = createTable("setting", {
   id: text("id")
@@ -267,9 +197,81 @@ export const settings = createTable("setting", {
   primaryColor: text("primaryColor").notNull(),
 });
 
+// Relations
+
+export const summariesRelations = relations(summaries, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [summaries.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const courseworkRelations = relations(courseworks, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [courseworks.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const skillsRelations = relations(skills, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [skills.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const experiencesRelations = relations(experiences, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [experiences.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const languageRelations = relations(languages, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [languages.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const sectionsRelations = relations(sections, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [sections.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
 export const settingsRelations = relations(settings, ({ one }) => ({
   resume: one(resumes, {
     fields: [settings.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const projectsRelations = relations(projects, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [projects.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const educationsRelations = relations(educations, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [educations.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const certificationsRelations = relations(certifications, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [certifications.resumeId],
+    references: [resumes.id],
+  }),
+}));
+
+export const contactsRelations = relations(contacts, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [contacts.resumeId],
     references: [resumes.id],
   }),
 }));

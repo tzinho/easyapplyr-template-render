@@ -50,9 +50,11 @@ export const summarySchema = z.object({
 
 export const educationSchema = z.object({
   degree: z.string({ message: "O campo de grau é obrigatório" }),
-  institution: z.string().optional().nullish(),
-  year: z.string().optional().nullish(),
-  description: z.string().optional().nullish(),
+  institution: z.string().nullish(),
+  description: z.string().nullish(),
+  where: z.string().nullish(),
+  startAt: dateSchema.nullish(),
+  endAt: dateSchema.nullish(),
 });
 
 export const courseworkSchema = z.object({

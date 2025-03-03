@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { educations } from "~/server/db/schema";
+import { educationSchema } from "~/validators";
 
 export const educationsRouter = createTRPCRouter({
   toogleAppear: publicProcedure
@@ -35,11 +36,8 @@ export const educationsRouter = createTRPCRouter({
 
   create: publicProcedure
     .input(
-      z.object({
+      educationSchema.extend({
         resumeId: z.string(),
-        degree: z.coerce.string().optional(),
-        institution: z.coerce.string().optional(),
-        description: z.coerce.string().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -97,14 +95,7 @@ export const educationsRouter = createTRPCRouter({
   }),
 
   update: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        degree: z.coerce.string().optional(),
-        institution: z.coerce.string().optional(),
-        description: z.coerce.string().optional(),
-      }),
-    )
+    .input(educationSchema)
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
       const education = await ctx.db

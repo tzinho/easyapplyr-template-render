@@ -20,7 +20,7 @@ export const experienceSchema = z.object({
   order: z.number(),
 });
 
-export const schema = z.object({
+export const experiencesSchema = z.object({
   experiences: z.array(experienceSchema),
 });
 
