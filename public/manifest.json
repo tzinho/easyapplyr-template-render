@@ -20,8 +20,8 @@
     }
   ],
   "theme_color": "#603813",
-  "background_color": "#603813",
-  "start_url": "/",
+  "background_color": "#FFFFFF",
+  "start_url": "/app",
   "display": "standalone",
   "orientation": "portrait"
 }
