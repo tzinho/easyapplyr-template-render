@@ -28,13 +28,21 @@ import {
 } from "~/components/ui/tooltip";
 import { Card, CardHeader, CardTitle, CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
+import { useHandlerInner } from "~/providers/handler-provider";
 
 interface HandlerListProps {
   onAppend: () => void;
-  onMove: (actualIndex: number, nextIndex: number, updateItems: any) => void;
-  fields: any[];
+  onMove: (
+    actualIndex: number,
+    nextIndex: number,
+    updateItems: { id: string; order: number }[],
+  ) => void;
+  fields: { _id: string; order: number }[];
   title: string;
-  renderItem: (field: any, index: number) => React.ReactNode;
+  renderItem: (
+    field: { _id: string; order: number },
+    index: number,
+  ) => React.ReactNode;
   actionInfoText: string;
 }
 
@@ -46,6 +54,7 @@ const List = ({
   title,
   actionInfoText,
 }: HandlerListProps) => {
+  const { isSubmitting } = useHandlerInner();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),
@@ -53,8 +62,6 @@ const List = ({
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
-
-  const isSubmitting = !fields.every((field) => !!field._id);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -66,7 +73,7 @@ const List = ({
 
     const nextIndex = fields.findIndex((item) => item._id === over.id);
 
-    const newItems = arrayMove(fields as unknown[], actualIndex, nextIndex);
+    const newItems = arrayMove(fields, actualIndex, nextIndex);
     const updateItems = newItems.map((item, order) => ({ ...item, order }));
 
     onMove(
@@ -115,9 +122,7 @@ const List = ({
             strategy={verticalListSortingStrategy}
           >
             <CardContent className="space-y-3">
-              {fields.map((field, index) => {
-                return renderItem(field, index);
-              })}
+              {fields.map((field, index) => renderItem(field, index))}
             </CardContent>
           </SortableContext>
         </DndContext>

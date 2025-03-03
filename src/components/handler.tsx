@@ -11,14 +11,17 @@ import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import lodash from "lodash";
 
-import { type Experience } from "~/stores/resume-store";
 import { Form } from "~/components/ui/form";
 import { Confirm } from "./confirm";
 import { usePreviousValues } from "~/hooks/use-previous";
+import {
+  HandlerInnerProvider,
+  HandlerProvider,
+} from "~/providers/handler-provider";
 
 interface HandlerProps {
-  defaultValues: Omit<Experience, "id"> & { activeIndex: string }[];
-  prefix: string;
+  defaultValues: { activeIndex: string }[] | null;
+  name: string;
   schema: any;
   renderList: (props: any) => React.ReactNode;
   renderForm: (props: any) => React.ReactNode;
@@ -28,7 +31,7 @@ interface HandlerProps {
 
 export const Handler = ({
   defaultValues,
-  prefix,
+  name,
   renderList,
   renderForm,
   schema,
@@ -44,19 +47,19 @@ export const Handler = ({
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      [prefix]: defaultValues ?? [generateANewItem(0)],
+      [name]: defaultValues ?? [generateANewItem(0)],
     },
   });
 
   const { fields, replace, move, update } = useFieldArray({
     control: form.control,
-    name: prefix,
+    name,
   });
 
   const isSubmitting = !fields.every((field) => !!field._id);
 
   useEffect(() => {
-    updatePreviousFields(form.getValues(prefix));
+    updatePreviousFields(form.getValues(name));
   }, []);
 
   useEffect(() => {
@@ -66,7 +69,7 @@ export const Handler = ({
   const onClick = (activeItemIndex: string) => {
     if (isSubmitting) {
       // eslint-disable-next-line @typescript-eslint/dot-notation
-      if (form.formState.touchedFields?.[prefix]) {
+      if (form.formState.touchedFields?.[name]) {
         setToActiveIndex(activeItemIndex);
         return;
       } else {
@@ -78,31 +81,16 @@ export const Handler = ({
     }
 
     const isEqual = lodash.isEqual(
-      form.getValues(prefix).map((field) => {
+      form.getValues(name).map((field) => {
         const { id, ...rest } = field;
         return rest;
       }),
       previousValues,
     );
 
-    console.log("[isEqual]: ", isEqual);
-    console.log("[previousValues]: ", previousValues);
-    console.log("[values]: ", form.getValues(prefix));
-
     if (!isEqual) {
       setToActiveIndex(activeItemIndex);
       return;
-    }
-
-    if (form.formState.touchedFields?.[prefix]) {
-      const fieldIndex = fields.findIndex(
-        (field) => field.activeIndex === activeIndex,
-      );
-      const fieldOnArray = form.formState.touchedFields?.[prefix][fieldIndex];
-
-      if (Object.values(fieldOnArray).some((value) => !!value)) {
-        return;
-      }
     }
 
     setActiveIndex(activeItemIndex);
@@ -110,17 +98,25 @@ export const Handler = ({
 
   const onAppend = () => {
     const newItem = generateANewItem(fields.length);
-    updatePreviousFields(form.getValues(prefix));
+    updatePreviousFields(form.getValues(name));
     replace([...fields, newItem]);
-
     resetForm();
-
     setActiveIndex(newItem.activeIndex);
   };
 
   const onMove = (actualIndex: number, nextIndex: number, updateItems: any) => {
     move(actualIndex, nextIndex);
     void mutations.mutationChangeOrder.mutateAsync(updateItems);
+  };
+
+  const currentActive = (
+    arrayItems: { activeIndex: string }[],
+    activeIndex: string,
+  ) => {
+    const index = arrayItems.findIndex(
+      (field) => field.activeIndex === activeIndex,
+    );
+    return fields?.[index];
   };
 
   const onRemove = (activeItemIndex: string) => {
@@ -153,8 +149,8 @@ export const Handler = ({
   const handleOnSubmit: SubmitHandler<z.infer<typeof schema>> = async (
     values,
   ) => {
-    let fieldsSubmit = values?.[prefix];
-    const field = values?.[prefix].find(
+    let fieldsSubmit = values?.[name];
+    const field = values?.[name].find(
       (item) => item.activeIndex === activeIndex,
     )!;
 
@@ -178,16 +174,17 @@ export const Handler = ({
   };
 
   const onAppear = (activeIndex: string) => {
-    const fieldIndex = fields.findIndex(
+    const index = fields.findIndex(
       (field) => field.activeIndex === activeIndex,
     );
+
     void mutations.mutationToggle.mutateAsync({
-      id: fields[fieldIndex]._id,
-      appear: !fields[fieldIndex].appear,
+      id: fields[index]._id,
+      appear: !fields[index].appear,
     });
-    update(fieldIndex, {
-      ...fields[fieldIndex],
-      appear: !fields[fieldIndex].appear,
+    update(index, {
+      ...fields[index],
+      appear: !fields[index].appear,
     });
     updatePreviousFields(
       previousValues?.map((field) => {
@@ -210,36 +207,50 @@ export const Handler = ({
 
   return (
     <Form {...form}>
-      <Confirm
-        open={!!toActiveIndex}
-        onOpenChange={() => setToActiveIndex(null)}
-        onClick={() => {
-          if (isSubmitting) replace(fields.filter((field) => !!field._id));
-          resetForm();
-          setActiveIndex(toActiveIndex);
-        }}
-      />
-      <div className="w-full md:max-w-[306px]">
-        {renderList({
-          fields,
-          activeIndex,
-          onAppend,
-          onMove,
-          onClick,
-          onAppear,
-          onRemove,
-        })}
-      </div>
-      <div className="flex-1">
-        {renderForm({
-          activeIndex,
-          onSubmit: handleOnSubmit,
-          fields,
-          isLoading:
-            mutations.mutationCreate.isPending ||
-            mutations.mutationUpdate.isPending,
-        })}
-      </div>
+      <HandlerProvider name={name}>
+        <Confirm
+          open={!!toActiveIndex}
+          onOpenChange={() => setToActiveIndex(null)}
+          onClick={() => {
+            if (isSubmitting) {
+              replace(fields.filter((field) => !!field._id));
+              resetForm();
+            } else {
+              form.reset(
+                { [name]: previousValues },
+                { keepTouched: false, keepDirty: false },
+              );
+            }
+            setActiveIndex(toActiveIndex);
+          }}
+        />
+        <HandlerInnerProvider
+          activeIndex={activeIndex}
+          isSubmitting={isSubmitting}
+        >
+          <div className="w-full md:max-w-[306px]">
+            {renderList({
+              fields,
+              activeIndex,
+              onAppend,
+              onMove,
+              onClick,
+              onAppear,
+              onRemove,
+            })}
+          </div>
+          <div className="flex-1">
+            {renderForm({
+              activeIndex,
+              onSubmit: handleOnSubmit,
+              fields,
+              isLoading:
+                mutations.mutationCreate.isPending ||
+                mutations.mutationUpdate.isPending,
+            })}
+          </div>
+        </HandlerInnerProvider>
+      </HandlerProvider>
     </Form>
   );
 };

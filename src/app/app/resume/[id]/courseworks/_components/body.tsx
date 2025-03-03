@@ -10,7 +10,7 @@ import { PageLoading } from "~/components/page-loading";
 import { Handler } from "~/components/handler";
 import { CardList } from "~/components/handler-list";
 import { CardForm } from "./form";
-import { Item } from "./item";
+import { Item } from "~/components/item";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,7 +29,7 @@ export const Body = () => {
   return (
     <PageContentEditor>
       <Handler
-        prefix="courseworks"
+        name="courseworks"
         schema={courseworksSchema}
         defaultValues={defaultValues}
         generateANewItem={generateANewItem}
@@ -54,14 +54,20 @@ export const Body = () => {
                 return (
                   <Item
                     key={field.activeIndex}
-                    id={field._id}
                     value={field}
                     index={index}
                     activeIndex={activeIndex}
                     onClick={onClick}
                     onAppear={onAppear}
                     onRemove={onRemove}
-                  />
+                  >
+                    {(watch) => (
+                      <div>
+                        <p className="text-sm">{watch.name}</p>
+                        <span className="text-xs">{watch.where}</span>
+                      </div>
+                    )}
+                  </Item>
                 );
               }}
             />

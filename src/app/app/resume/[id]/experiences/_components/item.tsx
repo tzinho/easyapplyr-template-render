@@ -26,9 +26,9 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
-import { type ExperienceSchema } from "~/validators";
 import { Button } from "~/components/ui/button";
 import { Collapsible, CollapsibleContent } from "~/components/ui/collapsible";
+import { useHandlerInner } from "~/providers/handler-provider";
 
 const buzzwords = [
   "inovação",
@@ -218,22 +218,19 @@ const Insights = ({ text }: { text: string }) => {
 };
 
 export const Item = ({
-  id,
   value,
   onClick,
   onRemove,
   index,
-  activeIndex,
   onAppear,
 }: {
-  id: string;
-  value: ExperienceSchema & { activeIndex: string };
+  value: { _id: string; appear: boolean; activeIndex: string };
   onClick: (activeIndex: string) => void;
   onRemove: (activeIndex: string) => void;
   onAppear: (activeIndex: string) => void;
   index: number;
-  activeIndex: string;
 }) => {
+  const { activeIndex } = useHandlerInner();
   const isActive = value.activeIndex === activeIndex;
   const form = useFormContext();
   const disabled = !value._id;
@@ -245,7 +242,7 @@ export const Item = ({
     `Empresa ${index + 1}`;
 
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id, disabled });
+    useSortable({ id: value._id, disabled });
 
   const style = {
     transform: transform

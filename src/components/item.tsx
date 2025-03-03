@@ -24,37 +24,34 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
-import { type ExperienceSchema } from "~/validators";
 import { Button } from "~/components/ui/button";
+import { type ReactNode } from "react";
+import { useHandler, useHandlerInner } from "~/providers/handler-provider";
 
 export const Item = ({
-  id,
   value,
   onClick,
   onRemove,
   index,
-  activeIndex,
   onAppear,
+  children,
 }: {
-  id: string;
-  value: ExperienceSchema & { activeIndex: string };
+  children: (props: any) => ReactNode;
+  value: { activeIndex: string; _id: string; appear: boolean };
   onClick: (activeIndex: string) => void;
   onRemove: (activeIndex: string) => void;
   onAppear: (activeIndex: string) => void;
   index: number;
-  activeIndex: string;
 }) => {
-  const isActive = value.activeIndex === activeIndex;
+  const { name } = useHandler();
+  const { activeIndex } = useHandlerInner();
   const form = useFormContext();
+  const isActive = value.activeIndex === activeIndex;
+
   const disabled = !value._id;
-  const name =
-    (form.watch(`courseworks.${index}.name`) as string) || `Curso ${index + 1}`;
-  const where =
-    (form.watch(`courseworks.${index}.where`) as string) ||
-    `Instituição ${index + 1}`;
 
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id, disabled });
+    useSortable({ id: value._id, disabled });
 
   const style = {
     transform: transform
@@ -63,6 +60,8 @@ export const Item = ({
     transition,
     touchAction: "none",
   };
+
+  const watch = form.watch(`${name}.${index}`);
 
   return (
     <>
@@ -89,10 +88,7 @@ export const Item = ({
                 }}
                 className="flex w-full flex-1 items-center justify-between"
               >
-                <div>
-                  <p className="text-sm">{name}</p>
-                  <span className="text-xs">{where}</span>
-                </div>
+                {children(watch)}
                 <Popover>
                   <PopoverTrigger>
                     <TooltipProvider>

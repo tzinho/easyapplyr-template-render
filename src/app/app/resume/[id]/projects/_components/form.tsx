@@ -13,7 +13,7 @@ import { ButtonLoading } from "~/components/ui/button-loading";
 import { cn } from "~/lib/utils";
 import { DateTimeRangePicker } from "~/components/form/datetime-range-picker";
 import { Badge } from "~/components/ui/badge";
-import { Textarea } from "~/components/form/textarea";
+import { useHandlerInner } from "~/providers/handler-provider";
 
 interface FormGenerics extends FieldValues {
   activeIndex: string;
@@ -23,7 +23,6 @@ interface FormGenerics extends FieldValues {
 interface FormProps<T extends FormGenerics> {
   onSubmit: SubmitHandler<T>;
   fields: T[];
-  activeIndex: string | null;
   isLoading: boolean;
 }
 
@@ -48,10 +47,10 @@ const getStackStyles = (
 
 function Form<T extends FormGenerics>({
   onSubmit,
-  activeIndex,
   isLoading,
   fields,
 }: FormProps<T>) {
+  const { activeIndex } = useHandlerInner();
   const form = useFormContext<T>();
 
   return (

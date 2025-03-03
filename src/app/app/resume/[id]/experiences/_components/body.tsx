@@ -8,9 +8,9 @@ import { api } from "~/trpc/react";
 import { PageLoading } from "~/components/page-loading";
 import { Handler } from "~/components/handler";
 import { experiencesSchema, generateANewItem, useMutations } from "./hooks";
-import { CardList } from "./handle-list";
 import { Item } from "./item";
 import { CardForm } from "./handle-form";
+import { CardList } from "~/components/handler-list";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,7 +29,7 @@ export const Body = () => {
   return (
     <PageContentEditor>
       <Handler
-        prefix="experiences"
+        name="experiences"
         schema={experiencesSchema}
         defaultValues={defaultValues}
         generateANewItem={generateANewItem}
@@ -41,23 +41,20 @@ export const Body = () => {
           onClick,
           onAppear,
           onRemove,
-          activeIndex,
         }) => {
           return (
             <CardList
-              onAppend={onAppend}
-              onMove={onMove}
               title="Suas experiências"
               actionInfoText="Adicionar uma experiência"
+              onAppend={onAppend}
+              onMove={onMove}
               fields={fields}
               renderItem={(field, index) => {
                 return (
                   <Item
                     key={field.activeIndex}
-                    id={field._id}
-                    value={field}
                     index={index}
-                    activeIndex={activeIndex}
+                    value={field}
                     onClick={onClick}
                     onAppear={onAppear}
                     onRemove={onRemove}
@@ -67,12 +64,11 @@ export const Body = () => {
             />
           );
         }}
-        renderForm={({ activeIndex, onSubmit, fields, isLoading }) => {
+        renderForm={({ onSubmit, fields, isLoading }) => {
           return (
             <CardForm
               fields={fields}
               isLoading={isLoading}
-              activeIndex={activeIndex}
               onSubmit={onSubmit}
             />
           );

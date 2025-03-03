@@ -9,7 +9,7 @@ import { generateANewItem, skillsSchema, useMutations } from "./hooks";
 import { PageLoading } from "~/components/page-loading";
 import { CardList } from "~/components/handler-list";
 import { Handler } from "~/components/handler";
-import { Item } from "./item";
+import { Item } from "~/components/item";
 import { CardForm } from "./form";
 
 export const Body = () => {
@@ -29,7 +29,7 @@ export const Body = () => {
   return (
     <PageContentEditor>
       <Handler
-        prefix="skills"
+        name="skills"
         schema={skillsSchema}
         defaultValues={defaultValues}
         generateANewItem={generateANewItem}
@@ -53,15 +53,21 @@ export const Body = () => {
               renderItem={(field, index) => {
                 return (
                   <Item
+                    prefix="skills"
                     key={field.activeIndex}
-                    id={field._id}
                     value={field}
                     index={index}
                     activeIndex={activeIndex}
                     onClick={onClick}
                     onAppear={onAppear}
                     onRemove={onRemove}
-                  />
+                  >
+                    {(watch) => (
+                      <div>
+                        <p className="text-sm">{watch.text}</p>
+                      </div>
+                    )}
+                  </Item>
                 );
               }}
             />

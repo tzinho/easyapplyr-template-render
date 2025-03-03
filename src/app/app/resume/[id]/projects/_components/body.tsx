@@ -10,7 +10,7 @@ import { api } from "~/trpc/react";
 import { PageLoading } from "~/components/page-loading";
 import { CardList } from "~/components/handler-list";
 import { CardForm } from "./form";
-import { Item } from "./item";
+import { Item } from "~/components/item";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,9 +28,8 @@ export const Body = () => {
 
   return (
     <PageContentEditor>
-      {" "}
       <Handler
-        prefix="projects"
+        name="projects"
         schema={projectsSchema}
         defaultValues={defaultValues}
         generateANewItem={generateANewItem}
@@ -42,7 +41,6 @@ export const Body = () => {
           onClick,
           onAppear,
           onRemove,
-          activeIndex,
         }) => {
           return (
             <CardList
@@ -55,14 +53,19 @@ export const Body = () => {
                 return (
                   <Item
                     key={field.activeIndex}
-                    id={field._id}
                     value={field}
                     index={index}
-                    activeIndex={activeIndex}
                     onClick={onClick}
                     onAppear={onAppear}
                     onRemove={onRemove}
-                  />
+                  >
+                    {(watch) => (
+                      <div>
+                        <p className="text-sm">{watch.title}</p>
+                        <span className="text-xs">{watch.organization}</span>
+                      </div>
+                    )}
+                  </Item>
                 );
               }}
             />
