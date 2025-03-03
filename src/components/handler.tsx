@@ -85,6 +85,10 @@ export const Handler = ({
       previousValues,
     );
 
+    console.log("[isEqual]: ", isEqual);
+    console.log("[previousValues]: ", previousValues);
+    console.log("[values]: ", form.getValues(prefix));
+
     if (!isEqual) {
       setToActiveIndex(activeItemIndex);
       return;
@@ -185,6 +189,15 @@ export const Handler = ({
       ...fields[fieldIndex],
       appear: !fields[fieldIndex].appear,
     });
+    updatePreviousFields(
+      previousValues?.map((field) => {
+        if (field.activeIndex === activeIndex)
+          return { ...field, appear: !field.appear };
+
+        return field;
+      }),
+    );
+    resetForm();
   };
 
   const resetForm = () => {
