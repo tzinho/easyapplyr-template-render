@@ -62,7 +62,12 @@ export interface Settings {
 export interface Template {
   id: string;
   title: string;
-  component: ({ resumeTemplate }: { resumeTemplate: Resume }) => JSX.Element;
+  component: ({
+    resumeTemplate,
+  }: {
+    resumeTemplate: Resume;
+    isPreview?: boolean;
+  }) => JSX.Element;
   defaultSections: Section[];
   categories: string[];
   isPro: boolean;

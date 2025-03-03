@@ -114,7 +114,13 @@ const Contact: React.FC<SectionProps> = ({ section, resumeTemplate }) => {
   );
 };
 
-export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
+export const Template = ({
+  resumeTemplate,
+  isPreview,
+}: {
+  resumeTemplate: Resume;
+  isPreview: boolean;
+}) => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "contact": {
@@ -173,6 +179,10 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
   };
 
   return (
-    <OneColumn renderSection={renderSection} resumeTemplate={resumeTemplate} />
+    <OneColumn
+      renderSection={renderSection}
+      resumeTemplate={resumeTemplate}
+      isPreview={isPreview}
+    />
   );
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import { ListOfResumeTemplates } from "~/app/_components/list-of-resume-templates";
 import { PageContent } from "~/components/page";
 

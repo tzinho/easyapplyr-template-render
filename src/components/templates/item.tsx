@@ -12,14 +12,8 @@ interface ItemProps extends PropsWithChildren {
 }
 
 export const Item = ({ id, children, disabled }: ItemProps) => {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    // isDragging,
-    transition,
-  } = useSortable({ id, disabled });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id, disabled });
 
   const style = {
     transform: transform
@@ -27,7 +21,6 @@ export const Item = ({ id, children, disabled }: ItemProps) => {
       : undefined,
     transition,
     cursor: disabled ? "not-allowed" : "grab",
-    // opacity: isDragging ? 0.5 : 1,
   };
 
   return (

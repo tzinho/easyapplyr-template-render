@@ -87,3 +87,7 @@ const dateStringSchema = z.date().transform((date) => {
 ```bash
 ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}'
 ```
+
+// A4 aspect ratio is 1:1.4142 (width:height)
+// const paperWidth = 215.16; // px
+// const paperHeight = Math.min(290, paperWidth \* 1.4142); // Maintain A4 ratio but cap at container height

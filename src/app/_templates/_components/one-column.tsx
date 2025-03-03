@@ -14,11 +14,13 @@ import { type Resume } from "~/stores/resume-store";
 interface OneColumnProps {
   resumeTemplate: Resume;
   renderSection: (section: SectionType) => ReactNode;
+  isPreview: boolean;
 }
 
 export const OneColumn = ({
   resumeTemplate,
   renderSection,
+  isPreview,
 }: OneColumnProps) => {
   const { sensors, handleDragStart, handleDragEnd, items, activeId } =
     useDragEndOneColumn<SectionType>({
@@ -32,7 +34,11 @@ export const OneColumn = ({
       onDragEnd={handleDragEnd}
       sensors={sensors}
     >
-      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+      <SortableContext
+        items={items}
+        strategy={verticalListSortingStrategy}
+        disabled={isPreview}
+      >
         <div
           id="resume"
           className="h-full w-full rounded-md bg-white p-4"

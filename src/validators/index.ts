@@ -66,8 +66,8 @@ export const projectSchema = z.object({
   title: z.string({ message: "O nome do projeto é obrigatório" }),
   organization: z.string(),
   url: z.string().optional(),
-  startAt: z.date().optional(),
-  endAt: z.date().optional(),
+  startAt: dateSchema.nullish(),
+  endAt: dateSchema.nullish(),
   description: z.string().optional(),
 });
 

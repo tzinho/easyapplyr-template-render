@@ -45,10 +45,6 @@ export const ResumePreview = ({
   const handleOnClick = () =>
     router.push(`/app/resume/${resumeTemplate.id}/contact`);
 
-  // A4 aspect ratio is 1:1.4142 (width:height)
-  // const paperWidth = 215.16; // px
-  // const paperHeight = Math.min(290, paperWidth * 1.4142); // Maintain A4 ratio but cap at container height
-
   return (
     <Card
       className="group relative h-[290px] w-[215.16px] cursor-pointer transition-all duration-300 hover:shadow-lg"
@@ -63,12 +59,6 @@ export const ResumePreview = ({
               </div>
             </div>
           </div>
-
-          {/* {resumeTemplate.isLocked && (
-            <div className="absolute inset-0 flex items-center justify-center bg-gray-900/10">
-              <Lock className="h-6 w-6 text-gray-500" />
-            </div>
-          )} */}
         </div>
 
         <div className="invisible absolute inset-0 flex items-center justify-center gap-4 bg-gray-900/70 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
