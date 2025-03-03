@@ -1,0 +1,27 @@
+{
+  "name": "Easyapplyr",
+  "short_name": "Easyapplyr",
+  "icons": [
+    {
+      "src": "/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-launchericon-96-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-launchericon-512-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#603813",
+  "background_color": "#603813",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
+}
