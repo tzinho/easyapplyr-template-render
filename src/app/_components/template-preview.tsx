@@ -15,7 +15,7 @@ export const TemplatePreview = ({
   const Template = getTemplate(resumeTemplate.templateId).component;
   //<div className="h-[600px] w-full flex justify-center overflow-auto bg-gray-100 p-4">
   return (
-    <div className="flex-1">
+    <div className="h-full w-full">
       <Template resumeTemplate={resumeTemplate} isPreview={isPreview} />
     </div>
   );

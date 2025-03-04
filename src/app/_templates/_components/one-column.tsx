@@ -41,7 +41,7 @@ export const OneColumn = ({
       >
         <div
           id="resume"
-          className="h-full w-full bg-red-100 p-4"
+          className="h-full w-full p-4"
           style={{ fontSize: resumeTemplate?.settings?.fontSize }}
         >
           {items.filter((item) => item.appear).map(renderSection)}
@@ -51,7 +51,6 @@ export const OneColumn = ({
       <DragOverlay>
         {activeId ? (
           <div className="rounded border-2 border-primary bg-white shadow-lg">
-            {/* {renderSection(items.find((item) => item.id === activeId)!)} */}
             {items.find((item) => item.id === activeId)!.title}
           </div>
         ) : null}

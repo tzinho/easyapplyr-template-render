@@ -14,9 +14,11 @@ export const Body = () => {
   if (resume.isLoading) return <PageLoading />;
 
   return (
-    <PageContent>
+    <PageContent className="flex h-full flex-col items-center justify-center">
       <Toolbar />
-      <TemplatePreview resumeTemplate={resume.data!} />
+      <div className="mx-auto min-h-[1122.519685px] w-[793.7px] bg-red-100">
+        <TemplatePreview resumeTemplate={resume.data!} />
+      </div>
     </PageContent>
   );
 };

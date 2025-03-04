@@ -37,10 +37,7 @@ export const TwoColumn = ({
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
     >
-      <div
-        className="grid h-full w-full grid-cols-2 gap-4 rounded-md bg-white p-4"
-        id="resume"
-      >
+      <div className="grid h-full w-full grid-cols-2 gap-4 p-4" id="resume">
         <div>
           <SortableContext
             items={column1Items}
