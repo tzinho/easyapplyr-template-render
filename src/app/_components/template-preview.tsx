@@ -1,7 +1,6 @@
 "use client";
 
 import { getTemplate } from "~/lib/templates";
-import { cn } from "~/lib/utils";
 import { type Resume } from "~/stores/resume-store";
 
 interface TemplatePreviewProps {

@@ -24,7 +24,15 @@ interface HandlerProps {
   name: string;
   schema: any;
   renderList: (props: any) => React.ReactNode;
-  renderForm: (props: any) => React.ReactNode;
+  renderForm: ({
+    isLoading,
+    onSubmit,
+    fields,
+  }: {
+    isLoading: boolean;
+    onSubmit: any;
+    fields: any[];
+  }) => React.ReactNode;
   generateANewItem: any;
   mutations: any;
 }
@@ -107,16 +115,6 @@ export const Handler = ({
   const onMove = (actualIndex: number, nextIndex: number, updateItems: any) => {
     move(actualIndex, nextIndex);
     void mutations.mutationChangeOrder.mutateAsync(updateItems);
-  };
-
-  const currentActive = (
-    arrayItems: { activeIndex: string }[],
-    activeIndex: string,
-  ) => {
-    const index = arrayItems.findIndex(
-      (field) => field.activeIndex === activeIndex,
-    );
-    return fields?.[index];
   };
 
   const onRemove = (activeItemIndex: string) => {

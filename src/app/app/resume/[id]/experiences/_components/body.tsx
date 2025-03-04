@@ -9,8 +9,9 @@ import { PageLoading } from "~/components/page-loading";
 import { Handler } from "~/components/handler";
 import { experiencesSchema, generateANewItem, useMutations } from "./hooks";
 import { Item } from "./item";
-import { CardForm } from "./handle-form";
 import { CardList } from "~/components/handler-list";
+import { FormList } from "~/components/form";
+import { FormFields } from "./fields";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
@@ -66,10 +67,12 @@ export const Body = () => {
         }}
         renderForm={({ onSubmit, fields, isLoading }) => {
           return (
-            <CardForm
+            <FormList
               fields={fields}
               isLoading={isLoading}
               onSubmit={onSubmit}
+              submitText="Salvar na lista de experiências"
+              render={({ index }) => <FormFields index={index} />}
             />
           );
         }}

@@ -34,6 +34,7 @@ interface DateTimeRangePickerProps {
   prefix: string;
   index: number;
   label: string;
+  className?: string;
 }
 
 interface MonthPickerProps {
@@ -124,6 +125,7 @@ export const DateTimeRangePicker = ({
   prefix,
   index,
   label,
+  className,
 }: DateTimeRangePickerProps) => {
   const form = useFormContext();
 
@@ -145,8 +147,8 @@ export const DateTimeRangePicker = ({
   };
 
   return (
-    <div className="w-full space-y-2 py-1">
-      <h3 className="text-sm font-medium">{label}</h3>
+    <div className={cn("w-full space-y-2 py-1", className)}>
+      <h3 className="truncate text-sm font-medium">{label}</h3>
       <div className="flex items-center space-x-2">
         <Popover>
           <PopoverTrigger asChild>

@@ -11,6 +11,8 @@ import { Handler } from "~/components/handler";
 import { CardList } from "~/components/handler-list";
 import { CardForm } from "./form";
 import { Item } from "~/components/item";
+import { FormList } from "~/components/form";
+import { FormFields } from "./fields";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
@@ -73,13 +75,14 @@ export const Body = () => {
             />
           );
         }}
-        renderForm={({ activeIndex, onSubmit, fields, isLoading }) => {
+        renderForm={({ onSubmit, fields, isLoading }) => {
           return (
-            <CardForm
+            <FormList
               fields={fields}
               isLoading={isLoading}
-              activeIndex={activeIndex}
               onSubmit={onSubmit}
+              submitText="Salvar na lista de cursos"
+              render={({ index }) => <FormFields index={index} />}
             />
           );
         }}

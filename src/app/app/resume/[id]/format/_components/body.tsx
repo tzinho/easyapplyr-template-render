@@ -2,18 +2,21 @@
 
 import { PageContent } from "~/components/page";
 import { TemplatePreview } from "~/app/_components/template-preview";
-import { useResumeStore } from "~/providers/resume-store-provider";
 import { Toolbar } from "../../../_components/toolbar";
+import { api } from "~/trpc/react";
+import { useParams } from "next/navigation";
+import { PageLoading } from "~/components/page-loading";
 
 export const Body = () => {
-  const { resumeTemplate } = useResumeStore((state) => state);
+  const { id } = useParams<{ id: string }>();
+  const resume = api.resumes.get.useQuery(id);
 
-  if (!resumeTemplate) return null;
+  if (resume.isLoading) return <PageLoading />;
 
   return (
     <PageContent>
       <Toolbar />
-      <TemplatePreview resumeTemplate={resumeTemplate} />
+      <TemplatePreview resumeTemplate={resume.data!} />
     </PageContent>
   );
 };

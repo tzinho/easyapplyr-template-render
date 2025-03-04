@@ -95,7 +95,7 @@ export const courseworksRouter = createTRPCRouter({
   }),
 
   update: publicProcedure
-    .input(courseworkSchema)
+    .input(courseworkSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
       const coursework = await ctx.db

@@ -9,8 +9,9 @@ import { PageContentEditor } from "~/components/page";
 import { certificationsSchema, generateANewItem, useMutations } from "./hooks";
 import { PageLoading } from "~/components/page-loading";
 import { CardList } from "~/components/handler-list";
-import { CardForm } from "./form";
 import { Item } from "~/components/item";
+import { FormList } from "~/components/form";
+import { FormFields } from "./fields";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
@@ -56,7 +57,6 @@ export const Body = () => {
                     key={field.activeIndex}
                     value={field}
                     index={index}
-                    activeIndex={activeIndex}
                     onClick={onClick}
                     onAppear={onAppear}
                     onRemove={onRemove}
@@ -73,13 +73,14 @@ export const Body = () => {
             />
           );
         }}
-        renderForm={({ activeIndex, onSubmit, fields, isLoading }) => {
+        renderForm={({ onSubmit, fields, isLoading }) => {
           return (
-            <CardForm
+            <FormList
               fields={fields}
               isLoading={isLoading}
-              activeIndex={activeIndex}
               onSubmit={onSubmit}
+              submitText="Salvar na lista de certificações"
+              render={({ index }) => <FormFields index={index} />}
             />
           );
         }}
