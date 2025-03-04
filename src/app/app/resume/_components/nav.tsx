@@ -167,7 +167,7 @@ export const LinkPage = ({ required, notRequired }: NavProps) => {
           <Button className="h-6 text-xs">{link.label}</Button>
         </Link>
       ))}
-      <div className="flex items-center gap-2">
+      {/* <div className="flex items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -200,7 +200,7 @@ export const LinkPage = ({ required, notRequired }: NavProps) => {
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div> */}
     </div>
   );
 };

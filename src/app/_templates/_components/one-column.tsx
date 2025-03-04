@@ -41,7 +41,7 @@ export const OneColumn = ({
       >
         <div
           id="resume"
-          className="h-full w-full rounded-md bg-white p-4"
+          className="h-full w-full bg-red-100 p-4"
           style={{ fontSize: resumeTemplate?.settings?.fontSize }}
         >
           {items.filter((item) => item.appear).map(renderSection)}

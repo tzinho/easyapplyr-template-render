@@ -27,6 +27,14 @@ const PaperSelectAdjust = () => {
   );
 };
 
+const LineHeightAdjust = () => {
+  return <div>LineHeightAdjust</div>;
+};
+
+const SectionSpacing = () => {
+  return <div>SectionSpacing</div>;
+};
+
 const FontSelectAdjust = () => {
   return (
     <Select>
@@ -84,7 +92,10 @@ export const Toolbar = () => {
     <div className="mb-3 flex gap-3">
       <FontSizeAdjust />
       <FontSelectAdjust />
+      <SectionSpacing />
+      <LineHeightAdjust />
       <PaperSelectAdjust />
+      <Button>Download PDF</Button>
     </div>
   );
 };

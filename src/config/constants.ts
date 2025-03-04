@@ -1,5 +1,4 @@
 export const CATEGORIES = [
-  { id: "pro", label: "Pro" },
   { id: "business", label: "Negócios" },
   { id: "programming", label: "Programação" },
   { id: "engineering", label: "Engenheiros" },

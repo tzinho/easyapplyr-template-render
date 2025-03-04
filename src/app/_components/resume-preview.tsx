@@ -54,7 +54,7 @@ export const ResumePreview = ({
         <div className="relative h-full w-full bg-gray-50">
           <div className="absolute inset-0 bg-white shadow-lg">
             <div className="absolute inset-0 h-full w-full origin-top-left scale-[0.3] transform">
-              <div className="flex min-h-full w-[333%] flex-col p-12">
+              <div className="flex min-h-full w-[333%] flex-col p-6">
                 <TemplatePreview resumeTemplate={resumeTemplate} isPreview />
               </div>
             </div>

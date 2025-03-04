@@ -13,7 +13,7 @@ import { fakeData } from "~/data";
 import { type Template } from "~/types/template";
 
 export const Body = () => {
-  const [selectedCategory, setSelectedCategory] = useState("pro");
+  const [selectedCategory, setSelectedCategory] = useState("business");
   const [zoom, setZoom] = useState(0.5);
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     null,

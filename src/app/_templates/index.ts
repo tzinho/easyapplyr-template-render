@@ -10,7 +10,7 @@ export const templates = [
     component: SaoPaulo.Template,
     defaultSections: SaoPaulo.defaultSections,
     isPro: false,
-    categories: ["pro"],
+    categories: ["business"],
     settings: {
       fontSize: 13,
       primaryColor: "purple",
@@ -29,7 +29,7 @@ export const templates = [
     component: Guarulhos.Template,
     defaultSections: Guarulhos.defaultSections,
     isPro: true,
-    categories: ["pro", "marketing"],
+    categories: ["programming", "marketing"],
     settings: {
       fontSize: 13,
       primaryColor: "black",
@@ -48,7 +48,7 @@ export const templates = [
     component: PracaOito.Template,
     defaultSections: PracaOito.defaultSections,
     isPro: false,
-    categories: ["pro"],
+    categories: ["marketing"],
     settings: {
       fontSize: 13,
       primaryColor: "purple",
