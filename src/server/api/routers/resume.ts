@@ -14,7 +14,7 @@ import {
   settings,
   skills,
 } from "~/server/db/schema";
-import { resumeSchema } from "~/validators";
+import { resumeSchema } from "~/validators/resume";
 
 const itemsTypes = {
   educations,

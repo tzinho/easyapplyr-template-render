@@ -1,10 +1,7 @@
 "use client";
 
-import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-
-import { api } from "~/trpc/react";
 
 export const experienceSchema = z.object({
   _id: z.string(),
@@ -39,38 +36,4 @@ export const generateANewItem = (order: number) => {
     startAt: null,
     endAt: null,
   } as z.infer<typeof experienceSchema>;
-};
-
-export const useMutations = () => {
-  const mutationToggle = api.experiences.toogleAppear.useMutation({
-    onSuccess: (data, variables) =>
-      toast.success(
-        `A experiência será ${variables.appear ? "mostrada" : "escondida"} no curriculo`,
-      ),
-  });
-
-  const mutationCreate = api.experiences.create.useMutation({
-    onSuccess: () => toast.success("A experiência foi adicionada com sucesso!"),
-  });
-
-  const mutationUpdate = api.experiences.update.useMutation({
-    onSuccess: () => toast.success("A experiência foi atualizada com sucesso!"),
-  });
-
-  const mutationDelete = api.experiences.delete.useMutation({
-    onSuccess: () => toast.success("A experiência foi deletada com sucesso!"),
-  });
-
-  const mutationChangeOrder = api.experiences.changeOrder.useMutation({
-    onSuccess: () =>
-      toast.success("A ordem das experiências alterada com sucesso!"),
-  });
-
-  return {
-    mutationToggle,
-    mutationCreate,
-    mutationUpdate,
-    mutationDelete,
-    mutationChangeOrder,
-  };
 };

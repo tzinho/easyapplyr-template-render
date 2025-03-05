@@ -10,7 +10,7 @@ import { Form } from "~/components/ui/form";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Summary } from "~/stores/resume-store";
 import { api } from "~/trpc/react";
-import { type SummarySchema } from "~/validators";
+import { type SummarySchema } from "~/validators/summary";
 import { Textarea } from "~/components/form/textarea";
 
 export const SummaryForm = ({ defaultValues }: { defaultValues: Summary }) => {

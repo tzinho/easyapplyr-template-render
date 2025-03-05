@@ -1,38 +1,35 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 
 import { Handler } from "~/components/handler";
 import { PageContentEditor } from "~/components/page";
-import { generateANewItem, projectsSchema, useMutations } from "./hooks";
+import { generateANewItem, projectsSchema } from "./hooks";
 import { api } from "~/trpc/react";
 import { PageLoading } from "~/components/page-loading";
 import { CardList } from "~/components/handler-list";
 import { Item } from "~/components/item";
 import { FormList } from "~/components/form";
 import { FormFields } from "./fields";
+import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
+  const name = "projects";
   const projects = api.projects.list.useQuery({ resumeId: id });
-  const mutations = useMutations();
+  const mutations = useMutations({
+    name,
+    modelName: "projeto",
+  });
 
   if (projects.isLoading) return <PageLoading />;
-
-  const defaultValues = projects.data!.length
-    ? projects.data!.map((project) => {
-        const { id, ...rest } = project;
-        return { ...rest, _id: project.id, activeIndex: uuidv4() };
-      })
-    : null;
 
   return (
     <PageContentEditor>
       <Handler
-        name="projects"
+        name={name}
         schema={projectsSchema}
-        defaultValues={defaultValues}
+        defaultValues={projects.data}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({

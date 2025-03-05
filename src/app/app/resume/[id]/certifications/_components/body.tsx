@@ -1,38 +1,35 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 
 import { api } from "~/trpc/react";
 import { Handler } from "~/components/handler";
 import { PageContentEditor } from "~/components/page";
-import { certificationsSchema, generateANewItem, useMutations } from "./hooks";
+import { certificationsSchema, generateANewItem } from "./hooks";
 import { PageLoading } from "~/components/page-loading";
 import { CardList } from "~/components/handler-list";
 import { Item } from "~/components/item";
 import { FormList } from "~/components/form";
 import { FormFields } from "./fields";
+import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
   const certifications = api.certifications.list.useQuery({ resumeId: id });
-  const mutations = useMutations();
+  const name = "certifications";
+  const mutations = useMutations({
+    name,
+    modelName: "certificado",
+  });
 
   if (certifications.isLoading) return <PageLoading />;
-
-  const defaultValues = certifications.data!.length
-    ? certifications.data!.map((certification) => {
-        const { id, ...rest } = certification;
-        return { ...rest, _id: certification.id, activeIndex: uuidv4() };
-      })
-    : null;
 
   return (
     <PageContentEditor>
       <Handler
-        name="certifications"
+        name={name}
         schema={certificationsSchema}
-        defaultValues={defaultValues}
+        defaultValues={certifications.data}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({

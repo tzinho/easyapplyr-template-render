@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { projects } from "~/server/db/schema";
-import { projectSchema } from "~/validators";
+import { projectSchema } from "~/validators/projects";
 
 export const projectsRouter = createTRPCRouter({
   toogleAppear: publicProcedure

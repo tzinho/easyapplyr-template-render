@@ -10,6 +10,7 @@ import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import lodash from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 import { Form } from "~/components/ui/form";
 import { Confirm } from "./confirm";
@@ -20,7 +21,7 @@ import {
 } from "~/providers/handler-provider";
 
 interface HandlerProps {
-  defaultValues: { activeIndex: string }[] | null;
+  defaultValues: { id: string; activeIndex: string }[] | null;
   name: string;
   schema: any;
   renderList: (props: any) => React.ReactNode;
@@ -55,7 +56,12 @@ export const Handler = ({
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
-      [name]: defaultValues ?? [generateANewItem(0)],
+      [name]: !!defaultValues?.length
+        ? defaultValues?.map((item) => {
+            const { id, ...rest } = item;
+            return { ...rest, _id: item.id, activeIndex: uuidv4() };
+          })
+        : [generateANewItem(0)],
     },
   });
 
@@ -65,6 +71,8 @@ export const Handler = ({
   });
 
   const isSubmitting = !fields.every((field) => !!field._id);
+  const isTouching = form.formState.touchedFields?.[name]?.length;
+  const isDirtying = form.formState.touchedFields?.[name]?.length;
 
   useEffect(() => {
     updatePreviousFields(form.getValues(name));
@@ -104,12 +112,23 @@ export const Handler = ({
     setActiveIndex(activeItemIndex);
   };
 
-  const onAppend = () => {
+  const addItem = () => {
     const newItem = generateANewItem(fields.length);
     updatePreviousFields(form.getValues(name));
     replace([...fields, newItem]);
     resetForm();
-    setActiveIndex(newItem.activeIndex);
+    return newItem;
+  };
+
+  const onAppend = () => {
+    if (!!isTouching && !!isDirtying) {
+      setToActiveIndex("new");
+      return;
+    }
+
+    const item = addItem();
+    resetForm();
+    setActiveIndex(item.activeIndex);
   };
 
   const onMove = (actualIndex: number, nextIndex: number, updateItems: any) => {
@@ -214,10 +233,17 @@ export const Handler = ({
               replace(fields.filter((field) => !!field._id));
               resetForm();
             } else {
-              form.reset(
-                { [name]: previousValues },
-                { keepTouched: false, keepDirty: false },
-              );
+              if (toActiveIndex === "new") {
+                const item = addItem();
+                resetForm();
+                setActiveIndex(item.activeIndex);
+                return;
+              } else {
+                form.reset(
+                  { [name]: previousValues },
+                  { keepTouched: false, keepDirty: false },
+                );
+              }
             }
             setActiveIndex(toActiveIndex);
           }}
@@ -239,7 +265,6 @@ export const Handler = ({
           </div>
           <div className="flex-1">
             {renderForm({
-              activeIndex,
               onSubmit: handleOnSubmit,
               fields,
               isLoading:

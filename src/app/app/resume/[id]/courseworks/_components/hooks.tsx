@@ -1,10 +1,7 @@
 "use client";
 
-import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-
-import { api } from "~/trpc/react";
 
 export const courseworkSchema = z.object({
   _id: z.string(),
@@ -35,38 +32,4 @@ export const generateANewItem = (order: number) => {
     activeIndex,
     order,
   } as z.infer<typeof courseworkSchema>;
-};
-
-export const useMutations = () => {
-  const mutationToggle = api.courseworks.toogleAppear.useMutation({
-    onSuccess: (data, variables) =>
-      toast.success(
-        `O curso será ${variables.appear ? "mostrado" : "escondido"} no curriculo`,
-      ),
-  });
-
-  const mutationCreate = api.courseworks.create.useMutation({
-    onSuccess: () => toast.success("O curso foi adicionado com sucesso!"),
-  });
-
-  const mutationUpdate = api.courseworks.update.useMutation({
-    onSuccess: () => toast.success("O curso foi atualizado com sucesso!"),
-  });
-
-  const mutationDelete = api.courseworks.delete.useMutation({
-    onSuccess: () => toast.success("O curso foi deletado com sucesso!"),
-  });
-
-  const mutationChangeOrder = api.courseworks.changeOrder.useMutation({
-    onSuccess: () =>
-      toast.success("A ordem dos cursos foi alterada com sucesso!"),
-  });
-
-  return {
-    mutationToggle,
-    mutationCreate,
-    mutationUpdate,
-    mutationDelete,
-    mutationChangeOrder,
-  };
 };

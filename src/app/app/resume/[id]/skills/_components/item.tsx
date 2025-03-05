@@ -24,7 +24,7 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
-import { type ExperienceSchema } from "~/validators";
+import { type ExperienceSchema } from "~/validators/experiences";
 import { Button } from "~/components/ui/button";
 
 export const Item = ({

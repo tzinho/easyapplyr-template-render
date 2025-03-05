@@ -1,10 +1,11 @@
 "use client";
 
+import { useParams } from "next/navigation";
+
 import { PageContent } from "~/components/page";
 import { TemplatePreview } from "~/app/_components/template-preview";
 import { Toolbar } from "../../../_components/toolbar";
 import { api } from "~/trpc/react";
-import { useParams } from "next/navigation";
 import { PageLoading } from "~/components/page-loading";
 
 export const Body = () => {

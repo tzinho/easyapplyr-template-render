@@ -1,39 +1,35 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 
 import { PageContentEditor } from "~/components/page";
-import { courseworksSchema, generateANewItem, useMutations } from "./hooks";
+import { courseworksSchema, generateANewItem } from "./hooks";
 import { api } from "~/trpc/react";
 import { PageLoading } from "~/components/page-loading";
 import { Handler } from "~/components/handler";
 import { CardList } from "~/components/handler-list";
-import { CardForm } from "./form";
 import { Item } from "~/components/item";
 import { FormList } from "~/components/form";
 import { FormFields } from "./fields";
+import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
   const courseworks = api.courseworks.list.useQuery({ resumeId: id });
-  const mutations = useMutations();
+  const name = "courseworks";
+  const mutations = useMutations({
+    name,
+    modelName: "curso",
+  });
 
   if (courseworks.isLoading) return <PageLoading />;
-
-  const defaultValues = courseworks.data!.length
-    ? courseworks.data!.map((coursework) => {
-        const { id, ...rest } = coursework;
-        return { ...rest, _id: coursework.id, activeIndex: uuidv4() };
-      })
-    : null;
 
   return (
     <PageContentEditor>
       <Handler
-        name="courseworks"
+        name={name}
         schema={courseworksSchema}
-        defaultValues={defaultValues}
+        defaultValues={courseworks.data}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({

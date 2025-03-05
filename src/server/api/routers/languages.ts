@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { languages } from "~/server/db/schema";
-import { languageSchema } from "~/validators";
+import { languageSchema } from "~/validators/languages";
 
 export const languagesRouter = createTRPCRouter({
   changeOrder: publicProcedure

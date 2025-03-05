@@ -1,11 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-
-import { api } from "~/trpc/react";
 
 export const educationSchema = z.object({
   _id: z.string(),
@@ -26,7 +22,6 @@ export const educationsSchema = z.object({
 });
 
 export const generateANewItem = (order: number) => {
-  const activeIndex = uuidv4();
   return {
     _id: "",
     degree: "",
@@ -37,41 +32,7 @@ export const generateANewItem = (order: number) => {
     appear: true,
     startAt: null,
     endAt: null,
-    activeIndex,
+    activeIndex: uuidv4(),
     order,
   } as z.infer<typeof educationSchema>;
-};
-
-export const useMutations = () => {
-  const mutationToggle = api.educations.toogleAppear.useMutation({
-    onSuccess: (data, variables) =>
-      toast.success(
-        `A educação será ${variables.appear ? "mostrada" : "escondida"} no curriculo`,
-      ),
-  });
-
-  const mutationCreate = api.educations.create.useMutation({
-    onSuccess: () => toast.success("A educação foi adicionada com sucesso!"),
-  });
-
-  const mutationUpdate = api.educations.update.useMutation({
-    onSuccess: () => toast.success("A educação foi atualizada com sucesso!"),
-  });
-
-  const mutationDelete = api.educations.delete.useMutation({
-    onSuccess: () => toast.success("A educação foi deletada com sucesso!"),
-  });
-
-  const mutationChangeOrder = api.educations.changeOrder.useMutation({
-    onSuccess: () =>
-      toast.success("A ordem das educações alterada com sucesso!"),
-  });
-
-  return {
-    mutationToggle,
-    mutationCreate,
-    mutationUpdate,
-    mutationDelete,
-    mutationChangeOrder,
-  };
 };

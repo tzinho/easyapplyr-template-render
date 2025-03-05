@@ -3,11 +3,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { contacts } from "~/server/db/schema";
-import { contactSchema } from "~/validators";
-
-const contactSchemaInput = contactSchema.extend({
-  resumeId: z.string(),
-});
+import { contactSchemaInput } from "~/validators/contact";
 
 export const contactRouter = createTRPCRouter({
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {

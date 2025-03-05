@@ -14,8 +14,7 @@ export const FormFields = ({ index }: FormFieldsProps) => {
   const { name } = useHandler();
   const form = useFormContext();
 
-  const language =
-    form.watch(`${name}.${index}.name`) || `Língua ${fields.length}`;
+  const language = form.watch(`${name}.${index}.name`) || `Língua ${index + 1}`;
   const appear = form.watch(`${name}.${index}.appear`);
 
   return (

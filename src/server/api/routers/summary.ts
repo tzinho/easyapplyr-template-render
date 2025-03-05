@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { summaries } from "~/server/db/schema";
-import { summarySchema } from "~/validators";
+import { summarySchema } from "~/validators/summary";
 
 const summarySchemaInput = summarySchema.extend({
   resumeId: z.string(),

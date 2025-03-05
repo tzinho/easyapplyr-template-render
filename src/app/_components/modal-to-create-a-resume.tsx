@@ -22,8 +22,8 @@ import { Input } from "~/components/form/input";
 import { api } from "~/trpc/react";
 import { useToast } from "~/hooks/use-toast";
 import { ButtonLoading } from "~/components/ui/button-loading";
-import { type ResumeSchema, resumeSchema } from "~/validators";
 import { templates } from "../_templates";
+import { resumeSchema, type ResumeSchema } from "~/validators/resume";
 
 const FormToCreateResume = () => {
   const utils = api.useUtils();

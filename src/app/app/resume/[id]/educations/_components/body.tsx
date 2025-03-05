@@ -1,38 +1,32 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 
 import { PageContentEditor } from "~/components/page";
 import { api } from "~/trpc/react";
 import { PageLoading } from "~/components/page-loading";
 import { Handler } from "~/components/handler";
 import { CardList } from "~/components/handler-list";
-import { educationsSchema, generateANewItem, useMutations } from "./hooks";
+import { educationsSchema, generateANewItem } from "./hooks";
 import { Item } from "~/components/item";
 import { FormList } from "~/components/form";
 import { FormFields } from "./fields";
+import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
   const { id } = useParams<{ id: string }>();
+  const name = "educations";
   const educations = api.educations.list.useQuery({ resumeId: id });
-  const mutations = useMutations();
+  const mutations = useMutations({ name, modelName: "educação" });
 
   if (educations.isLoading) return <PageLoading />;
-
-  const defaultValues = educations.data!.length
-    ? educations.data!.map((education) => {
-        const { id, ...rest } = education;
-        return { ...rest, _id: education.id, activeIndex: uuidv4() };
-      })
-    : null;
 
   return (
     <PageContentEditor>
       <Handler
-        name="educations"
+        name={name}
         schema={educationsSchema}
-        defaultValues={defaultValues}
+        defaultValues={educations.data}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({

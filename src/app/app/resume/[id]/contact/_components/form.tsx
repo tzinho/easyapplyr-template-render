@@ -9,13 +9,13 @@ import { City, Country, State } from "country-state-city";
 
 import { Form } from "~/components/ui/form";
 import { Input } from "~/components/form/input";
-import { type ContactSchema, contactSchema } from "~/validators";
 import { api } from "~/trpc/react";
 import { ButtonLoading } from "~/components/ui/button-loading";
 import { useResumeStore } from "~/providers/resume-store-provider";
 import { type Resume, type Contact } from "~/stores/resume-store";
 import { SelectItem } from "~/components/ui/select";
 import { Select } from "~/components/form/select";
+import { contactSchema, type ContactSchema } from "~/validators/contact";
 
 interface SelectCountryProps {
   name: string;
