@@ -96,6 +96,20 @@ Font.register({
   ],
 });
 
+Font.register({
+  family: "Helvetica",
+  fonts: [
+    {
+      src: "https://db.onlinewebfonts.com/t/05acfdb568c445f0708b99ebfd07c7c4.ttf",
+      fontWeight: "normal",
+    },
+    {
+      src: "https://db.onlinewebfonts.com/t/f881fc6b1d0b4e784c5c42f616290dc9.ttf",
+      fontWeight: "bold",
+    },
+  ],
+});
+
 interface ResumeTemplateProps {
   settings: ResumeSettings;
 }
