@@ -2,12 +2,15 @@
 
 import { Header } from "./_components/header";
 import { Body } from "./_components/body";
+import { ResumeProvider } from "~/providers/resume-provider";
 
 const Format = () => {
   return (
     <>
       <Header />
-      <Body />
+      <ResumeProvider>
+        <Body />
+      </ResumeProvider>
     </>
   );
 };
