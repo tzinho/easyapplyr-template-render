@@ -8,7 +8,6 @@ export const useMutations = ({
   name: string;
   modelName: string;
 }) => {
-  console.log("{ name, modelName }", { name, modelName });
   const mutationToggle = api[name].toogleAppear.useMutation({
     onSuccess: (data, variables) =>
       toast.success(
