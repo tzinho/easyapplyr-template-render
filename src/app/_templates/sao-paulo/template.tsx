@@ -9,14 +9,15 @@ import {
   type SectionProps,
   type Section as SectionType,
 } from "~/types/template";
-import { OneColumn } from "../_components/one-column";
+import { OneColumn, useResumeContext } from "../_components/one-column";
 import { type Resume } from "~/stores/resume-store";
 import { Item } from "~/components/templates/item";
 import { Section } from "~/components/templates/section";
 import { SectionList } from "~/components/templates/section-list";
 import { SectionTitle } from "~/components/templates/section-title";
 
-const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
+const Skills: React.FC<SectionProps> = ({ section }) => {
+  const { resumeTemplate } = useResumeContext();
   return (
     <SectionList
       id={section.id}
@@ -26,7 +27,14 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id} disabled={section.disabled}>
-            <li className="list-disc">{item.text}</li>
+            <li
+              className="list-disc"
+              contentEditable
+              suppressContentEditableWarning
+              onInput={(e) => console.log(e.currentTarget.textContent)}
+            >
+              {item.text}
+            </li>
           </Item>
         ))
       }
@@ -36,7 +44,8 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   );
 };
 
-const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
+const Experiences: React.FC<SectionProps> = ({ section }) => {
+  const { resumeTemplate } = useResumeContext();
   return (
     <SectionList
       id={section.id}
@@ -46,7 +55,11 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id} disabled={section.disabled}>
-            <li className="list-disc">
+            <li
+              className="list-disc"
+              contentEditable
+              suppressContentEditableWarning
+            >
               {item.role} - {item.company}
             </li>
           </Item>
@@ -58,7 +71,9 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   );
 };
 
-const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
+const Education: React.FC<SectionProps> = ({ section }) => {
+  const { resumeTemplate } = useResumeContext();
+
   return (
     <SectionList
       id={section.id}
@@ -68,7 +83,13 @@ const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id} disabled={section.disabled}>
-            <li className="list-disc">{item.degree}</li>
+            <li
+              className="list-disc"
+              contentEditable
+              suppressContentEditableWarning
+            >
+              {item.degree}
+            </li>
           </Item>
         ))
       }
@@ -78,24 +99,33 @@ const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   );
 };
 
-const Summary: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
+const Summary: React.FC<SectionProps> = ({ section }) => {
+  const { resumeTemplate } = useResumeContext();
   return (
     <Section id={section.id} disabled={section.disabled}>
-      <h3>{section.title}</h3>
-      <p>{resumeTemplate?.summary?.text}</p>
+      <h3 contentEditable suppressContentEditableWarning>
+        {section.title}
+      </h3>
+      <p contentEditable suppressContentEditableWarning>
+        {resumeTemplate?.summary?.text}
+      </p>
     </Section>
   );
 };
 
-const Contact: React.FC<SectionProps> = ({ section, resumeTemplate }) => {
+const Contact: React.FC<SectionProps> = ({ section }) => {
+  const { resumeTemplate } = useResumeContext();
+
   return (
     <Section id={section.id} disabled={section.disabled}>
-      <h2 className="text-3xl">{resumeTemplate?.contact?.name}</h2>
+      <h2 className="text-3xl" contentEditable suppressContentEditableWarning>
+        {resumeTemplate?.contact?.name}
+      </h2>
       <div className="flex items-center gap-3">
         <div className="inline-flex items-center gap-1 text-muted-foreground">
           <MapPin size={12} />
           <div className="flex">
-            <p>
+            <p contentEditable suppressContentEditableWarning>
               {resumeTemplate?.contact?.city} - {resumeTemplate?.contact?.state}{" "}
               - {resumeTemplate?.contact?.country}
             </p>
@@ -103,11 +133,15 @@ const Contact: React.FC<SectionProps> = ({ section, resumeTemplate }) => {
         </div>
         <div className="inline-flex items-center gap-1 text-muted-foreground">
           <Linkedin size={12} />
-          <p>{resumeTemplate?.contact?.email}</p>
+          <p contentEditable suppressContentEditableWarning>
+            {resumeTemplate?.contact?.email}
+          </p>
         </div>
         <div className="inline-flex items-center gap-1 text-muted-foreground">
           <Phone size={12} />
-          <p>{resumeTemplate?.contact?.phone}</p>
+          <p contentEditable suppressContentEditableWarning>
+            {resumeTemplate?.contact?.phone}
+          </p>
         </div>
       </div>
     </Section>
@@ -117,60 +151,38 @@ const Contact: React.FC<SectionProps> = ({ section, resumeTemplate }) => {
 export const Template = ({
   resumeTemplate,
   isPreview,
+  settings,
 }: {
   resumeTemplate: Resume;
   isPreview: boolean;
+  settings: any;
 }) => {
+  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
+    const newValue = e.currentTarget.textContent || "";
+    // setInputValue(newValue);
+    // debouncedSave(newValue);
+  };
+
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "contact": {
-        return (
-          <Contact
-            key={section.id}
-            resumeTemplate={resumeTemplate}
-            section={section}
-          />
-        );
+        return <Contact key={section.id} section={section} />;
       }
 
       case "summary": {
-        return (
-          <Summary
-            key={section.id}
-            resumeTemplate={resumeTemplate}
-            section={section}
-          />
-        );
+        return <Summary key={section.id} section={section} />;
       }
 
       case "educations": {
-        return (
-          <Education
-            key={section.id}
-            resumeTemplate={resumeTemplate}
-            section={section}
-          />
-        );
+        return <Education key={section.id} section={section} />;
       }
 
       case "experiences": {
-        return (
-          <Experiences
-            key={section.id}
-            resumeTemplate={resumeTemplate}
-            section={section}
-          />
-        );
+        return <Experiences key={section.id} section={section} />;
       }
 
       case "skills": {
-        return (
-          <Skills
-            key={section.id}
-            resumeTemplate={resumeTemplate}
-            section={section}
-          />
-        );
+        return <Skills key={section.id} section={section} />;
       }
 
       default:
@@ -183,6 +195,7 @@ export const Template = ({
       renderSection={renderSection}
       resumeTemplate={resumeTemplate}
       isPreview={isPreview}
+      settings={settings}
     />
   );
 };

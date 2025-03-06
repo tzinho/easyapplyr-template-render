@@ -1,15 +1,16 @@
 "use client";
 
+import { useParams } from "next/navigation";
+import { pdfjs } from "react-pdf";
+// import { Document, Page } from "@react-pdf/renderer";
+
 import { PageContent } from "~/components/page";
 import { api } from "~/trpc/react";
-import { useParams } from "next/navigation";
 import { PageLoading } from "~/components/page-loading";
-import { Document, Page } from "@react-pdf/renderer";
-import ResumeTemplate from "./resume";
+// import ResumeTemplate from "./resume";
 import Toolbar from "../../../_components/toolbar";
 import { useResumeContext } from "~/providers/resume-provider";
-
-import { pdfjs } from "react-pdf";
+import { getTemplate } from "~/lib/templates";
 
 // Configure PDF.js worker
 // This is important for react-pdf to work properly
@@ -41,27 +42,14 @@ export const Body = () => {
 
   if (resume.isLoading) return <PageLoading />;
 
+  const Template = getTemplate(resume.data.templateId).component;
+
   return (
     <PageContent className="flex h-full flex-col items-center justify-center">
       <Toolbar />
       <div className="mx-auto min-h-[1122.519685px] w-[793.7px] bg-red-100">
-        <div className="bg-editor-bg animate-slide-up flex min-h-[calc(100vh-80px)] w-full justify-center overflow-auto py-8">
-          <div
-            className="pdf-shadow overflow-hidden rounded-lg transition-transform duration-300"
-            style={{
-              transform: `scale(${settings.zoom / 100})`,
-              transformOrigin: "top center",
-              ...getViewerDimensions(),
-            }}
-          >
-            <div className="paper-effect h-full w-full bg-white">
-              <Document file="">
-                <Page>
-                  <ResumeTemplate settings={settings} />
-                </Page>
-              </Document>
-            </div>
-          </div>
+        <div className="h-full w-full">
+          <Template resumeTemplate={resume.data} settings={settings} />
         </div>
       </div>
     </PageContent>

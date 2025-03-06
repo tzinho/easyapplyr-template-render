@@ -79,9 +79,9 @@ const Toolbar: React.FC = () => {
             <span className="text-lg font-bold text-primary">56</span>
           </div>
           <div className="ml-2 hidden sm:block">
-            <h1 className="text-sm font-semibold">Resume Crafter</h1>
+            <h1 className="text-sm font-semibold">Score</h1>
             <p className="text-xs text-muted-foreground">
-              Professional resumes made simple
+              Clique aqui e otimize
             </p>
           </div>
         </div>
@@ -188,13 +188,12 @@ const Toolbar: React.FC = () => {
         {/* Color Picker */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className="toolbar-button" title="Primary Color">
+            <button className="toolbar-button" title="Cor primária">
               <Palette className="h-4 w-4" />
             </button>
           </PopoverTrigger>
           <PopoverContent className="w-48">
             <div className="space-y-2">
-              <h4 className="text-sm font-medium">Primary Color</h4>
               <div className="grid grid-cols-4 gap-2">
                 {colorOptions.map((color) => (
                   <button

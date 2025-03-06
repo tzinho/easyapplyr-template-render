@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { closestCorners, DndContext, DragOverlay } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -15,12 +15,43 @@ interface OneColumnProps {
   resumeTemplate: Resume;
   renderSection: (section: SectionType) => ReactNode;
   isPreview: boolean;
+  settings: any;
 }
+
+interface ResumeApi {
+  resumeTemplate: any;
+}
+
+const ResumeContext = createContext<ResumeApi | undefined>(undefined);
+
+export const useResumeContext = () => {
+  const context = useContext(ResumeContext);
+  if (!context)
+    throw new Error(
+      "the useResumeContext needs to use inside a ResumeContext provider!",
+    );
+  return context;
+};
+
+const ResumeProvider = ({
+  children,
+  resumeTemplate,
+}: {
+  children: ReactNode;
+  resumeTemplate: any;
+}) => {
+  return (
+    <ResumeContext.Provider value={{ resumeTemplate }}>
+      {children}
+    </ResumeContext.Provider>
+  );
+};
 
 export const OneColumn = ({
   resumeTemplate,
   renderSection,
   isPreview,
+  settings,
 }: OneColumnProps) => {
   const { sensors, handleDragStart, handleDragEnd, items, activeId } =
     useDragEndOneColumn<SectionType>({
@@ -39,13 +70,18 @@ export const OneColumn = ({
         strategy={verticalListSortingStrategy}
         disabled={isPreview}
       >
-        <div
-          id="resume"
-          className="h-full w-full p-4"
-          style={{ fontSize: resumeTemplate?.settings?.fontSize }}
-        >
-          {items.filter((item) => item.appear).map(renderSection)}
-        </div>
+        <ResumeProvider resumeTemplate={resumeTemplate}>
+          <div
+            id="resume"
+            className="h-full w-full p-4"
+            style={{
+              fontSize: settings?.fontSize,
+              lineHeight: settings?.lineHeight,
+            }}
+          >
+            {items.filter((item) => item.appear).map(renderSection)}
+          </div>
+        </ResumeProvider>
       </SortableContext>
 
       <DragOverlay>

@@ -14,11 +14,13 @@ import { type Resume } from "~/stores/resume-store";
 interface TwoColumnProps {
   resumeTemplate: Resume;
   renderSection: (section: SectionType) => ReactNode;
+  settings: any;
 }
 
 export const TwoColumn = ({
   resumeTemplate,
   renderSection,
+  settings,
 }: TwoColumnProps) => {
   const {
     sensors,
@@ -29,6 +31,7 @@ export const TwoColumn = ({
     activeId,
     sections,
   } = useDragEndTwoColumn<SectionType>({ resumeTemplate });
+  console.log("settings", settings);
 
   return (
     <DndContext
@@ -37,7 +40,11 @@ export const TwoColumn = ({
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
     >
-      <div className="grid h-full w-full grid-cols-2 gap-4 p-4" id="resume">
+      <div
+        className="grid h-full w-full grid-cols-2 gap-4 p-4"
+        id="resume"
+        style={{ fontSize: settings?.fontSize }}
+      >
         <div>
           <SortableContext
             items={column1Items}

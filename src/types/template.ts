@@ -108,7 +108,6 @@ export interface NavigationProps {
 
 export interface SectionProps {
   section: Section;
-  resumeTemplate: Resume;
 }
 
 export interface Contact {

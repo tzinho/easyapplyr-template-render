@@ -2,7 +2,7 @@
 
 import { type PropsWithChildren } from "react";
 import { useSortable } from "@dnd-kit/sortable";
-import { ArrowDownUp } from "lucide-react";
+import { GripVertical } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 
@@ -32,7 +32,7 @@ export const Item = ({ id, children, disabled }: ItemProps) => {
     >
       {!disabled && (
         <div className="absolute -left-4 top-0" {...listeners}>
-          <ArrowDownUp
+          <GripVertical
             className={cn(
               "h-2 w-2 cursor-grab opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100",
               "group-hover:scale-110",
