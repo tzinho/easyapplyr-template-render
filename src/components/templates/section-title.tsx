@@ -1,3 +1,15 @@
+import { useResumeContext } from "~/app/_templates/_components/one-column";
+
 export const SectionTitle = ({ children }: { children: React.ReactNode }) => {
-  return <h3 className="text-2xl">{children}</h3>;
+  const { settings } = useResumeContext();
+
+  return (
+    <h3
+      contentEditable
+      suppressContentEditableWarning
+      style={{ fontSize: settings?.fontSize + 3 }}
+    >
+      {children}
+    </h3>
+  );
 };

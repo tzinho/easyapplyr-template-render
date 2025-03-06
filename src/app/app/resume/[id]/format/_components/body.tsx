@@ -47,7 +47,7 @@ export const Body = () => {
   return (
     <PageContent className="flex h-full flex-col items-center justify-center">
       <Toolbar />
-      <div className="mx-auto min-h-[1122.519685px] w-[793.7px] bg-red-100">
+      <div className="mx-auto min-h-[1122.519685px] w-[793.7px] bg-white">
         <div className="h-full w-full">
           <Template resumeTemplate={resume.data} settings={settings} />
         </div>

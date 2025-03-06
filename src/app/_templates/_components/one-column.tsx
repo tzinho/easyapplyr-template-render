@@ -20,6 +20,7 @@ interface OneColumnProps {
 
 interface ResumeApi {
   resumeTemplate: any;
+  settings: any;
 }
 
 const ResumeContext = createContext<ResumeApi | undefined>(undefined);
@@ -36,12 +37,14 @@ export const useResumeContext = () => {
 const ResumeProvider = ({
   children,
   resumeTemplate,
+  settings,
 }: {
   children: ReactNode;
   resumeTemplate: any;
+  settings: any;
 }) => {
   return (
-    <ResumeContext.Provider value={{ resumeTemplate }}>
+    <ResumeContext.Provider value={{ resumeTemplate, settings }}>
       {children}
     </ResumeContext.Provider>
   );
@@ -70,7 +73,7 @@ export const OneColumn = ({
         strategy={verticalListSortingStrategy}
         disabled={isPreview}
       >
-        <ResumeProvider resumeTemplate={resumeTemplate}>
+        <ResumeProvider resumeTemplate={resumeTemplate} settings={settings}>
           <div
             id="resume"
             className="h-full w-full p-4"

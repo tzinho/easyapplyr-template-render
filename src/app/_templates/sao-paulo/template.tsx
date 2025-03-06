@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { type ReactNode } from "react";
 import { Linkedin, MapPin, Phone } from "lucide-react";
 
 import {
@@ -16,24 +16,30 @@ import { Section } from "~/components/templates/section";
 import { SectionList } from "~/components/templates/section-list";
 import { SectionTitle } from "~/components/templates/section-title";
 
+export const Text = ({ children }: { children: ReactNode }) => {
+  return (
+    <p
+      contentEditable
+      suppressContentEditableWarning
+      onInput={(e) => console.log(e.currentTarget.textContent)}
+      className="inline-flex"
+    >
+      {children}
+    </p>
+  );
+};
+
 const Skills: React.FC<SectionProps> = ({ section }) => {
-  const { resumeTemplate } = useResumeContext();
   return (
     <SectionList
       id={section.id}
-      resumeTemplate={resumeTemplate}
       disabled={section.disabled}
       type="skills"
       renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id} disabled={section.disabled}>
-            <li
-              className="list-disc"
-              contentEditable
-              suppressContentEditableWarning
-              onInput={(e) => console.log(e.currentTarget.textContent)}
-            >
-              {item.text}
+            <li className="list-disc">
+              <Text>{item.text}</Text>
             </li>
           </Item>
         ))
@@ -45,22 +51,16 @@ const Skills: React.FC<SectionProps> = ({ section }) => {
 };
 
 const Experiences: React.FC<SectionProps> = ({ section }) => {
-  const { resumeTemplate } = useResumeContext();
   return (
     <SectionList
       id={section.id}
       disabled={section.disabled}
-      resumeTemplate={resumeTemplate}
       type="experiences"
       renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id} disabled={section.disabled}>
-            <li
-              className="list-disc"
-              contentEditable
-              suppressContentEditableWarning
-            >
-              {item.role} - {item.company}
+            <li className="list-disc">
+              <Text>{item.role}</Text> | <Text>{item.company}</Text>
             </li>
           </Item>
         ))
@@ -72,23 +72,16 @@ const Experiences: React.FC<SectionProps> = ({ section }) => {
 };
 
 const Education: React.FC<SectionProps> = ({ section }) => {
-  const { resumeTemplate } = useResumeContext();
-
   return (
     <SectionList
       id={section.id}
       disabled={section.disabled}
-      resumeTemplate={resumeTemplate}
       type="educations"
       renderItem={(items) =>
         items.map((item) => (
           <Item key={item.id} id={item.id} disabled={section.disabled}>
-            <li
-              className="list-disc"
-              contentEditable
-              suppressContentEditableWarning
-            >
-              {item.degree}
+            <li className="list-disc">
+              <Text>{item.degree}</Text> | <Text>{item.institution}</Text>
             </li>
           </Item>
         ))
@@ -103,12 +96,8 @@ const Summary: React.FC<SectionProps> = ({ section }) => {
   const { resumeTemplate } = useResumeContext();
   return (
     <Section id={section.id} disabled={section.disabled}>
-      <h3 contentEditable suppressContentEditableWarning>
-        {section.title}
-      </h3>
-      <p contentEditable suppressContentEditableWarning>
-        {resumeTemplate?.summary?.text}
-      </p>
+      <SectionTitle>{section.title}</SectionTitle>
+      <Text>{resumeTemplate?.summary?.text}</Text>
     </Section>
   );
 };
@@ -125,23 +114,18 @@ const Contact: React.FC<SectionProps> = ({ section }) => {
         <div className="inline-flex items-center gap-1 text-muted-foreground">
           <MapPin size={12} />
           <div className="flex">
-            <p contentEditable suppressContentEditableWarning>
-              {resumeTemplate?.contact?.city} - {resumeTemplate?.contact?.state}{" "}
-              - {resumeTemplate?.contact?.country}
-            </p>
+            <Text>{resumeTemplate?.contact?.city}</Text> |{" "}
+            <Text>{resumeTemplate?.contact?.state}</Text>|{" "}
+            <Text>{resumeTemplate?.contact?.country}</Text>
           </div>
         </div>
         <div className="inline-flex items-center gap-1 text-muted-foreground">
           <Linkedin size={12} />
-          <p contentEditable suppressContentEditableWarning>
-            {resumeTemplate?.contact?.email}
-          </p>
+          <Text>{resumeTemplate?.contact?.email}</Text>
         </div>
         <div className="inline-flex items-center gap-1 text-muted-foreground">
           <Phone size={12} />
-          <p contentEditable suppressContentEditableWarning>
-            {resumeTemplate?.contact?.phone}
-          </p>
+          <Text>{resumeTemplate?.contact?.phone}</Text>
         </div>
       </div>
     </Section>
@@ -157,12 +141,6 @@ export const Template = ({
   isPreview: boolean;
   settings: any;
 }) => {
-  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-    const newValue = e.currentTarget.textContent || "";
-    // setInputValue(newValue);
-    // debouncedSave(newValue);
-  };
-
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "contact": {

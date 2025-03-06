@@ -68,3 +68,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+[contenteditable] {
+  outline: 0px solid transparent;
+}

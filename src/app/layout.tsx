@@ -14,7 +14,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
     <html lang="pt-BR" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          <main className="flex-1 bg-slate-50">{children}</main>
+          <main className="h-screen flex-1 bg-slate-100">{children}</main>
         </TRPCReactProvider>
         <Toaster />
         <Sonner />

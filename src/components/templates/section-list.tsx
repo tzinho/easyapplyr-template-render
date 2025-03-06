@@ -9,13 +9,13 @@ import { type Section as SectionType, type ItemType } from "~/types/template";
 import { useDragEnd } from "~/hooks/use-drag-end";
 import { type Resume } from "~/stores/resume-store";
 import { Section } from "~/components/templates/section";
+import { useResumeContext } from "~/app/_templates/_components/one-column";
 
 interface SectionListProps<T> extends PropsWithChildren {
   id: string | number;
   disabled: boolean;
   type: Exclude<SectionType["type"], "contact" | "summary" | "settings">;
   renderItem: (items: T[]) => ReactNode[];
-  resumeTemplate: Resume;
   className?: string;
 }
 
@@ -25,9 +25,10 @@ export function SectionList<T extends ItemType>({
   type,
   children,
   renderItem,
-  resumeTemplate,
   className,
 }: SectionListProps<T>) {
+  const { resumeTemplate } = useResumeContext();
+
   const { sensors, handleDragStart, handleDragEnd, items } = useDragEnd({
     resumeTemplate,
     type,
