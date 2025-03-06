@@ -3,24 +3,16 @@
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-export const courseworkSchema = z.object({
-  _id: z.string(),
-  activeIndex: z.string(),
-  appear: z.boolean(),
-  name: z.string().min(1, "O nome do curso é obrigatório!"),
-  where: z.string().min(1, "O local do curso é obrigatório!"),
-  startAt: z.string().nullish(),
-  endAt: z.string().nullish(),
-  resumeId: z.string(),
-  order: z.number(),
-});
+import {
+  type CourseworkSchemaInputField,
+  courseworkSchemaInputField,
+} from "~/validators/courseworks";
 
 export const courseworksSchema = z.object({
-  courseworks: z.array(courseworkSchema),
+  courseworks: z.array(courseworkSchemaInputField),
 });
 
 export const generateANewItem = (order: number) => {
-  const activeIndex = uuidv4();
   return {
     _id: "",
     name: "",
@@ -29,7 +21,7 @@ export const generateANewItem = (order: number) => {
     endAt: null,
     resumeId: "",
     appear: true,
-    activeIndex,
+    activeIndex: uuidv4(),
     order,
-  } as z.infer<typeof courseworkSchema>;
+  } as CourseworkSchemaInputField;
 };

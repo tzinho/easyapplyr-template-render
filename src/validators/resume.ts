@@ -9,4 +9,5 @@ export const resumeSchema = z.object({
   experience: z.coerce.number().optional(),
   templateId: z.string(),
 });
+
 export type ResumeSchema = z.infer<typeof resumeSchema>;

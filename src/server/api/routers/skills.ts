@@ -3,15 +3,12 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { skills } from "~/server/db/schema";
+import { changeOrderInput, toggleAppearInput } from "~/validators";
+import { skillSchemaInput, skillSchemaUpdate } from "~/validators/skills";
 
 export const skillsRouter = createTRPCRouter({
   toogleAppear: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        appear: z.boolean(),
-      }),
-    )
+    .input(toggleAppearInput)
     .mutation(async ({ ctx, input }) => {
       const [model] = await ctx.db
         .update(skills)
@@ -23,14 +20,7 @@ export const skillsRouter = createTRPCRouter({
       return model;
     }),
   changeOrder: publicProcedure
-    .input(
-      z.array(
-        z.object({
-          id: z.string(),
-          order: z.number(),
-        }),
-      ),
-    )
+    .input(changeOrderInput)
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.transaction(async (tx) => {
         for (const update of input) {
@@ -43,12 +33,7 @@ export const skillsRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(
-      z.object({
-        resumeId: z.string(),
-        text: z.string(),
-      }),
-    )
+    .input(skillSchemaInput)
     .mutation(async ({ ctx, input }) => {
       const maxOrder = await ctx.db
         .select({ order: skills.order })
@@ -104,12 +89,7 @@ export const skillsRouter = createTRPCRouter({
   }),
 
   update: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        text: z.string(),
-      }),
-    )
+    .input(skillSchemaUpdate)
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
       const skill = await ctx.db

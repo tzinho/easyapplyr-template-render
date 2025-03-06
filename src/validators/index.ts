@@ -10,3 +10,15 @@ export const dateSchema = z.string().transform((val) => {
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}T03:00:00Z`;
 });
+
+export const toggleAppearInput = z.object({
+  id: z.string(),
+  appear: z.boolean(),
+});
+
+export const changeOrderInput = z.array(
+  z.object({
+    id: z.string(),
+    order: z.number(),
+  }),
+);

@@ -3,7 +3,10 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { educations } from "~/server/db/schema";
-import { educationSchema } from "~/validators/educations";
+import {
+  educationSchemaInput,
+  educationSchemaUpdate,
+} from "~/validators/educations";
 
 export const educationsRouter = createTRPCRouter({
   toogleAppear: publicProcedure
@@ -35,11 +38,7 @@ export const educationsRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(
-      educationSchema.extend({
-        resumeId: z.string(),
-      }),
-    )
+    .input(educationSchemaInput)
     .mutation(async ({ ctx, input }) => {
       const maxOrder = await ctx.db
         .select({ order: educations.order })
@@ -95,7 +94,7 @@ export const educationsRouter = createTRPCRouter({
   }),
 
   update: publicProcedure
-    .input(educationSchema.extend({ id: z.string() }))
+    .input(educationSchemaUpdate)
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
       const education = await ctx.db

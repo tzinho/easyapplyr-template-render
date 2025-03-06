@@ -3,11 +3,16 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { projects } from "~/server/db/schema";
-import { projectSchema } from "~/validators/projects";
+import { toggleAppearInput } from "~/validators";
+import {
+  projectSchema,
+  projectSchemaInput,
+  projectSchemaUpdate,
+} from "~/validators/projects";
 
 export const projectsRouter = createTRPCRouter({
   toogleAppear: publicProcedure
-    .input(z.object({ id: z.string(), appear: z.boolean() }))
+    .input(toggleAppearInput)
     .mutation(async ({ ctx, input }) => {
       return await ctx.db
         .update(projects)
@@ -35,11 +40,7 @@ export const projectsRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(
-      projectSchema.extend({
-        resumeId: z.string(),
-      }),
-    )
+    .input(projectSchemaInput)
     .mutation(async ({ ctx, input }) => {
       const maxOrder = await ctx.db
         .select({ order: projects.order })
@@ -48,7 +49,7 @@ export const projectsRouter = createTRPCRouter({
         .orderBy(desc(projects.order))
         .limit(1);
 
-      return await ctx.db
+      const [model] = await ctx.db
         .insert(projects)
         .values({
           ...input,
@@ -56,6 +57,8 @@ export const projectsRouter = createTRPCRouter({
           order: (maxOrder[0]?.order ?? -1) + 1,
         })
         .returning();
+
+      return model;
     }),
 
   list: publicProcedure
@@ -90,11 +93,7 @@ export const projectsRouter = createTRPCRouter({
   }),
 
   update: publicProcedure
-    .input(
-      projectSchema.extend({
-        id: z.string(),
-      }),
-    )
+    .input(projectSchemaUpdate)
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
       const project = await ctx.db

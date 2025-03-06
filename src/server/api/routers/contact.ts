@@ -18,7 +18,7 @@ export const contactRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { resumeId, ...rest } = input;
 
-      const data = await ctx.db
+      const [model] = await ctx.db
         .insert(contacts)
         .values(input)
         .onConflictDoUpdate({
@@ -26,6 +26,6 @@ export const contactRouter = createTRPCRouter({
           set: rest,
         });
 
-      return data;
+      return model;
     }),
 });

@@ -3,18 +3,15 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { experiences } from "~/server/db/schema";
-import { experienceSchema } from "~/validators/experiences";
+import { changeOrderInput, toggleAppearInput } from "~/validators";
+import {
+  experienceSchema,
+  experienceSchemaUpdate,
+} from "~/validators/experiences";
 
 export const experiencesRouter = createTRPCRouter({
   changeOrder: publicProcedure
-    .input(
-      z.array(
-        z.object({
-          id: z.string(),
-          order: z.number(),
-        }),
-      ),
-    )
+    .input(changeOrderInput)
     .mutation(async ({ ctx, input }) => {
       await ctx.db.transaction(async (tx) => {
         for (const update of input) {
@@ -27,7 +24,7 @@ export const experiencesRouter = createTRPCRouter({
     }),
 
   toogleAppear: publicProcedure
-    .input(z.object({ id: z.string(), appear: z.boolean() }))
+    .input(toggleAppearInput)
     .mutation(async ({ ctx, input }) => {
       return await ctx.db
         .update(experiences)
@@ -92,11 +89,7 @@ export const experiencesRouter = createTRPCRouter({
   }),
 
   update: publicProcedure
-    .input(
-      experienceSchema.extend({
-        id: z.string(),
-      }),
-    )
+    .input(experienceSchemaUpdate)
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
       const experience = await ctx.db

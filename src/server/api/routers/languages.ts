@@ -3,18 +3,15 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { languages } from "~/server/db/schema";
-import { languageSchema } from "~/validators/languages";
+import { changeOrderInput, toggleAppearInput } from "~/validators";
+import {
+  languageSchemaInput,
+  languageSchemaUpdate,
+} from "~/validators/languages";
 
 export const languagesRouter = createTRPCRouter({
   changeOrder: publicProcedure
-    .input(
-      z.array(
-        z.object({
-          id: z.string(),
-          order: z.number(),
-        }),
-      ),
-    )
+    .input(changeOrderInput)
     .mutation(async ({ ctx, input }) => {
       await ctx.db.transaction(async (tx) => {
         for (const update of input) {
@@ -27,7 +24,7 @@ export const languagesRouter = createTRPCRouter({
     }),
 
   toogleAppear: publicProcedure
-    .input(z.object({ id: z.string(), appear: z.boolean() }))
+    .input(toggleAppearInput)
     .mutation(async ({ ctx, input }) => {
       return await ctx.db
         .update(languages)
@@ -36,7 +33,7 @@ export const languagesRouter = createTRPCRouter({
     }),
 
   create: publicProcedure
-    .input(languageSchema.extend({ resumeId: z.string() }))
+    .input(languageSchemaInput)
     .mutation(async ({ ctx, input }) => {
       const maxOrder = await ctx.db
         .select({ order: languages.order })
@@ -92,11 +89,7 @@ export const languagesRouter = createTRPCRouter({
   }),
 
   update: publicProcedure
-    .input(
-      languageSchema.extend({
-        id: z.string(),
-      }),
-    )
+    .input(languageSchemaUpdate)
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
       const language = await ctx.db

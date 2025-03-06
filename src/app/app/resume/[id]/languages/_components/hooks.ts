@@ -3,10 +3,13 @@
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
-import { fieldLanguageSchema } from "~/validators/languages";
+import {
+  languageSchemaInputField,
+  type LanguageSchemaInputField,
+} from "~/validators/languages";
 
 export const languagesSchema = z.object({
-  languages: z.array(fieldLanguageSchema),
+  languages: z.array(languageSchemaInputField),
 });
 
 export const generateANewItem = (order: number) => {
@@ -17,5 +20,5 @@ export const generateANewItem = (order: number) => {
     appear: true,
     activeIndex: uuidv4(),
     order,
-  } as z.infer<typeof fieldLanguageSchema>;
+  } as LanguageSchemaInputField;
 };

@@ -11,4 +11,20 @@ export const experienceSchema = z.object({
   did: z.string().nullish(),
 });
 
+export const experienceSchemaUpdate = experienceSchema.extend({
+  id: z.string(),
+});
+
+export const experienceSchemaInputField = experienceSchema.extend({
+  _id: z.string(),
+  activeIndex: z.string(),
+  resumeId: z.string(),
+  appear: z.boolean(),
+  order: z.number(),
+});
+
 export type ExperienceSchema = z.infer<typeof experienceSchema>;
+export type ExperienceSchemaUpdate = z.infer<typeof experienceSchemaUpdate>;
+export type ExperienceSchemaInputField = z.infer<
+  typeof experienceSchemaInputField
+>;

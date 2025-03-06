@@ -15,4 +15,8 @@ export const contactSchemaInput = contactSchema.extend({
   resumeId: z.string(),
 });
 
+export const contactSchemaUpdate = contactSchema.extend({
+  resumeId: z.string(),
+});
+
 export type ContactSchema = z.infer<typeof contactSchema>;

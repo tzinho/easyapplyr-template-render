@@ -3,11 +3,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { summaries } from "~/server/db/schema";
-import { summarySchema } from "~/validators/summary";
-
-const summarySchemaInput = summarySchema.extend({
-  resumeId: z.string(),
-});
+import { summarySchemaInput } from "~/validators/summary";
 
 export const summaryRouter = createTRPCRouter({
   get: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
@@ -23,7 +19,7 @@ export const summaryRouter = createTRPCRouter({
       const { resumeId, ...rest } = input;
 
       try {
-        const data = await ctx.db
+        const [model] = await ctx.db
           .insert(summaries)
           .values(input)
           .onConflictDoUpdate({
@@ -31,7 +27,7 @@ export const summaryRouter = createTRPCRouter({
             set: rest,
           });
 
-        return data;
+        return model;
       } catch (err) {
         console.log("error", err);
       }
