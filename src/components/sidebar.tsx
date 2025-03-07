@@ -1,6 +1,12 @@
 "use client";
 
-import { Library, Settings2, File } from "lucide-react";
+import {
+  Library,
+  Settings2,
+  File,
+  Shirt,
+  PersonStandingIcon,
+} from "lucide-react";
 
 import { CompanyNav } from "./company-nav";
 import { MenuLink } from "./menu-link";
@@ -27,11 +33,16 @@ function Sidebar() {
           <div className="space-y-1 overflow-y-auto pt-6 text-xs font-medium text-gray-500 md:px-2">
             <MenuLink href="/app" title="Currículos" icon={File} />
             <MenuLink href="/app/library" title="Biblioteca" icon={Library} />
-            {/* <MenuLink
+            <MenuLink
               href="/app/ia-interview"
               title="Entrevista com I.A"
               icon={Shirt}
-            /> */}
+            />
+            <MenuLink
+              href="/app/jobs"
+              title="Vagas de emprego"
+              icon={PersonStandingIcon}
+            />
           </div>
 
           <div className="flex flex-col">

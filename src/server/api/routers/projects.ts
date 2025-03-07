@@ -4,11 +4,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { projects } from "~/server/db/schema";
 import { toggleAppearInput } from "~/validators";
-import {
-  projectSchema,
-  projectSchemaInput,
-  projectSchemaUpdate,
-} from "~/validators/projects";
+import { projectSchemaInput, projectSchemaUpdate } from "~/validators/projects";
 
 export const projectsRouter = createTRPCRouter({
   toogleAppear: publicProcedure

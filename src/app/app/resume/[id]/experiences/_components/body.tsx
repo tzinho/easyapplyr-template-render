@@ -2,9 +2,8 @@
 
 import { useParams } from "next/navigation";
 
-import { PageContentEditor } from "~/components/page";
+import { PageContentTwoSections } from "~/components/page";
 import { api } from "~/trpc/react";
-import { PageLoading } from "~/components/page-loading";
 import { Handler } from "~/components/handler";
 import { experiencesSchema, generateANewItem } from "./hooks";
 import { Item } from "./item";
@@ -14,22 +13,23 @@ import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
-  const { id } = useParams<{ id: string }>();
-  const experiences = api.experiences.list.useQuery({ resumeId: id });
+  const params = useParams<{ id: string }>();
+  const responseAPI = api.experiences.list.useQuery({ resumeId: params.id });
   const name = "experiences";
   const mutations = useMutations({
     name,
     modelName: "experiência",
   });
 
-  if (experiences.isLoading) return <PageLoading />;
-
   return (
-    <PageContentEditor>
+    <PageContentTwoSections
+      isLoading={responseAPI.isLoading}
+      isError={responseAPI.isError}
+    >
       <Handler
         name={name}
         schema={experiencesSchema}
-        defaultValues={experiences.data}
+        defaultValues={responseAPI.data}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({
@@ -74,6 +74,6 @@ export const Body = () => {
           );
         }}
       />
-    </PageContentEditor>
+    </PageContentTwoSections>
   );
 };

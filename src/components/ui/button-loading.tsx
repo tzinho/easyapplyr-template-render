@@ -1,4 +1,7 @@
+"use client";
+
 import { LoaderCircle } from "lucide-react";
+
 import { Button, type ButtonProps } from "./button";
 import { cn } from "~/lib/utils";
 

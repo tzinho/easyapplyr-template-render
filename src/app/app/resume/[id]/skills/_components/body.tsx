@@ -2,10 +2,9 @@
 
 import { useParams } from "next/navigation";
 
-import { PageContentEditor } from "~/components/page";
+import { PageContentTwoSections } from "~/components/page";
 import { api } from "~/trpc/react";
 import { generateANewItem, skillsSchema } from "./hooks";
-import { PageLoading } from "~/components/page-loading";
 import { CardList } from "~/components/handler-list";
 import { Handler } from "~/components/handler";
 import { Item } from "~/components/item";
@@ -14,22 +13,23 @@ import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
   const name = "skills";
-  const skills = api.skills.list.useQuery({ resumeId: id });
+  const responseAPI = api.skills.list.useQuery({ resumeId: params.id });
   const mutations = useMutations({
     name,
     modelName: "habilidade",
   });
 
-  if (skills.isLoading) return <PageLoading />;
-
   return (
-    <PageContentEditor>
+    <PageContentTwoSections
+      isLoading={responseAPI.isLoading}
+      isError={responseAPI.isError}
+    >
       <Handler
         name={name}
         schema={skillsSchema}
-        defaultValues={skills.data}
+        defaultValues={responseAPI.data!}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({
@@ -83,6 +83,6 @@ export const Body = () => {
           );
         }}
       />
-    </PageContentEditor>
+    </PageContentTwoSections>
   );
 };

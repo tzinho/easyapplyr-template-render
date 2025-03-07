@@ -1,111 +1,24 @@
 "use client";
 
-import { useMemo } from "react";
 import { useParams } from "next/navigation";
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { City, Country, State } from "country-state-city";
 
 import { Form } from "~/components/ui/form";
 import { Input } from "~/components/form/input";
 import { api } from "~/trpc/react";
 import { ButtonLoading } from "~/components/ui/button-loading";
-import { useResumeStore } from "~/providers/resume-store-provider";
-import { type Resume, type Contact } from "~/stores/resume-store";
-import { SelectItem } from "~/components/ui/select";
-import { Select } from "~/components/form/select";
 import { contactSchema, type ContactSchema } from "~/validators/contact";
+import { type Resume } from "~/stores/resume-store";
+import { SelectCity, SelectCountry, SelectState } from "./select-location";
 
-interface SelectCountryProps {
-  name: string;
-  placeholder?: string;
-}
-
-interface SelectStateProps {
-  name: string;
-  placeholder?: string;
-}
-
-interface SelectCityProps {
-  name: string;
-  placeholder?: string;
-}
-
-const SelectCity = ({ name, placeholder }: SelectCityProps) => {
-  const { watch } = useFormContext();
-  const country = watch("country") as string;
-  const state = watch("state") as string;
-
-  const cities = useMemo(
-    () => City.getCitiesOfState(country, state),
-    [country, state],
-  );
-
-  return (
-    <Select
-      name={name}
-      placeholder={placeholder}
-      label="Cidade"
-      className="flex-1"
-    >
-      {cities.map((city) => (
-        <SelectItem key={city.name} value={city.name}>
-          {city.name}
-        </SelectItem>
-      ))}
-    </Select>
-  );
-};
-
-const SelectState = ({ name, placeholder }: SelectStateProps) => {
-  const { watch } = useFormContext();
-  const country = watch("country") as string;
-  const states = State.getStatesOfCountry(country);
-
-  return (
-    <Select
-      name={name}
-      placeholder={placeholder}
-      label="Estado"
-      className="flex-1"
-    >
-      {states.map((state) => (
-        <SelectItem key={state.isoCode} value={state.isoCode}>
-          {state.name}
-        </SelectItem>
-      ))}
-    </Select>
-  );
-};
-
-const SelectCountry = ({ name, placeholder }: SelectCountryProps) => {
-  const countries = Country.getAllCountries();
-
-  return (
-    <Select
-      name={name}
-      placeholder={placeholder}
-      label="País"
-      className="flex-1"
-    >
-      {countries.map((country) => (
-        <SelectItem key={country.isoCode} value={country.isoCode}>
-          {country.name}
-        </SelectItem>
-      ))}
-    </Select>
-  );
-};
-
-export const ContactForm = ({
+export const PageForm = ({
   defaultValues,
 }: {
   defaultValues: Resume["contact"];
 }) => {
   const params = useParams<{ id: string }>();
-
-  const { setContactTemplate } = useResumeStore((state) => state);
 
   const form = useForm<ContactSchema>({
     resolver: zodResolver(contactSchema),
@@ -113,13 +26,9 @@ export const ContactForm = ({
   });
 
   const updateContact = api.contact.create.useMutation({
-    onSuccess(_, variables) {
-      setContactTemplate(variables as Contact);
-      toast.success("Mudanças salvas com sucesso!");
-    },
-    onError() {
-      toast.error("Ocorreu um erro ao tentar salvar as mudanças! ");
-    },
+    onSuccess: () => toast.success("Mudanças salvas com sucesso!"),
+    onError: () =>
+      toast.error("Ocorreu um erro ao tentar salvar as mudanças! "),
   });
 
   const onSubmit = async (values: ContactSchema) => {

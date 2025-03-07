@@ -2,10 +2,9 @@
 
 import { useParams } from "next/navigation";
 
-import { PageContentEditor } from "~/components/page";
+import { PageContentTwoSections } from "~/components/page";
 import { generateANewItem, languagesSchema } from "./hooks";
 import { api } from "~/trpc/react";
-import { PageLoading } from "~/components/page-loading";
 import { Handler } from "~/components/handler";
 import { CardList } from "~/components/handler-list";
 import { Item } from "~/components/item";
@@ -14,24 +13,23 @@ import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
-  const { id } = useParams<{ id: string }>();
-  const languages = api.languages.list.useQuery({ resumeId: id });
+  const params = useParams<{ id: string }>();
+  const responseAPI = api.languages.list.useQuery({ resumeId: params.id });
   const name = "languages";
   const mutations = useMutations({
     name,
     modelName: "língua",
   });
 
-  console.log("mutations", mutations);
-
-  if (languages.isLoading) return <PageLoading />;
-
   return (
-    <PageContentEditor>
+    <PageContentTwoSections
+      isLoading={responseAPI.isLoading}
+      isError={responseAPI.isError}
+    >
       <Handler
         name={name}
         schema={languagesSchema}
-        defaultValues={languages.data}
+        defaultValues={responseAPI.data!}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({
@@ -82,6 +80,6 @@ export const Body = () => {
           );
         }}
       />
-    </PageContentEditor>
+    </PageContentTwoSections>
   );
 };

@@ -2,9 +2,8 @@
 
 import { useParams } from "next/navigation";
 
-import { PageContentEditor } from "~/components/page";
+import { PageContentTwoSections } from "~/components/page";
 import { api } from "~/trpc/react";
-import { PageLoading } from "~/components/page-loading";
 import { Handler } from "~/components/handler";
 import { CardList } from "~/components/handler-list";
 import { educationsSchema, generateANewItem } from "./hooks";
@@ -14,19 +13,20 @@ import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
   const name = "educations";
-  const educations = api.educations.list.useQuery({ resumeId: id });
+  const responseAPI = api.educations.list.useQuery({ resumeId: params.id });
   const mutations = useMutations({ name, modelName: "educação" });
 
-  if (educations.isLoading) return <PageLoading />;
-
   return (
-    <PageContentEditor>
+    <PageContentTwoSections
+      isLoading={responseAPI.isLoading}
+      isError={responseAPI.isError}
+    >
       <Handler
         name={name}
         schema={educationsSchema}
-        defaultValues={educations.data}
+        defaultValues={responseAPI.data!}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({
@@ -80,6 +80,6 @@ export const Body = () => {
           );
         }}
       />
-    </PageContentEditor>
+    </PageContentTwoSections>
   );
 };

@@ -1,13 +1,15 @@
 "use client";
 
 import React, { type PropsWithChildren } from "react";
-import { ArrowLeft, type LucideIcon, Search, SidebarClose } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { ArrowLeft, type LucideIcon, Search, SidebarClose } from "lucide-react";
 
 import { useStore } from "~/store";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { PageLoading } from "./page-loading";
+import { ButtonReload } from "./shared/button-reload";
 
 const PageNavbarLeftContent = React.forwardRef<
   HTMLDivElement,
@@ -86,10 +88,16 @@ const PageNavbar = ({ children }: Readonly<PropsWithChildren>) => {
 
 interface PageContentProps extends Readonly<PropsWithChildren> {
   isLoading?: boolean;
+  isError?: boolean;
   className?: string;
 }
 
-const PageContent = ({ children, isLoading, className }: PageContentProps) => {
+const PageContent = ({
+  children,
+  isLoading,
+  isError,
+  className,
+}: PageContentProps) => {
   return (
     <main
       className={cn(
@@ -97,17 +105,32 @@ const PageContent = ({ children, isLoading, className }: PageContentProps) => {
         className,
       )}
     >
-      {isLoading ? <PageLoading /> : children}
+      {isLoading ? (
+        <PageLoading />
+      ) : isError ? (
+        <div className="flex flex-col items-center gap-4 text-center">
+          <Image src="/error.png" width={200} height={200} alt="Error image" />
+          <h3 className="text-2xl font-semibold">Oops!</h3>
+          <p>
+            Nós sentimos muito ocorreu um erro ao carregar a página que você
+            solicitou!
+          </p>
+          <ButtonReload />
+        </div>
+      ) : (
+        children
+      )}
     </main>
   );
 };
 
-export const PageContentEditor = ({
+const PageContentTwoSections = ({
   children,
   isLoading,
+  isError,
 }: PageContentProps) => {
   return (
-    <PageContent isLoading={isLoading}>
+    <PageContent isLoading={isLoading} isError={isError}>
       <div className="flex flex-col gap-5 md:flex-row">{children}</div>
     </PageContent>
   );
@@ -166,5 +189,6 @@ export {
   PageNavbarIconButton,
   PageNavbarLeftContent,
   PageNavbarPrimaryButton,
+  PageContentTwoSections,
   PageNavbarRightContent,
 };

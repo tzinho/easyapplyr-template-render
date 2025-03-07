@@ -9,12 +9,11 @@ import {
   type summaries,
   type courseworks,
   type projects,
-  type involvements,
-  type educations,
   type languages,
   type experiences,
   type certifications,
   type settings,
+  type educations,
 } from "~/server/db/schema";
 
 export type Skill = InferSelectModel<typeof skills>;
@@ -22,7 +21,6 @@ export type Contact = InferSelectModel<typeof contacts>;
 export type Summary = InferSelectModel<typeof summaries>;
 export type Courseworks = InferSelectModel<typeof courseworks>;
 export type Project = InferSelectModel<typeof projects>;
-export type Involvements = InferSelectModel<typeof involvements>;
 export type Education = InferSelectModel<typeof educations>;
 export type Language = InferSelectModel<typeof languages>;
 export type Section = InferSelectModel<typeof sections>;
@@ -36,7 +34,6 @@ export type Resume = InferSelectModel<typeof resumes> & {
   skills: Skill[];
   courseworks: Courseworks[];
   projects: Project[];
-  involvements: Involvements[];
   experiences: Experience[];
   educations: Education[];
   languages: Language[];
@@ -49,15 +46,7 @@ export type ResumeState = {
   resumeTemplate: Resume | null;
 };
 
-export type ResumeActions = {
-  setResumeTemplate: (resumeTemplate: Resume) => void;
-  setSkillsTemplate: (skillsTemplate: Skill) => void;
-  setContactTemplate: (contactTemplate: Contact) => void;
-  setSummaryTemplate: (summaryTemplate: Summary) => void;
-  deleteSkillTemplate: (id: string) => void;
-  setSettings: (settings: Partial<Settings>) => void;
-  setOrderItemsTemplate: (data: Partial<Resume>) => void;
-};
+export type ResumeActions = {};
 
 export type ResumeStore = ResumeState & ResumeActions;
 
@@ -68,62 +57,7 @@ export const defaultInitState: ResumeState = {
 export const createResumeStore = (
   initState: ResumeState = defaultInitState,
 ) => {
-  return createStore<ResumeStore>()((set) => ({
+  return createStore<ResumeStore>()(() => ({
     ...initState,
-    setResumeTemplate: (resumeTemplate) => set(() => ({ resumeTemplate })),
-    setOrderItemsTemplate: (data: Partial<Resume>) => {
-      set((state) => ({
-        resumeTemplate: state.resumeTemplate
-          ? { ...state.resumeTemplate, ...data }
-          : null,
-      }));
-    },
-    setSkillsTemplate: (skill: Skill) =>
-      set((state) => ({
-        resumeTemplate: state.resumeTemplate
-          ? {
-              ...state.resumeTemplate,
-              skills: [...state.resumeTemplate.skills, skill],
-            }
-          : null,
-      })),
-    setContactTemplate: (contact: Contact) =>
-      set((state) => ({
-        resumeTemplate: state.resumeTemplate
-          ? {
-              ...state.resumeTemplate,
-              contact: { ...state.resumeTemplate.contact, ...contact },
-            }
-          : null,
-      })),
-    setSummaryTemplate: (summary: Summary) =>
-      set((state) => ({
-        resumeTemplate: state.resumeTemplate
-          ? {
-              ...state.resumeTemplate,
-              summary: { ...state.resumeTemplate.summary, ...summary },
-            }
-          : null,
-      })),
-    deleteSkillTemplate: (id: string) =>
-      set((state) => ({
-        resumeTemplate: state.resumeTemplate
-          ? {
-              ...state.resumeTemplate,
-              skills: state.resumeTemplate.skills.filter(
-                (skill) => skill.id !== id,
-              ),
-            }
-          : null,
-      })),
-    setSettings: (settings: Partial<Settings>) =>
-      set((state) => ({
-        resumeTemplate: state.resumeTemplate
-          ? {
-              ...state.resumeTemplate,
-              settings: { ...state.resumeTemplate.settings, ...settings },
-            }
-          : null,
-      })),
   }));
 };

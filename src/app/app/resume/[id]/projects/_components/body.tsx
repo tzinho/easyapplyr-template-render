@@ -3,10 +3,9 @@
 import { useParams } from "next/navigation";
 
 import { Handler } from "~/components/handler";
-import { PageContentEditor } from "~/components/page";
+import { PageContentTwoSections } from "~/components/page";
 import { generateANewItem, projectsSchema } from "./hooks";
 import { api } from "~/trpc/react";
-import { PageLoading } from "~/components/page-loading";
 import { CardList } from "~/components/handler-list";
 import { Item } from "~/components/item";
 import { FormList } from "~/components/form";
@@ -14,22 +13,23 @@ import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
   const name = "projects";
-  const projects = api.projects.list.useQuery({ resumeId: id });
+  const responseAPI = api.projects.list.useQuery({ resumeId: params.id });
   const mutations = useMutations({
     name,
     modelName: "projeto",
   });
 
-  if (projects.isLoading) return <PageLoading />;
-
   return (
-    <PageContentEditor>
+    <PageContentTwoSections
+      isLoading={responseAPI.isLoading}
+      isError={responseAPI.isError}
+    >
       <Handler
         name={name}
         schema={projectsSchema}
-        defaultValues={projects.data}
+        defaultValues={responseAPI.data!}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({
@@ -81,6 +81,6 @@ export const Body = () => {
           );
         }}
       />
-    </PageContentEditor>
+    </PageContentTwoSections>
   );
 };

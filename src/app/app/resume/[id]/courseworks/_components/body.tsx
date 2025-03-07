@@ -2,10 +2,9 @@
 
 import { useParams } from "next/navigation";
 
-import { PageContentEditor } from "~/components/page";
+import { PageContentTwoSections } from "~/components/page";
 import { courseworksSchema, generateANewItem } from "./hooks";
 import { api } from "~/trpc/react";
-import { PageLoading } from "~/components/page-loading";
 import { Handler } from "~/components/handler";
 import { CardList } from "~/components/handler-list";
 import { Item } from "~/components/item";
@@ -14,22 +13,23 @@ import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 
 export const Body = () => {
-  const { id } = useParams<{ id: string }>();
-  const courseworks = api.courseworks.list.useQuery({ resumeId: id });
+  const params = useParams<{ id: string }>();
+  const responseAPI = api.courseworks.list.useQuery({ resumeId: params.id });
   const name = "courseworks";
   const mutations = useMutations({
     name,
     modelName: "curso",
   });
 
-  if (courseworks.isLoading) return <PageLoading />;
-
   return (
-    <PageContentEditor>
+    <PageContentTwoSections
+      isLoading={responseAPI.isLoading}
+      isError={responseAPI.isError}
+    >
       <Handler
         name={name}
         schema={courseworksSchema}
-        defaultValues={courseworks.data}
+        defaultValues={responseAPI.data!}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({
@@ -83,6 +83,6 @@ export const Body = () => {
           );
         }}
       />
-    </PageContentEditor>
+    </PageContentTwoSections>
   );
 };

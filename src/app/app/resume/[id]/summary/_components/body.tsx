@@ -2,20 +2,22 @@
 
 import { useParams } from "next/navigation";
 
-import { PageContent } from "~/components/page";
-import { SummaryForm } from "./form";
 import { api } from "~/trpc/react";
-import { PageLoading } from "~/components/page-loading";
+import { PageContentTwoSections } from "~/components/page";
+import { PageForm } from "./form";
+import { AIWriter } from "./ai-writer";
 
 export const Body = () => {
   const params = useParams<{ id: string }>();
-  const summary = api.summary.get.useQuery(params.id);
-
-  if (summary.isLoading) return <PageLoading />;
+  const responseAPI = api.summary.get.useQuery(params.id);
 
   return (
-    <PageContent>
-      <SummaryForm defaultValues={summary.data!} />
-    </PageContent>
+    <PageContentTwoSections
+      isLoading={responseAPI.isLoading}
+      isError={responseAPI.isError}
+    >
+      <PageForm defaultValues={responseAPI.data!} />
+      <AIWriter />
+    </PageContentTwoSections>
   );
 };

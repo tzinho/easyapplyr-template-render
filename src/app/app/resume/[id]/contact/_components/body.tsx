@@ -2,20 +2,20 @@
 
 import { useParams } from "next/navigation";
 
-import { PageContentEditor } from "~/components/page";
-import { ContactForm } from "./form";
-import { PageLoading } from "~/components/page-loading";
 import { api } from "~/trpc/react";
+import { PageContentTwoSections } from "~/components/page";
+import { PageForm } from "./form";
 
 export const Body = () => {
-  const { id } = useParams<{ id: string }>();
-  const contact = api.contact.get.useQuery(id);
-
-  if (contact.isLoading) return <PageLoading />;
+  const params = useParams<{ id: string }>();
+  const responseAPI = api.contact.get.useQuery(params.id);
 
   return (
-    <PageContentEditor>
-      <ContactForm defaultValues={contact.data!} />
-    </PageContentEditor>
+    <PageContentTwoSections
+      isLoading={responseAPI.isLoading}
+      isError={responseAPI.isError}
+    >
+      <PageForm defaultValues={responseAPI.data!} />
+    </PageContentTwoSections>
   );
 };
