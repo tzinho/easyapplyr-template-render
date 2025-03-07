@@ -46,7 +46,9 @@ export type ResumeState = {
   resumeTemplate: Resume | null;
 };
 
-export type ResumeActions = {};
+export type ResumeActions = {
+  setResumeTemplate: (resumeTemplate: Resume | null) => void;
+};
 
 export type ResumeStore = ResumeState & ResumeActions;
 
@@ -57,7 +59,9 @@ export const defaultInitState: ResumeState = {
 export const createResumeStore = (
   initState: ResumeState = defaultInitState,
 ) => {
-  return createStore<ResumeStore>()(() => ({
+  return createStore<ResumeStore>()((set) => ({
     ...initState,
+    setResumeTemplate: (resumeTemplate: Resume | null) =>
+      set({ resumeTemplate }),
   }));
 };

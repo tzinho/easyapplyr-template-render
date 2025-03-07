@@ -13,15 +13,15 @@ export default function ResumeLayoutEdit({ children }: PropsWithChildren) {
   console.log("[ResumeLayoutEdit]");
 
   const params = useParams<{ id: string }>();
-  const state = useResumeStore((state) => state);
+  const setResumeTemplate = useResumeStore((state) => state.setResumeTemplate);
   const { setIsSidebarCollapse } = useStore();
   const isMobile = useIsMobile();
 
-  const resume = api.resumes.get.useQuery(params.id);
+  const responseAPI = api.resumes.get.useQuery(params.id);
 
   useEffect(() => {
-    // if (resume.data) setResumeTemplate(resume.data as unknown as Resume);
-  }, [resume.isLoading, resume.data]);
+    if (responseAPI.data) setResumeTemplate(responseAPI.data);
+  }, [responseAPI.isLoading, responseAPI.data]);
 
   useEffect(() => {
     if (isMobile !== undefined) setIsSidebarCollapse(!isMobile);
@@ -30,7 +30,7 @@ export default function ResumeLayoutEdit({ children }: PropsWithChildren) {
 
   return (
     <div className="flex flex-col gap-3">
-      {resume.isLoading ? <PageLoading /> : children}
+      {responseAPI.isLoading ? <PageLoading /> : children}
     </div>
   );
 }
