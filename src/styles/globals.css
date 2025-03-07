@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Acme&family=Atma:wght@300;400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital@0;1&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -7,7 +8,9 @@
 
 * {
   /* font-family: "Acme", sans-serif !important; */
+  /* font-family: "Source Sans 3", sans-serif !important; */
   font-family: "Atma", sans-serif !important;
+  font-weight: 500;
 }
 
 @layer base {

@@ -28,14 +28,14 @@ export const Text = ({
 }) => {
   const debouncedSave = useRef(
     debounce((value: string) => {
-      onChange(value);
+      onChange?.(value);
     }, 800),
   ).current;
 
   return (
     <p
-      contentEditable
-      suppressContentEditableWarning
+      contentEditable={!!onChange}
+      suppressContentEditableWarning={!!onChange}
       onInput={(e) => debouncedSave(e.currentTarget.textContent)}
       className="inline-flex cursor-text text-wrap text-justify"
     >
@@ -64,7 +64,6 @@ const Skills: React.FC<SectionProps> = ({ section }) => {
             <li className="list-disc">
               <Text
                 onChange={(value) => {
-                  console.log("value", item, value);
                   void skillUpdate.mutateAsync({ id: item.id, text: value! });
                 }}
               >
@@ -81,6 +80,15 @@ const Skills: React.FC<SectionProps> = ({ section }) => {
 };
 
 const Experiences: React.FC<SectionProps> = ({ section }) => {
+  const utils = api.useUtils();
+  const experienceUpdate = api.experiences.update.useMutation({
+    onSuccess: () => {
+      toast.success("Salvo com sucesso!");
+      void utils.experiences.list.invalidate();
+      void utils.resumes.get.invalidate();
+    },
+  });
+
   return (
     <SectionList
       id={section.id}
@@ -90,7 +98,17 @@ const Experiences: React.FC<SectionProps> = ({ section }) => {
         items.map((item) => (
           <Item key={item.id} id={item.id} disabled={section.disabled}>
             <li className="list-disc">
-              <Text>{item.role}</Text> | <Text>{item.company}</Text>
+              <Text
+                onChange={(value) => {
+                  void experienceUpdate.mutateAsync({
+                    id: item.id,
+                    role: value!,
+                  });
+                }}
+              >
+                {item.role}
+              </Text>
+              | <Text>{item.company}</Text>
             </li>
           </Item>
         ))

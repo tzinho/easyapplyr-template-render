@@ -75,7 +75,7 @@ export const OneColumn = ({
       >
         <ResumeProvider resumeTemplate={resumeTemplate} settings={settings}>
           <div
-            id="resume"
+            // id="resume"
             className="h-full w-full p-4"
             style={{
               fontSize: settings?.fontSize,

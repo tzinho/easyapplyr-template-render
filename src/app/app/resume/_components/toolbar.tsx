@@ -1,19 +1,8 @@
+"use client";
+
 import React from "react";
-import { Button } from "~/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
-import { Slider } from "~/components/ui/slider";
-import { Separator } from "~/components/ui/separator";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
 import {
   Download,
   Minus,
@@ -23,6 +12,21 @@ import {
   TextCursor,
   Palette,
 } from "lucide-react";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
+import { Button } from "~/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import { Slider } from "~/components/ui/slider";
 import {
   type FontFamily,
   type PaperSize,
@@ -31,6 +35,21 @@ import {
 
 const Toolbar: React.FC = () => {
   const { settings, updateSettings } = useResumeContext();
+  const handleDownloadPDF = async () => {
+    const input = document.getElementById("resume");
+    const canvas = await html2canvas(input!, {
+      scale: 2, // Increase scale for better quality
+      useCORS: true, // Allow cross-origin images
+    });
+    const imgData = canvas.toDataURL("image/png"); // Convert canvas to image
+    const pdf = new jsPDF("p", "mm", "a4"); // Create a new PDF
+
+    const imgWidth = 210; // A4 width in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width; // Calculate height to maintain aspect ratio
+
+    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight); // Add image to PDF
+    pdf.save("resume.pdf");
+  };
 
   // Font families available
   const fontFamilies: FontFamily[] = [
@@ -247,7 +266,11 @@ const Toolbar: React.FC = () => {
         </div>
 
         {/* Download Button */}
-        <Button size="sm" className="hidden sm:flex">
+        <Button
+          size="sm"
+          className="hidden sm:flex"
+          onClick={handleDownloadPDF}
+        >
           <Download className="mr-1 h-4 w-4" />
           Baixar PDF
         </Button>

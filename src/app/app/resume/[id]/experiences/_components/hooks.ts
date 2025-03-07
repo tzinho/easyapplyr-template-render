@@ -12,7 +12,7 @@ export const experienceSchema = z.object({
   appear: z.boolean(),
   where: z.string().nullish(),
   role: z.string().min(1, "A função é obrigatória!"),
-  company: z.string().min(1, "A empresa é obrigatória!"),
+  company: z.string().nullish(),
   did: z.string().nullish(),
   resumeId: z.string(),
   startAt: z.string().nullish(),

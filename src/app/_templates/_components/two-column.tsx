@@ -45,7 +45,7 @@ export const TwoColumn = ({
       <ResumeProvider resumeTemplate={resumeTemplate} settings={settings}>
         <div
           className="grid h-full w-full grid-cols-2 gap-4 p-4"
-          id="resume"
+          // id="resume"
           style={{
             fontSize: settings?.fontSize,
             lineHeight: settings?.lineHeight,
