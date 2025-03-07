@@ -138,7 +138,7 @@ const Toolbar: React.FC = () => {
           </PopoverTrigger>
           <PopoverContent className="w-64">
             <div className="space-y-2">
-              <h4 className="text-sm font-medium">Line Height</h4>
+              <h4 className="text-sm font-medium">Altura da linha</h4>
               <div className="flex items-center gap-2">
                 <Slider
                   min={1}
@@ -166,7 +166,7 @@ const Toolbar: React.FC = () => {
           </PopoverTrigger>
           <PopoverContent className="w-64">
             <div className="space-y-2">
-              <h4 className="text-sm font-medium">Letter Spacing</h4>
+              <h4 className="text-sm font-medium">Espaço entre as letras</h4>
               <div className="flex items-center gap-2">
                 <Slider
                   min={-1}

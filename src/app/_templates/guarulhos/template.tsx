@@ -125,25 +125,23 @@ export const Template = ({
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "contact": {
-        return <Contact resumeTemplate={resumeTemplate} section={section} />;
+        return <Contact section={section} />;
       }
 
       case "summary": {
-        return <Summary resumeTemplate={resumeTemplate} section={section} />;
+        return <Summary section={section} />;
       }
 
       case "experiences": {
-        return (
-          <Experiences resumeTemplate={resumeTemplate} section={section} />
-        );
+        return <Experiences section={section} />;
       }
 
       case "skills": {
-        return <Skills resumeTemplate={resumeTemplate} section={section} />;
+        return <Skills section={section} />;
       }
 
       case "educations": {
-        return <Education resumeTemplate={resumeTemplate} section={section} />;
+        return <Education section={section} />;
       }
 
       default:

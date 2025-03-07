@@ -156,10 +156,6 @@ interface NavProps {
 }
 
 export const LinkPage = ({ required, notRequired }: NavProps) => {
-  const toggleSection = (link: LinkEditPage) => {
-    console.log("[toggleSection]: ", link);
-  };
-
   return (
     <div className="flex items-center justify-center gap-3">
       {required.map((link) => (
@@ -167,40 +163,6 @@ export const LinkPage = ({ required, notRequired }: NavProps) => {
           <Button className="h-6 text-xs">{link.label}</Button>
         </Link>
       ))}
-      {/* <div className="flex items-center gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-gray-400 hover:text-white"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
-            {notRequired.map((link) => (
-              <DropdownMenuItem
-                key={link.value}
-                className="flex items-center space-x-2"
-                disabled={link.required}
-                onSelect={(e) => {
-                  e.preventDefault();
-                  if (!link.required) toggleSection(link);
-                }}
-              >
-                <div className="flex flex-1 items-center space-x-2">
-                  <Checkbox checked={link.appear} disabled={link.required} />
-                  <span>{link.label}</span>
-                </div>
-                {link.required && (
-                  <span className="text-xs text-gray-500">Obrigatório</span>
-                )}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div> */}
     </div>
   );
 };

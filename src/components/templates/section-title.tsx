@@ -8,6 +8,7 @@ export const SectionTitle = ({ children }: { children: React.ReactNode }) => {
       contentEditable
       suppressContentEditableWarning
       style={{ fontSize: settings?.fontSize + 3 }}
+      className="cursor-text text-wrap"
     >
       {children}
     </h3>

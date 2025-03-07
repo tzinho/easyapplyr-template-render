@@ -57,7 +57,6 @@ export function useDragEnd({
     if (active.id === over.id) return;
 
     const actual = items.findIndex((item) => item.id === active.id);
-
     const next = items.findIndex((item) => item.id === over.id);
 
     const newItems = arrayMove(items, actual, next);

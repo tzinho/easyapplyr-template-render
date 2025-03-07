@@ -34,7 +34,7 @@ export const useResumeContext = () => {
   return context;
 };
 
-const ResumeProvider = ({
+export const ResumeProvider = ({
   children,
   resumeTemplate,
   settings,
@@ -80,6 +80,8 @@ export const OneColumn = ({
             style={{
               fontSize: settings?.fontSize,
               lineHeight: settings?.lineHeight,
+              letterSpacing: settings?.letterSpacing,
+              fontFamily: settings?.fontFamily,
             }}
           >
             {items.filter((item) => item.appear).map(renderSection)}

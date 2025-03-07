@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type ReactNode } from "react";
+import React, { useRef, type ReactNode } from "react";
 import { Linkedin, MapPin, Phone } from "lucide-react";
 
 import {
@@ -15,14 +15,29 @@ import { Item } from "~/components/templates/item";
 import { Section } from "~/components/templates/section";
 import { SectionList } from "~/components/templates/section-list";
 import { SectionTitle } from "~/components/templates/section-title";
+import { debounce } from "lodash";
+import { api } from "~/trpc/react";
+import { toast } from "sonner";
 
-export const Text = ({ children }: { children: ReactNode }) => {
+export const Text = ({
+  children,
+  onChange,
+}: {
+  children: ReactNode;
+  onChange?: (value: string | null) => any;
+}) => {
+  const debouncedSave = useRef(
+    debounce((value: string) => {
+      onChange(value);
+    }, 800),
+  ).current;
+
   return (
     <p
       contentEditable
       suppressContentEditableWarning
-      onInput={(e) => console.log(e.currentTarget.textContent)}
-      className="inline-flex"
+      onInput={(e) => debouncedSave(e.currentTarget.textContent)}
+      className="inline-flex cursor-text text-wrap text-justify"
     >
       {children}
     </p>
@@ -30,6 +45,14 @@ export const Text = ({ children }: { children: ReactNode }) => {
 };
 
 const Skills: React.FC<SectionProps> = ({ section }) => {
+  const utils = api.useUtils();
+  const skillUpdate = api.skills.update.useMutation({
+    onSuccess: () => {
+      toast.success("Salvo com sucesso!");
+      void utils.skills.list.invalidate();
+      void utils.resumes.get.invalidate();
+    },
+  });
   return (
     <SectionList
       id={section.id}
@@ -39,7 +62,14 @@ const Skills: React.FC<SectionProps> = ({ section }) => {
         items.map((item) => (
           <Item key={item.id} id={item.id} disabled={section.disabled}>
             <li className="list-disc">
-              <Text>{item.text}</Text>
+              <Text
+                onChange={(value) => {
+                  console.log("value", item, value);
+                  void skillUpdate.mutateAsync({ id: item.id, text: value! });
+                }}
+              >
+                {item.text}
+              </Text>
             </li>
           </Item>
         ))
@@ -103,11 +133,16 @@ const Summary: React.FC<SectionProps> = ({ section }) => {
 };
 
 const Contact: React.FC<SectionProps> = ({ section }) => {
-  const { resumeTemplate } = useResumeContext();
+  const { resumeTemplate, settings } = useResumeContext();
 
   return (
-    <Section id={section.id} disabled={section.disabled}>
-      <h2 className="text-3xl" contentEditable suppressContentEditableWarning>
+    <Section id={section.id} disabled={section.disabled} className="bg-red-500">
+      <h2
+        className="text-3xl"
+        contentEditable
+        suppressContentEditableWarning
+        style={{ color: settings?.primaryColor }}
+      >
         {resumeTemplate?.contact?.name}
       </h2>
       <div className="flex items-center gap-3">
