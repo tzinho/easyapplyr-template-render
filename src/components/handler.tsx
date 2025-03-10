@@ -20,7 +20,13 @@ import {
   HandlerProvider,
 } from "~/providers/handler-provider";
 
-interface HandlerProps {
+interface Field {
+  _id: string;
+  activeIndex: string;
+  resumeId: string;
+}
+
+interface HandlerProps<T extends Field> {
   defaultValues: { id: string; activeIndex: string }[] | null;
   name: string;
   schema: any;
@@ -32,13 +38,13 @@ interface HandlerProps {
   }: {
     isLoading: boolean;
     onSubmit: any;
-    fields: any[];
+    fields: T[];
   }) => React.ReactNode;
   generateANewItem: any;
   mutations: any;
 }
 
-export const Handler = ({
+export function Handler<T extends Field>({
   defaultValues,
   name,
   renderList,
@@ -46,14 +52,14 @@ export const Handler = ({
   schema,
   generateANewItem,
   mutations,
-}: HandlerProps) => {
+}: HandlerProps<T>) {
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
   const [toActiveIndex, setToActiveIndex] = useState<string | null>(null);
 
   const { update: updatePreviousFields, previousValues } = usePreviousValues();
 
-  const form = useForm<z.infer<typeof schema>>({
+  const form = useForm<T>({
     resolver: zodResolver(schema),
     defaultValues: {
       [name]: !!defaultValues?.length
@@ -74,8 +80,25 @@ export const Handler = ({
   const isTouching = form.formState.touchedFields?.[name]?.length;
   const isDirtying = form.formState.touchedFields?.[name]?.length;
 
+  const currentValues = () => form.getValues(name);
+
+  const getIndexOfItem = (activeIndex: string) => {
+    const index = fields.findIndex(
+      (field) => field.activeIndex === activeIndex,
+    );
+    return index;
+  };
+
+  const addItem = () => {
+    const item = generateANewItem(fields.length) as T;
+    updatePreviousFields(currentValues());
+    replace([...fields, item]);
+    resetForm();
+    return item;
+  };
+
   useEffect(() => {
-    updatePreviousFields(form.getValues(name));
+    updatePreviousFields(currentValues());
   }, []);
 
   useEffect(() => {
@@ -97,7 +120,7 @@ export const Handler = ({
     }
 
     const isEqual = lodash.isEqual(
-      form.getValues(name).map((field) => {
+      currentValues().map((field) => {
         const { id, ...rest } = field;
         return rest;
       }),
@@ -110,14 +133,6 @@ export const Handler = ({
     }
 
     setActiveIndex(activeItemIndex);
-  };
-
-  const addItem = () => {
-    const newItem = generateANewItem(fields.length);
-    updatePreviousFields(form.getValues(name));
-    replace([...fields, newItem]);
-    resetForm();
-    return newItem;
   };
 
   const onAppend = () => {
@@ -140,14 +155,10 @@ export const Handler = ({
     const newItems = fields.filter(
       (field) => field.activeIndex !== activeItemIndex,
     );
-    const hasItems = newItems.length;
-    const index = fields.findIndex(
-      (field) => field.activeIndex === activeItemIndex,
-    );
-    const item = fields[index];
-    void mutations.mutationDelete.mutateAsync(item!._id);
+    const index = getIndexOfItem(activeItemIndex);
+    void mutations.mutationDelete.mutateAsync(fields[index]!._id);
 
-    if (hasItems) {
+    if (newItems.length) {
       replace(newItems);
 
       if (activeIndex === activeItemIndex)
@@ -191,9 +202,7 @@ export const Handler = ({
   };
 
   const onAppear = (activeIndex: string) => {
-    const index = fields.findIndex(
-      (field) => field.activeIndex === activeIndex,
-    );
+    const index = getIndexOfItem(activeIndex);
 
     void mutations.mutationToggle.mutateAsync({
       id: fields[index]._id,
@@ -255,7 +264,6 @@ export const Handler = ({
           <div className="w-full md:max-w-[306px]">
             {renderList({
               fields,
-              activeIndex,
               onAppend,
               onMove,
               onClick,
@@ -276,4 +284,4 @@ export const Handler = ({
       </HandlerProvider>
     </Form>
   );
-};
+}

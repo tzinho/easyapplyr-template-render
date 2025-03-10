@@ -10,7 +10,6 @@ import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { PageLoading } from "./page-loading";
 import { ButtonReload } from "./shared/button-reload";
-import { ResumeStoreProvider } from "~/providers/resume-store-provider";
 
 const PageNavbarLeftContent = React.forwardRef<
   HTMLDivElement,
@@ -132,9 +131,7 @@ const PageContentTwoSections = ({
 }: PageContentProps) => {
   return (
     <PageContent isLoading={isLoading} isError={isError}>
-      <ResumeStoreProvider>
-        <div className="flex flex-col gap-5 md:flex-row">{children}</div>
-      </ResumeStoreProvider>
+      <div className="flex flex-col gap-5 md:flex-row">{children}</div>
     </PageContent>
   );
 };

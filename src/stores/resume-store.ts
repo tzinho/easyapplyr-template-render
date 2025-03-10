@@ -15,6 +15,7 @@ import {
   type settings,
   type educations,
 } from "~/server/db/schema";
+import state from "country-state-city/lib/state";
 
 export type Skill = InferSelectModel<typeof skills>;
 export type Contact = InferSelectModel<typeof contacts>;
@@ -48,6 +49,8 @@ export type ResumeState = {
 
 export type ResumeActions = {
   setResumeTemplate: (resumeTemplate: Resume | null) => void;
+  setContact: (contact: Contact) => void;
+  setSummary: (summary: Summary) => void;
 };
 
 export type ResumeStore = ResumeState & ResumeActions;
@@ -61,7 +64,30 @@ export const createResumeStore = (
 ) => {
   return createStore<ResumeStore>()((set) => ({
     ...initState,
-    setResumeTemplate: (resumeTemplate: Resume | null) =>
-      set({ resumeTemplate }),
+    setResumeTemplate: (resumeTemplate: Resume | null) => {
+      set({ resumeTemplate });
+    },
+    setContact: (contact: Contact) =>
+      set((state) => ({
+        resumeTemplate: {
+          ...state.resumeTemplate,
+          contact: { ...state.resumeTemplate?.contact, ...contact },
+        },
+      })),
+    setSummary: (summary: Summary) =>
+      set((state) => ({
+        resumeTemplate: {
+          ...state.resumeTemplate,
+          summary: { ...state.resumeTemplate?.summary, ...summary },
+        },
+      })),
+    setLanguages: (languages: Language) => {
+      set((state) => ({
+        resumeTemplate: {
+          ...state.resumeTemplate,
+          languages,
+        },
+      }));
+    },
   }));
 };

@@ -12,6 +12,7 @@ import { ButtonLoading } from "~/components/ui/button-loading";
 import { contactSchema, type ContactSchema } from "~/validators/contact";
 import { type Resume } from "~/stores/resume-store";
 import { SelectCity, SelectCountry, SelectState } from "./select-location";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
 export const PageForm = ({
   defaultValues,
@@ -19,6 +20,7 @@ export const PageForm = ({
   defaultValues: Resume["contact"];
 }) => {
   const params = useParams<{ id: string }>();
+  const setContact = useResumeStore((state) => state.setContact);
 
   const form = useForm<ContactSchema>({
     resolver: zodResolver(contactSchema),
@@ -32,6 +34,7 @@ export const PageForm = ({
   });
 
   const onSubmit = async (values: ContactSchema) => {
+    setContact(values);
     await updateContact.mutateAsync({ ...values, resumeId: params.id });
   };
 

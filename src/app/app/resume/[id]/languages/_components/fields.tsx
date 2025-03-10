@@ -1,7 +1,6 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { DateTimeRangePicker } from "~/components/form/datetime-range-picker";
 import { Input } from "~/components/form/input";
 import { Badge } from "~/components/ui/badge";
 import { useHandler } from "~/providers/handler-provider";
@@ -25,7 +24,7 @@ export const FormFields = ({ index }: FormFieldsProps) => {
       </div>
 
       <Input
-        label={`Qual o língua?`}
+        label={`Qual a língua?`}
         name={`${name}.${index}.name`}
         className="focus-visible:ring-2"
         required

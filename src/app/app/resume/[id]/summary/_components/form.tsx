@@ -11,20 +11,23 @@ import { type Summary } from "~/stores/resume-store";
 import { api } from "~/trpc/react";
 import { type SummarySchema } from "~/validators/summary";
 import { Textarea } from "~/components/form/textarea";
+import { useResumeStore } from "~/providers/resume-store-provider";
 
 export const PageForm = ({ defaultValues }: { defaultValues: Summary }) => {
   const params = useParams<{ id: string }>();
 
   const form = useForm({ defaultValues });
+  const setSummary = useResumeStore((state) => state.setSummary);
 
   const updateSummary = api.summary.create.useMutation({
     onSuccess: () => toast.success("Sumário salvo com sucesso!"),
   });
 
-  const handleOnSubmit: SubmitHandler<SummarySchema> = async (d) => {
+  const handleOnSubmit: SubmitHandler<SummarySchema> = async (values) => {
+    setSummary(values);
     await updateSummary.mutateAsync({
       resumeId: params.id,
-      ...d,
+      ...values,
     });
   };
 
