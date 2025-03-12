@@ -26,20 +26,12 @@ export const Body = () => {
         defaultValues={resumeTemplate?.experiences}
         generateANewItem={generateANewItem}
         mutations={mutations}
-        renderList={({
-          fields,
-          onAppend,
-          onMove,
-          onClick,
-          onAppear,
-          onRemove,
-        }) => (
+        renderList={({ onAppend, onMove, onClick, onAppear, onRemove }) => (
           <CardList
             title="Suas experiências"
             actionInfoText="Adicionar uma experiência"
             onAppend={onAppend}
             onMove={onMove}
-            fields={fields}
             renderItem={(field, index) => (
               <Item
                 key={field.activeIndex}
@@ -52,9 +44,8 @@ export const Body = () => {
             )}
           />
         )}
-        renderForm={({ onSubmit, fields, isLoading }) => (
+        renderForm={({ onSubmit, isLoading }) => (
           <FormList
-            fields={fields}
             isLoading={isLoading}
             onSubmit={onSubmit}
             submitText="Salvar na lista de experiências"

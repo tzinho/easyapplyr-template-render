@@ -12,7 +12,7 @@ export const Body = () => {
 
   return (
     <PageContentTwoSections isLoading={!resumeTemplate}>
-      <PageForm defaultValues={resumeTemplate.summary} />
+      <PageForm defaultValues={resumeTemplate?.summary} />
       <AIWriter />
     </PageContentTwoSections>
   );

@@ -23,7 +23,7 @@ export const Body = () => {
       <Handler
         name={name}
         schema={skillsSchema}
-        defaultValues={resumeTemplate.skills}
+        defaultValues={resumeTemplate?.skills}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({

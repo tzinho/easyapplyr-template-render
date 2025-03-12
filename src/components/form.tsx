@@ -18,7 +18,6 @@ interface FormGenerics extends FieldValues {
 
 interface FormProps<T extends FormGenerics> {
   onSubmit: SubmitHandler<T>;
-  fields: T[];
   isLoading: boolean;
   submitText: string;
   render: ({ index }: { index: number }) => ReactNode;
@@ -46,12 +45,17 @@ const getStackStyles = (
 function Form<T extends FormGenerics>({
   onSubmit,
   isLoading,
-  fields,
   submitText,
   render,
 }: FormProps<T>) {
   const form = useFormContext<T>();
-  const { activeIndex } = useHandlerInner();
+  const { activeIndex, fields } = useHandlerInner();
+
+  // console.log("[activeIndex]: ", activeIndex);
+  // console.log(
+  //   "[fields]: ",
+  //   fields.map((field) => field.activeIndex),
+  // );
 
   return (
     <form
@@ -64,6 +68,8 @@ function Form<T extends FormGenerics>({
             const currentVisible = fields.findIndex(
               (field) => field.activeIndex === activeIndex,
             );
+
+            console.log("currentVisible: ", currentVisible);
 
             const stackStyles = getStackStyles(
               currentVisible,

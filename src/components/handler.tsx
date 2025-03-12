@@ -5,7 +5,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,13 +20,7 @@ import {
   HandlerProvider,
 } from "~/providers/handler-provider";
 
-interface Field {
-  _id: string;
-  activeIndex: string;
-  resumeId: string;
-}
-
-interface HandlerProps<T extends Field> {
+interface HandlerProps {
   defaultValues: { id: string; activeIndex: string }[] | null;
   name: string;
   schema: any;
@@ -34,17 +28,15 @@ interface HandlerProps<T extends Field> {
   renderForm: ({
     isLoading,
     onSubmit,
-    fields,
   }: {
     isLoading: boolean;
     onSubmit: any;
-    fields: T[];
   }) => React.ReactNode;
   generateANewItem: any;
   mutations: any;
 }
 
-export function Handler<T extends Field>({
+export function Handler({
   defaultValues,
   name,
   renderList,
@@ -52,7 +44,7 @@ export function Handler<T extends Field>({
   schema,
   generateANewItem,
   mutations,
-}: HandlerProps<T>) {
+}: HandlerProps) {
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
   const [toActiveIndex, setToActiveIndex] = useState<string | null>(null);
@@ -78,7 +70,12 @@ export function Handler<T extends Field>({
 
   const isSubmitting = !fields.every((field) => !!field._id);
   const isTouching = form.formState.touchedFields?.[name]?.length;
-  const isDirtying = form.formState.touchedFields?.[name]?.length;
+  const isDirtying = form.formState.dirtyFields?.[name]?.length;
+
+  // console.log("[isTouching]: ", isTouching);
+  // console.log("[isDirtying]: ", isDirtying);
+  // console.log("[fieldsDirtying]: ", form.formState.dirtyFields?.[name]);
+  // console.log("[isSubmitting]: ", isSubmitting);
 
   const currentValues = () => form.getValues(name);
 
@@ -90,12 +87,17 @@ export function Handler<T extends Field>({
   };
 
   const addItem = () => {
-    const item = generateANewItem(fields.length) as T;
+    const item = generateANewItem(fields.length);
     updatePreviousFields(currentValues());
     replace([...fields, item]);
     resetForm();
     return item;
   };
+
+  console.log(
+    "[ff]: ",
+    fields.map((field) => field.activeIndex),
+  );
 
   useEffect(() => {
     updatePreviousFields(currentValues());
@@ -106,9 +108,11 @@ export function Handler<T extends Field>({
   }, [fields.length]);
 
   const onClick = (activeItemIndex: string) => {
+    console.log("onClick");
     if (isSubmitting) {
       // eslint-disable-next-line @typescript-eslint/dot-notation
       if (form.formState.touchedFields?.[name]) {
+        console.log("[here]");
         setToActiveIndex(activeItemIndex);
         return;
       } else {
@@ -128,6 +132,11 @@ export function Handler<T extends Field>({
     );
 
     if (!isEqual) {
+      // console.log("is not equal", activeItemIndex);
+      // console.log(
+      //   "[items]: ",
+      //   fields.map((field) => field.activeIndex),
+      // );
       setToActiveIndex(activeItemIndex);
       return;
     }
@@ -148,6 +157,7 @@ export function Handler<T extends Field>({
 
   const onMove = (actualIndex: number, nextIndex: number, updateItems: any) => {
     move(actualIndex, nextIndex);
+    resetForm(); //check
     void mutations.mutationChangeOrder.mutateAsync(updateItems);
   };
 
@@ -260,10 +270,10 @@ export function Handler<T extends Field>({
         <HandlerInnerProvider
           activeIndex={activeIndex}
           isSubmitting={isSubmitting}
+          fields={fields}
         >
           <div className="w-full md:max-w-[306px]">
             {renderList({
-              fields,
               onAppend,
               onMove,
               onClick,
@@ -274,7 +284,6 @@ export function Handler<T extends Field>({
           <div className="flex-1">
             {renderForm({
               onSubmit: handleOnSubmit,
-              fields,
               isLoading:
                 mutations.mutationCreate.isPending ||
                 mutations.mutationUpdate.isPending,

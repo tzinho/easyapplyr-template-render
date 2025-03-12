@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
+
 import { DateTimeRangePicker } from "~/components/form/datetime-range-picker";
 import { Input } from "~/components/form/input";
 import { TextareaList } from "~/components/form/textarea-list";
@@ -22,11 +23,15 @@ export const FormFields = ({ index }: FormFieldsProps) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex justify-between">
+      <div className="flex items-start justify-between sm:items-center">
         <p>
           {role} <span className="text-xs">{company}</span>
         </p>
-        {!appear && <Badge>Não mostra no currículo</Badge>}
+        {!appear && (
+          <Badge className="text-nowrap text-center text-xs">
+            Não mostra no currículo
+          </Badge>
+        )}
       </div>
 
       <Input

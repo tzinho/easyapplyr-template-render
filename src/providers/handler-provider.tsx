@@ -7,6 +7,7 @@ type HandlerApi = {
 type HandlerInnerApi = {
   activeIndex: string | null;
   isSubmitting: boolean;
+  fields: any[];
 };
 
 const HandlerContext = createContext<HandlerApi | undefined>(undefined);
@@ -19,6 +20,7 @@ type HandlerInnerProviderProps = {
   children: ReactNode;
   activeIndex: string | null;
   isSubmitting: boolean;
+  fields: any[];
 };
 
 export const HandlerProvider = ({ children, name }: HandlerProviderProps) => {
@@ -33,9 +35,10 @@ export const HandlerInnerProvider = ({
   children,
   activeIndex,
   isSubmitting,
+  fields,
 }: HandlerInnerProviderProps) => {
   return (
-    <HandlerInnerContext.Provider value={{ activeIndex, isSubmitting }}>
+    <HandlerInnerContext.Provider value={{ activeIndex, isSubmitting, fields }}>
       {children}
     </HandlerInnerContext.Provider>
   );

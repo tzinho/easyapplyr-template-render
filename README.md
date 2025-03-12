@@ -95,3 +95,15 @@ ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}'
 # BUGS
 
 When move the items need to update the previous values and the touched fields and the dirty fields
+
+```js
+useEffect(() => {
+    const listener = (event: BeforeUnloadEvent) => {
+     event.preventDefault();
+   };
+
+   window.addEventListener("beforeunload", listener);
+
+   return () => window.removeEventListener("beforeunload", listener);
+}, []);
+```

@@ -37,7 +37,6 @@ interface HandlerListProps {
     nextIndex: number,
     updateItems: { id: string; order: number }[],
   ) => void;
-  fields: { _id: string; order: number }[];
   title: string;
   renderItem: (
     field: { _id: string; order: number },
@@ -49,12 +48,11 @@ interface HandlerListProps {
 const List = ({
   onAppend,
   onMove,
-  fields,
   renderItem,
   title,
   actionInfoText,
 }: HandlerListProps) => {
-  const { isSubmitting } = useHandlerInner();
+  const { isSubmitting, fields } = useHandlerInner();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(TouchSensor),
