@@ -72,11 +72,6 @@ export function Handler({
   const isTouching = form.formState.touchedFields?.[name]?.length;
   const isDirtying = form.formState.dirtyFields?.[name]?.length;
 
-  // console.log("[isTouching]: ", isTouching);
-  // console.log("[isDirtying]: ", isDirtying);
-  // console.log("[fieldsDirtying]: ", form.formState.dirtyFields?.[name]);
-  // console.log("[isSubmitting]: ", isSubmitting);
-
   const currentValues = () => form.getValues(name);
 
   const getIndexOfItem = (activeIndex: string) => {
@@ -94,11 +89,6 @@ export function Handler({
     return item;
   };
 
-  console.log(
-    "[ff]: ",
-    fields.map((field) => field.activeIndex),
-  );
-
   useEffect(() => {
     updatePreviousFields(currentValues());
   }, []);
@@ -108,11 +98,9 @@ export function Handler({
   }, [fields.length]);
 
   const onClick = (activeItemIndex: string) => {
-    console.log("onClick");
     if (isSubmitting) {
       // eslint-disable-next-line @typescript-eslint/dot-notation
       if (form.formState.touchedFields?.[name]) {
-        console.log("[here]");
         setToActiveIndex(activeItemIndex);
         return;
       } else {
@@ -132,11 +120,6 @@ export function Handler({
     );
 
     if (!isEqual) {
-      // console.log("is not equal", activeItemIndex);
-      // console.log(
-      //   "[items]: ",
-      //   fields.map((field) => field.activeIndex),
-      // );
       setToActiveIndex(activeItemIndex);
       return;
     }
@@ -157,8 +140,15 @@ export function Handler({
 
   const onMove = (actualIndex: number, nextIndex: number, updateItems: any) => {
     move(actualIndex, nextIndex);
-    resetForm(); //check
-    void mutations.mutationChangeOrder.mutateAsync(updateItems);
+    // resetForm(); //check
+
+    updatePreviousFields(currentValues());
+    void mutations.mutationChangeOrder.mutateAsync(
+      updateItems.map((item) => ({
+        id: item._id,
+        order: item.order,
+      })),
+    );
   };
 
   const onRemove = (activeItemIndex: string) => {

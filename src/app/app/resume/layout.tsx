@@ -7,6 +7,5 @@ export * from "./__metadata";
 export default function ResumeLayout({
   children,
 }: Readonly<PropsWithChildren>) {
-  console.log("[ResumeLayout]");
   return <ResumeStoreProvider>{children}</ResumeStoreProvider>;
 }

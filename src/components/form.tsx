@@ -51,12 +51,6 @@ function Form<T extends FormGenerics>({
   const form = useFormContext<T>();
   const { activeIndex, fields } = useHandlerInner();
 
-  // console.log("[activeIndex]: ", activeIndex);
-  // console.log(
-  //   "[fields]: ",
-  //   fields.map((field) => field.activeIndex),
-  // );
-
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit)}
@@ -68,8 +62,6 @@ function Form<T extends FormGenerics>({
             const currentVisible = fields.findIndex(
               (field) => field.activeIndex === activeIndex,
             );
-
-            console.log("currentVisible: ", currentVisible);
 
             const stackStyles = getStackStyles(
               currentVisible,

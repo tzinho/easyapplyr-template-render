@@ -74,14 +74,7 @@ const List = ({
     const newItems = arrayMove(fields, actualIndex, nextIndex);
     const updateItems = newItems.map((item, order) => ({ ...item, order }));
 
-    onMove(
-      actualIndex,
-      nextIndex,
-      updateItems.map((item) => ({
-        id: item._id,
-        order: item.order,
-      })),
-    );
+    onMove(actualIndex, nextIndex, updateItems);
   };
 
   return (
