@@ -1,8 +1,7 @@
 "use client";
 
-import { PageContentTwoSections } from "~/components/page";
+import { PageContent } from "~/components/page";
 import { PageForm } from "./form";
-import { AIWriter } from "./ai-writer";
 import { useResumeStore } from "~/providers/resume-store-provider";
 
 export const Body = () => {
@@ -11,9 +10,8 @@ export const Body = () => {
   if (!resumeTemplate) return null;
 
   return (
-    <PageContentTwoSections isLoading={!resumeTemplate}>
+    <PageContent isLoading={!resumeTemplate}>
       <PageForm defaultValues={resumeTemplate?.summary} />
-      <AIWriter />
-    </PageContentTwoSections>
+    </PageContent>
   );
 };

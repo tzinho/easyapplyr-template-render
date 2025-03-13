@@ -12,11 +12,18 @@ import { api } from "~/trpc/react";
 import { type SummarySchema } from "~/validators/summary";
 import { Textarea } from "~/components/form/textarea";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { AIWriter } from "./ai-writer";
 
 export const PageForm = ({ defaultValues }: { defaultValues: Summary }) => {
   const params = useParams<{ id: string }>();
 
-  const form = useForm({ defaultValues });
+  const form = useForm({
+    defaultValues: {
+      ...defaultValues,
+      highlights: "",
+    },
+  });
+
   const setSummary = useResumeStore((state) => state.setSummary);
 
   const updateSummary = api.summary.create.useMutation({
@@ -33,20 +40,26 @@ export const PageForm = ({ defaultValues }: { defaultValues: Summary }) => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleOnSubmit)}
-        className="flex-2 flex flex-col"
-      >
-        <Textarea
-          name="text"
-          label="Escreva o melhor sumário possível"
-          placeholder="Experiente executivo global em estágio inicial com graduação em economia e matemática da Universidade de Wisconsin. Paixão por construir empresas inspiradoras que as pessoas adoram por meio de design, desenvolvimento, branding e grandes apostas."
-          rows={4}
-        />
-        <ButtonLoading isLoading={updateSummary.isPending} className="self-end">
-          Salvar suas informações
-        </ButtonLoading>
-      </form>
+      <div className="flex flex-col-reverse gap-4 md:flex-row">
+        <form
+          onSubmit={form.handleSubmit(handleOnSubmit)}
+          className="flex flex-1 flex-col"
+        >
+          <Textarea
+            name="text"
+            label="Escreva o melhor sumário possível"
+            placeholder="Experiente executivo global em estágio inicial com graduação em economia e matemática da Universidade de Wisconsin. Paixão por construir empresas inspiradoras que as pessoas adoram por meio de design, desenvolvimento, branding e grandes apostas."
+            rows={4}
+          />
+          <ButtonLoading
+            isLoading={updateSummary.isPending}
+            className="self-end"
+          >
+            Salvar suas informações
+          </ButtonLoading>
+        </form>
+        <AIWriter />
+      </div>
     </Form>
   );
 };
