@@ -1,8 +1,9 @@
+import Image from "next/image";
+
 import { WaitlistForm } from "~/components/waitlist-form";
 import { SocialLinks } from "~/components/social-links";
 import { WaitlistAvatars } from "~/components/waitlist-avatars";
 import { BackgroundLines } from "~/components/background-lines";
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
       <BackgroundLines className="flex w-full flex-col items-center justify-center px-4">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.4)_100%)]" />
 
-        <div className="relative mx-auto w-full max-w-2xl space-y-12 px-4 text-center">
+        <div className="relative mx-auto h-full w-full max-w-2xl space-y-12 px-4 text-center">
           <div className="flex flex-col items-center justify-center space-y-6">
             <Image
               src="/android-launchericon-144-144.png"
@@ -19,9 +20,9 @@ export default function Home() {
               alt="Logo Easyapplyr"
               className="rounded-full shadow-lg ring-2 ring-primary"
             />
-            <h1 className="text-3xl font-bold tracking-tight text-black md:text-5xl">
+            <h1 className="text-3xl font-bold tracking-tight text-white md:text-5xl">
               Junte-se a Easyapplyr <br />
-              <span className="text-xl font-black text-white">
+              <span className="text-xl font-black">
                 Faça parte da lista de espera
               </span>
             </h1>
