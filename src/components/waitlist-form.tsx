@@ -40,11 +40,11 @@ export function WaitlistForm() {
         onSubmit={form.handleSubmit(handleSubmit)}
         className="mx-auto w-full max-w-xl"
       >
-        <div className="flex gap-2 rounded-full bg-white/10 p-1 backdrop-blur-sm">
+        <div className="flex flex-col gap-2 rounded-full p-1 backdrop-blur-sm sm:flex-row sm:bg-white/10">
           <input
             autoComplete="off"
             placeholder="Preencha com seu melhor email"
-            className="h-8 w-full appearance-none border-0 border-none bg-transparent px-6 text-white shadow-none outline-none ring-0 placeholder:text-gray-400 focus:border-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 active:border-0 active:border-none"
+            className="h-10 w-full appearance-none rounded-full border-0 border-none bg-white/10 px-6 text-white shadow-none outline-none ring-0 placeholder:text-gray-400 focus:border-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 active:border-0 active:border-none sm:bg-transparent"
             {...form.register("email")}
           />
           <Button

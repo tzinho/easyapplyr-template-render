@@ -7,11 +7,11 @@ export function WaitlistAvatars() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-1">
-      <div className="flex -space-x-3">
+      <div className="flex -space-x-2">
         {avatars.map((avatar, i) => (
           <div
             key={avatar.initials}
-            className={`h-8 w-8 rounded-full ${avatar.color} flex items-center justify-center text-xs font-medium text-white ring-2 ring-black`}
+            className={`h-8 w-8 rounded-full ${avatar.color} flex items-center justify-center text-xs font-medium text-white`}
           >
             {avatar.initials}
           </div>
