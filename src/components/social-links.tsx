@@ -1,20 +1,31 @@
 "use client";
 
-import {
-  Twitter,
-  Instagram,
-  DiscIcon as Discord,
-  Facebook,
-  Linkedin,
-} from "lucide-react";
+import { icons } from "./icons";
 
 export function SocialLinks() {
   const socialLinks = [
-    { name: "Twitter", icon: Twitter, href: "#" },
-    { name: "Instagram", icon: Instagram, href: "#" },
-    { name: "Discord", icon: Discord, href: "#" },
-    { name: "Facebook", icon: Facebook, href: "#" },
-    { name: "LinkedIn", icon: Linkedin, href: "#" },
+    {
+      name: "X",
+      icon: icons.X,
+      href: "#",
+    },
+    {
+      name: "Instagram",
+      icon: icons.Instagram,
+      href: "https://www.instagram.com/easyapplyr/",
+    },
+    {
+      name: "Discord",
+      icon: icons.Discord,
+      href: "#",
+    },
+    { name: "Facebook", icon: icons.Facebook, href: "#" },
+    { name: "LinkedIn", icon: icons.Linkedin, href: "#" },
+    {
+      name: "Reddit",
+      icon: icons.Reddit,
+      href: "#",
+    },
   ];
 
   return (
@@ -23,12 +34,12 @@ export function SocialLinks() {
         <a
           key={social.name}
           href={social.href}
-          className="text-gray-400 transition-colors hover:text-white"
+          className="text-gray-400 transition-colors hover:fill-white"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`Follow us on ${social.name}`}
+          aria-label={`Siga-nos no ${social.name}`}
         >
-          <social.icon className="h-6 w-6" />
+          <social.icon className="hover:fill-white" />
         </a>
       ))}
     </div>
