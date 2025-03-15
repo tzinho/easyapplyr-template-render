@@ -77,7 +77,7 @@ export const SelectCountry = ({ name, placeholder }: SelectCountryProps) => {
       name={name}
       placeholder={placeholder}
       label="País"
-      className="flex-1"
+      className="w-full flex-1"
     >
       {countries.map((country) => (
         <SelectItem key={country.isoCode} value={country.isoCode}>

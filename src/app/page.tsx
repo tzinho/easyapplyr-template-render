@@ -7,13 +7,13 @@ import { BackgroundLines } from "~/components/background-lines";
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-primary to-[#331F0D] p-4">
+    <main className="relative flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-primary to-[#331F0D] py-4">
       <BackgroundLines className="flex w-full flex-col items-center justify-center px-4">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.4)_100%)]" />
 
-        <div className="relative mx-auto flex h-full w-full max-w-2xl flex-col justify-between space-y-12 px-4 py-12 text-center">
-          <div className="space-y-12">
-            <div className="flex flex-col items-center justify-center space-y-6">
+        <div className="relative mx-auto flex h-full w-full max-w-2xl flex-col justify-center space-y-12 px-4 text-center">
+          <div className="space-y-8">
+            <div className="flex flex-col items-center justify-center space-y-4">
               <Image
                 src="/android-launchericon-144-144.png"
                 width={72}

@@ -38,17 +38,12 @@ export const Input = ({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="w-full">
+        <FormItem className={cn("w-full", className)}>
           <FormLabel>
             {label} {required && <span className="text-red-500">*</span>}
           </FormLabel>
           <FormControl>
-            <InputShadcn
-              placeholder={placeholder}
-              {...field}
-              {...props}
-              className={cn("w-full", className)}
-            />
+            <InputShadcn placeholder={placeholder} {...field} {...props} />
           </FormControl>
           <FormDescription>{description}</FormDescription>
           <FormMessage />
