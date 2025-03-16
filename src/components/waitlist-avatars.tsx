@@ -6,7 +6,7 @@ export function WaitlistAvatars() {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-1">
+    <div className="flex h-fit flex-col items-center justify-center gap-3 sm:flex-row sm:gap-1">
       <div className="flex -space-x-2">
         {avatars.map((avatar, i) => (
           <div

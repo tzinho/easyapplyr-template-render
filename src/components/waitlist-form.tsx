@@ -8,6 +8,7 @@ import { z } from "zod";
 import { subscribeToWaitlist } from "~/app/actions";
 import { Button } from "~/components/ui/button";
 import { Form } from "./ui/form";
+import { LoaderCircle } from "lucide-react";
 
 const waitlistInput = z.object({
   email: z.string().email({ message: "Insira um email válido!" }),
@@ -23,10 +24,14 @@ export function WaitlistForm() {
   });
 
   const handleSubmit = async (values: WaitlistInput) => {
-    console.log("values", values);
     setIsSubmitting(true);
     try {
-      await subscribeToWaitlist(values.email);
+      // await subscribeToWaitlist(values.email);
+      const promise = new Promise((resolve) => {
+        setTimeout(resolve, 3000);
+      });
+
+      await promise;
     } catch (err) {
       console.error(err);
     } finally {
@@ -52,7 +57,14 @@ export function WaitlistForm() {
             className="my-auto rounded-full bg-white px-8 text-primary hover:bg-gray-100"
             disabled={isSubmitting}
           >
-            Seja notificado
+            {isSubmitting ? (
+              <span className="flex gap-1">
+                <LoaderCircle className="h-12 w-12 animate-spin" />
+                Enviando email
+              </span>
+            ) : (
+              "Seja notificado"
+            )}
           </Button>
         </div>
       </form>
