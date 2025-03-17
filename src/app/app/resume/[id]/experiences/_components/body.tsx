@@ -23,7 +23,9 @@ export const Body = () => {
       <Handler
         name={name}
         schema={experiencesSchema}
-        defaultValues={resumeTemplate?.experiences}
+        defaultValues={resumeTemplate?.experiences.sort(
+          (a, b) => a.order - b.order,
+        )}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({ onAppend, onMove, onClick, onAppear, onRemove }) => (

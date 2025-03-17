@@ -92,12 +92,12 @@ export const skillsRouter = createTRPCRouter({
     .input(skillSchemaUpdate)
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input;
-      const skill = await ctx.db
+      const [model] = await ctx.db
         .update(skills)
         .set(data)
         .where(eq(skills.id, id))
         .returning();
 
-      return skill;
+      return model;
     }),
 });

@@ -108,4 +108,4 @@ useEffect(() => {
 }, []);
 ```
 
-## Summary depends on teh experiences
+## Summary depends on the experiences

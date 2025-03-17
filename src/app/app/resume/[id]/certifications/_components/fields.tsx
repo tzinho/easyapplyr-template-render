@@ -16,7 +16,7 @@ export const FormFields = ({ index }: FormFieldsProps) => {
   const name =
     form.watch(`certifications.${index}.name`) || `Certificação ${index + 1}`;
   const where =
-    form.watch(`certifications.${index}.where`) || `Intituição ${index + 1}`;
+    form.watch(`certifications.${index}.where`) || `Instituição ${index + 1}`;
 
   const appear = form.watch(`certifications.${index}.appear`);
 

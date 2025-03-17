@@ -20,12 +20,12 @@ export const Header = ({ onOpenChange }: HeaderProps) => {
         subtitle="Gerencie seus currículos"
         icon={FileUser}
       >
-        <ModalToCreateAResume>
+        {/* <ModalToCreateAResume>
           <PageNavbarPrimaryButton onClick={() => onOpenChange?.(true)}>
             <Plus size={16} />
             <span className="hidden md:inline">Criar currículo</span>
           </PageNavbarPrimaryButton>
-        </ModalToCreateAResume>
+        </ModalToCreateAResume> */}
       </PageNavbarSearchAction>
     </>
   );

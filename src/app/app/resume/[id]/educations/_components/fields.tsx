@@ -17,7 +17,7 @@ export const FormFields = ({ index }: FormFieldsProps) => {
   const degree =
     form.watch(`educations.${index}.degree`) || `Grau ${index + 1}`;
   const institution =
-    form.watch(`educations.${index}.institution`) || `Intituição ${index + 1}`;
+    form.watch(`educations.${index}.institution`) || `Instituição ${index + 1}`;
 
   const appear = form.watch(`educations.${index}.appear`);
 

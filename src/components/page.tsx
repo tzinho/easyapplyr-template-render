@@ -10,6 +10,7 @@ import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { PageLoading } from "./page-loading";
 import { ButtonReload } from "./shared/button-reload";
+import { UserDropdown } from "./user-dropdown";
 
 const PageNavbarLeftContent = React.forwardRef<
   HTMLDivElement,
@@ -174,9 +175,10 @@ export function PageNavbarSearchAction({
       </PageNavbarLeftContent>
 
       <PageNavbarRightContent>
-        <PageNavbarIconButton>
+        <UserDropdown />
+        {/* <PageNavbarIconButton>
           <Search size={16} />
-        </PageNavbarIconButton>
+        </PageNavbarIconButton> */}
         {children}
       </PageNavbarRightContent>
     </PageNavbar>

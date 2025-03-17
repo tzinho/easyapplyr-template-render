@@ -5,12 +5,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { type SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import lodash from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import ReactPlayer from "react-player/lazy";
 
 import { Form } from "~/components/ui/form";
 import { Confirm } from "./confirm";
@@ -208,10 +209,12 @@ export function Handler({
       id: fields[index]._id,
       appear: !fields[index].appear,
     });
+
     update(index, {
       ...fields[index],
       appear: !fields[index].appear,
     });
+
     updatePreviousFields(
       previousValues?.map((field) => {
         if (field.activeIndex === activeIndex)
@@ -257,12 +260,31 @@ export function Handler({
             setActiveIndex(toActiveIndex);
           }}
         />
+
         <HandlerInnerProvider
           activeIndex={activeIndex}
           isSubmitting={isSubmitting}
           fields={fields}
         >
-          <div className="w-full md:max-w-[306px]">
+          <div className="w-full space-y-4 md:max-w-[306px]">
+            {/* <ReactPlayer
+              url="https://www.youtube.com/watch?v=OtEJTgmL5rc"
+              width={306}
+              height={175}
+              config={{
+                youtube: {
+                  playerVars: {
+                    showinfo: 1,
+                    modestbranding: 0,
+                    rel: 1,
+                    controls: 0,
+                    enablejsapi: 1,
+                  },
+                  embedOptions: {},
+                },
+              }}
+              style={{ borderRadius: "25px" }}
+            /> */}
             {renderList({
               onAppend,
               onMove,

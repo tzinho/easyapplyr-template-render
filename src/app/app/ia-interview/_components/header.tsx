@@ -19,10 +19,10 @@ export const Header = ({ onOpenChange }: HeaderProps) => {
         subtitle="Simule uma entrevista"
         icon={UserCheck}
       >
-        <PageNavbarPrimaryButton onClick={() => onOpenChange?.(true)}>
+        {/* <PageNavbarPrimaryButton onClick={() => onOpenChange?.(true)}>
           <Plus size={16} />
           <span className="hidden md:inline">Criar entrevista</span>
-        </PageNavbarPrimaryButton>
+        </PageNavbarPrimaryButton> */}
       </PageNavbarSearchAction>
     </>
   );

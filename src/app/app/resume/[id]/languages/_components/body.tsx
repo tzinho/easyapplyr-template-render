@@ -23,7 +23,9 @@ export const Body = () => {
       <Handler
         name={name}
         schema={languagesSchema}
-        defaultValues={resumeTemplate?.languages}
+        defaultValues={resumeTemplate?.languages.sort(
+          (a, b) => a.order - b.order,
+        )}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({

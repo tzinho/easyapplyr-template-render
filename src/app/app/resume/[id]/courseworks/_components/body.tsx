@@ -23,7 +23,9 @@ export const Body = () => {
       <Handler
         name={name}
         schema={courseworksSchema}
-        defaultValues={resumeTemplate?.courseworks}
+        defaultValues={resumeTemplate?.courseworks.sort(
+          (a, b) => a.order - b.order,
+        )}
         generateANewItem={generateANewItem}
         mutations={mutations}
         renderList={({
