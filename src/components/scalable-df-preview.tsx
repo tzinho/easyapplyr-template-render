@@ -45,7 +45,7 @@ export function ScalablePdfPreview({
     return () => window.removeEventListener("resize", updateScale);
   }, []);
 
-  console.log("[scale]: ", scale);
+  // console.log("[scale]: ", scale);
 
   return (
     <div
