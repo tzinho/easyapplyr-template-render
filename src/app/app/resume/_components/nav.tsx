@@ -114,7 +114,7 @@ export const SelectPage = ({ required }: NavProps) => {
 
   return (
     <div className="px-4">
-      <Select onValueChange={handleOnChange} defaultValue={initial.value}>
+      <Select onValueChange={handleOnChange} defaultValue={initial?.value}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select a page" />
         </SelectTrigger>

@@ -8,7 +8,6 @@ import { BackgroundLines } from "~/components/background-lines";
 export default function Home() {
   return (
     <main className="relative flex h-full flex-col items-center justify-center bg-gradient-to-b from-primary to-[#331F0D] py-4">
-      {/* // <main className="relative flex h-screen flex-1 flex-col items-center justify-center bg-red-100 py-4"> */}
       <BackgroundLines className="flex h-full w-full flex-col items-center justify-center px-4">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0)_0%,rgba(0,0,0,0.4)_100%)]" />
 

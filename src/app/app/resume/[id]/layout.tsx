@@ -18,7 +18,7 @@ export default async function ResumeLayoutEdit({
   const responseAPI = await api.resumes.get(id);
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex h-full flex-col gap-3">
       <Wrapper resumeTemplate={responseAPI}>{children}</Wrapper>
     </div>
   );

@@ -57,7 +57,7 @@ const FontSelectAdjust = () => {
 const FontSizeAdjust = () => {
   const { resumeTemplate, setSettings } = useResumeStore((state) => state);
   return (
-    <div className="flex w-full flex-1 items-center gap-3">
+    <div className="flex w-full flex-1 items-center justify-center gap-3">
       <Button
         variant="outline"
         className="rounded-full"
@@ -89,13 +89,11 @@ const FontSizeAdjust = () => {
 
 export const Toolbar = () => {
   return (
-    <div className="mb-3 flex gap-3">
+    <div className="mb-3 flex flex-col items-center justify-center gap-3 md:flex-row">
       <FontSizeAdjust />
       <FontSelectAdjust />
-      <SectionSpacing />
-      <LineHeightAdjust />
       <PaperSelectAdjust />
-      <Button>Download PDF</Button>
+      <Button>Baixar PDF</Button>
     </div>
   );
 };
