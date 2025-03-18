@@ -27,6 +27,8 @@ export const OneColumn = ({
       resumeTemplate,
     });
 
+  console.log("[isPreview]: ", isPreview);
+
   return (
     <DndContext
       collisionDetection={closestCorners}

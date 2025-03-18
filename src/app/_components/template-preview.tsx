@@ -13,9 +13,5 @@ export const TemplatePreview = ({
   isPreview,
 }: TemplatePreviewProps) => {
   const Template = getTemplate(resumeTemplate.templateId).component;
-  return (
-    <div className="h-full w-full">
-      <Template resumeTemplate={resumeTemplate} isPreview={isPreview} />
-    </div>
-  );
+  return <Template resumeTemplate={resumeTemplate} isPreview={isPreview} />;
 };

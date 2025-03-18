@@ -16,7 +16,11 @@ import { OneColumn } from "../_components/one-column";
 import { SectionList } from "~/components/templates/section-list";
 import { SectionTitle } from "~/components/templates/section-title";
 
-const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
+const Skills: React.FC<SectionProps> = ({
+  resumeTemplate,
+  section,
+  isPreview,
+}) => {
   return (
     <SectionList
       id={section.id}
@@ -25,7 +29,11 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
       type="skills"
       renderItem={(items) =>
         items.map((item) => (
-          <Item key={item.id} id={item.id} disabled={section.disabled}>
+          <Item
+            key={item.id}
+            id={item.id}
+            disabled={section.disabled || !!isPreview}
+          >
             <li className="list-disc">{item.text}</li>
           </Item>
         ))
@@ -36,16 +44,24 @@ const Skills: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   );
 };
 
-const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
+const Experiences: React.FC<SectionProps> = ({
+  resumeTemplate,
+  section,
+  isPreview,
+}) => {
   return (
     <SectionList
       id={section.id}
-      disabled={section.disabled}
+      disabled={section.disabled || !!isPreview}
       resumeTemplate={resumeTemplate}
       type="experiences"
       renderItem={(items) =>
         items.map((item) => (
-          <Item key={item.id} id={item.id} disabled={section.disabled}>
+          <Item
+            key={item.id}
+            id={item.id}
+            disabled={section.disabled || !!isPreview}
+          >
             <li className="list-disc">{item.role}</li>
           </Item>
         ))
@@ -56,16 +72,24 @@ const Experiences: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   );
 };
 
-const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
+const Education: React.FC<SectionProps> = ({
+  resumeTemplate,
+  section,
+  isPreview,
+}) => {
   return (
     <SectionList
       id={section.id}
-      disabled={section.disabled}
+      disabled={section.disabled || !!isPreview}
       resumeTemplate={resumeTemplate}
       type="educations"
       renderItem={(items) =>
         items.map((item) => (
-          <Item key={item.id} id={item.id} disabled={section.disabled}>
+          <Item
+            key={item.id}
+            id={item.id}
+            disabled={section.disabled || !!isPreview}
+          >
             <li className="list-disc">{item.degree}</li>
           </Item>
         ))
@@ -76,18 +100,26 @@ const Education: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
   );
 };
 
-const Summary: React.FC<SectionProps> = ({ resumeTemplate, section }) => {
+const Summary: React.FC<SectionProps> = ({
+  resumeTemplate,
+  section,
+  isPreview,
+}) => {
   return (
-    <Section id={section.id} disabled={section.disabled}>
+    <Section id={section.id} disabled={section.disabled || !!isPreview}>
       <SectionTitle>{section.title}</SectionTitle>
       <p>{resumeTemplate?.summary?.text}</p>
     </Section>
   );
 };
 
-const Contact: React.FC<SectionProps> = ({ section, resumeTemplate }) => {
+const Contact: React.FC<SectionProps> = ({
+  section,
+  resumeTemplate,
+  isPreview,
+}) => {
   return (
-    <Section id={section.id} disabled={section.disabled}>
+    <Section id={section.id} disabled={section.disabled || !!isPreview}>
       <h2 className="text-3xl">{resumeTemplate?.contact?.name}</h2>
       <div className="flex items-center gap-3">
         <div className="inline-flex items-center gap-1 text-muted-foreground">
@@ -112,7 +144,13 @@ const Contact: React.FC<SectionProps> = ({ section, resumeTemplate }) => {
   );
 };
 
-export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
+export const Template = ({
+  resumeTemplate,
+  isPreview,
+}: {
+  resumeTemplate: Resume;
+  isPreview?: boolean;
+}) => {
   const renderSection = (section: SectionType) => {
     switch (section.type) {
       case "contact": {
@@ -121,6 +159,7 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
             key={section.id}
             resumeTemplate={resumeTemplate}
             section={section}
+            isPreview={isPreview}
           />
         );
       }
@@ -131,6 +170,7 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
             key={section.id}
             resumeTemplate={resumeTemplate}
             section={section}
+            isPreview={isPreview}
           />
         );
       }
@@ -141,6 +181,7 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
             key={section.id}
             resumeTemplate={resumeTemplate}
             section={section}
+            isPreview={isPreview}
           />
         );
       }
@@ -151,6 +192,7 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
             key={section.id}
             resumeTemplate={resumeTemplate}
             section={section}
+            isPreview={isPreview}
           />
         );
       }
@@ -161,6 +203,7 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
             key={section.id}
             resumeTemplate={resumeTemplate}
             section={section}
+            isPreview={isPreview}
           />
         );
       }
@@ -171,6 +214,10 @@ export const Template = ({ resumeTemplate }: { resumeTemplate: Resume }) => {
   };
 
   return (
-    <OneColumn renderSection={renderSection} resumeTemplate={resumeTemplate} />
+    <OneColumn
+      renderSection={renderSection}
+      resumeTemplate={resumeTemplate}
+      isPreview={isPreview}
+    />
   );
 };

@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 * {
-  font-family: "Atma", sans-serif !important;
+  font-family: "Atma", sans-serif;
 }
 
 @layer base {

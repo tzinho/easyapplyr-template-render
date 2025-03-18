@@ -34,6 +34,7 @@ export const Section = ({
     // opacity: isDragging ? 0.5 : 1,
   };
 
+  console.log("[disabled]: ", disabled);
   if (disabled) return children;
 
   return (

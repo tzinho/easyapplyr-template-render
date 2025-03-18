@@ -17,7 +17,7 @@ export const Body = () => {
   return (
     <PageContent className="flex justify-center">
       <div className="w-full max-w-3xl rounded-lg border border-gray-200 p-8 md:p-12">
-        <div className="flex flex-col justify-between gap-3 md:flex-row">
+        <div className="flex flex-col justify-between gap-3 lg:flex-row">
           <div>
             <h3 className="text-md font-semibold text-primary">
               Configurações de linguagem
@@ -42,7 +42,7 @@ export const Body = () => {
 
         <Separator className="my-4 w-full" />
 
-        <div className="flex flex-col justify-between gap-3 md:flex-row">
+        <div className="flex flex-col justify-between gap-3 lg:flex-row">
           <div>
             <h3 className="text-md font-semibold text-primary">Mudar email</h3>
             <p className="text-muted-foreground">
@@ -57,7 +57,7 @@ export const Body = () => {
 
         <Separator className="my-4 w-full" />
 
-        <div className="flex flex-col justify-between gap-3 md:flex-row">
+        <div className="flex flex-col justify-between gap-3 lg:flex-row">
           <div>
             <h3 className="text-md font-semibold text-primary">
               Atualizar pagamento
@@ -74,7 +74,7 @@ export const Body = () => {
 
         <Separator className="my-4 w-full" />
 
-        <div className="flex flex-col justify-between gap-3 md:flex-row">
+        <div className="flex flex-col justify-between gap-3 lg:flex-row">
           <div>
             <h3 className="text-md font-semibold text-primary">
               Deletar conta

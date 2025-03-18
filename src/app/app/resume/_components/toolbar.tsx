@@ -15,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { ColorPicker } from "~/components/colorpicker";
+import { useState } from "react";
 
 export const PAPER_SIZES = {
   A4: { width: 210, height: 297, name: "A4" },
@@ -93,7 +95,12 @@ const FontSizeAdjust = () => {
 
 export const Toolbar = () => {
   const paperSize = "A4";
+  const [color, setColor] = useState("#000000");
   const { width: WIDTH_MM, height: HEIGHT_MM } = PAPER_SIZES[paperSize];
+
+  const handleOnChangeColor = (color: string) => {
+    setColor(color);
+  };
 
   const downloadPdf = async () => {
     const container = document.getElementById("resume");
@@ -142,6 +149,7 @@ export const Toolbar = () => {
       <FontSizeAdjust />
       <FontSelectAdjust />
       <PaperSelectAdjust />
+      <ColorPicker value={color} onChange={handleOnChangeColor} />
       <Button onClick={downloadPdf}>Baixar PDF</Button>
     </div>
   );
