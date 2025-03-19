@@ -27,7 +27,7 @@ export const OneColumn = ({
       resumeTemplate,
     });
 
-  console.log("[isPreview]: ", isPreview);
+  console.log("[settings]: ", resumeTemplate?.settings);
 
   return (
     <DndContext
@@ -43,8 +43,15 @@ export const OneColumn = ({
       >
         <div
           id="resume"
-          className="h-full w-full p-4"
-          style={{ fontSize: resumeTemplate?.settings?.fontSize }}
+          // className="flex h-full w-full flex-col rounded-sm border bg-white p-4 shadow-xl"
+          className="flex h-full w-full flex-col rounded-sm border p-4 shadow-xl"
+          style={{
+            fontFamily: resumeTemplate?.settings?.fontFamily,
+            fontSize: resumeTemplate?.settings?.fontSize,
+            gap: `${resumeTemplate?.settings?.sectionSpacing}em`,
+            // letterSpacing: `${0.1}em`,
+            // lineHeight: `${resumeTemplate?.settings?.lineHeight}rem`,
+          }}
         >
           {items.filter((item) => item.appear).map(renderSection)}
         </div>

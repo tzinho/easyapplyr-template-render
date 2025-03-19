@@ -57,6 +57,7 @@ export interface Settings {
   lineHeight: number;
   indent: boolean;
   showSeparators: boolean;
+  letterSpacing: number;
 }
 
 export interface Template {

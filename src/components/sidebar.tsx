@@ -13,9 +13,12 @@ import { MenuLink } from "./menu-link";
 import { UserNav } from "./user-nav";
 import { cn } from "~/lib/utils";
 import { useStore } from "~/store";
+import { Button } from "./ui/button";
+import usePremiumModal from "~/hooks/use-premium-modal";
 
 function Sidebar() {
   const { isCollapsed } = useStore();
+  const { setOpen } = usePremiumModal();
 
   return (
     <div
@@ -37,6 +40,7 @@ function Sidebar() {
               href="/app/ia-interview"
               title="Entrevista com I.A"
               icon={Shirt}
+              isPro
             />
             <MenuLink
               href="/app/jobs"
@@ -45,7 +49,24 @@ function Sidebar() {
             />
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-4">
+            <div
+              className={cn(
+                "mx-1 flex items-center gap-1",
+                isCollapsed && "hidden",
+              )}
+            >
+              <div className="">
+                <p className="font-semibold tracking-tight text-primary">
+                  Acesse todas as funcionalidades
+                </p>
+                <span className="text-xs">Clique aqui e se torne pro</span>
+              </div>
+              <Button size="sm" onClick={() => setOpen(true)}>
+                Atualizar
+              </Button>
+            </div>
+
             <div className="text-xs font-medium text-gray-500 md:px-2">
               <MenuLink
                 href="/app/settings"
@@ -58,7 +79,6 @@ function Sidebar() {
 
             <div
               className={cn(
-                // "flex cursor-pointer items-center justify-start px-4 duration-200 md:px-6 md:pb-20",
                 "flex cursor-pointer items-center justify-start px-4 duration-200 md:px-6 md:pb-20",
                 isCollapsed && "px-2 md:px-2",
               )}

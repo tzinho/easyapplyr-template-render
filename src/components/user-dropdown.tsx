@@ -1,6 +1,5 @@
 import {
   Bell,
-  ChevronRight,
   FileText,
   LogOut,
   Settings,
@@ -20,23 +19,95 @@ import {
   DropdownMenuSubTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Button } from "~/components/ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "~/components/ui/sheet";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+} from "./ui/sheet";
+import { Button } from "./ui/button";
+import { useState } from "react";
 
 interface UserDropdownProps {
   email?: string;
   userInitial?: string;
+}
+
+type Notification = {
+  id: string;
+  title: string;
+  message: string;
+  date: string;
+};
+
+function NotificationButton() {
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      id: "1",
+      title: "Nova mensagem",
+      message: "Você viu o que acabemos de implementar",
+      date: "2 min atrás",
+    },
+    {
+      id: "2",
+      title: "Sumiu? Porque?",
+      message: "Não se esqueça de editar seu currículo",
+      date: "10 min atrás",
+    },
+    {
+      id: "3",
+      title: "Atualização do app",
+      message: "Uma nova funcionalidade esperando por você",
+      date: "2 horas atrás",
+    },
+  ]);
+
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={`${notifications.length} new notifications`}
+          className="relative rounded-full"
+        >
+          <Bell className="h-5 w-5" />
+          {notifications.length > 0 && (
+            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs text-destructive-foreground">
+              {notifications.length}
+            </span>
+          )}
+        </Button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Notificações</SheetTitle>
+        </SheetHeader>
+        <div className="mt-4">
+          {notifications.length === 0 ? (
+            <p className="text-center text-muted-foreground">
+              No new notifications
+            </p>
+          ) : (
+            <ul className="space-y-4">
+              {notifications.map((notification) => (
+                <li key={notification.id} className="rounded-md bg-muted p-3">
+                  <h3 className="font-medium">{notification.title}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {notification.message}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {notification.date}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
 }
 
 export function UserDropdown({
@@ -45,40 +116,7 @@ export function UserDropdown({
 }: UserDropdownProps) {
   return (
     <div className="flex items-center gap-3">
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="ghost" className="rounded-full">
-            <Bell className="h-5 w-5 fill-primary stroke-primary text-gray-400" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Editar conta</SheetTitle>
-            <SheetDescription>
-              Faça as alterações na sua conta e clique em salvar.
-            </SheetDescription>
-          </SheetHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Nome
-              </Label>
-              <Input id="name" value="Pedro Duarte" className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Usuário
-              </Label>
-              <Input id="username" value="@peduarte" className="col-span-3" />
-            </div>
-          </div>
-          <SheetFooter>
-            <SheetClose asChild>
-              <Button type="submit">Salvar alterações</Button>
-            </SheetClose>
-          </SheetFooter>
-        </SheetContent>
-      </Sheet>
+      <NotificationButton />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative rounded-full p-0">

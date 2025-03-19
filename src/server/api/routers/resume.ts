@@ -152,10 +152,6 @@ export const resumeRouter = createTRPCRouter({
         const template = getTemplate(input.templateId);
 
         const resumeId = resume[0]!.id;
-        /*
-  involvements: many(involvements),
-  languages: many(languages),
-*/
 
         const defaultSections = template.defaultSections.map((section) => {
           return {

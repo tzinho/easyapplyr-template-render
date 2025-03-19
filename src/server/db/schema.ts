@@ -193,8 +193,16 @@ export const settings = createTable("setting", {
   resumeId: text("resumeId")
     .notNull()
     .references(() => resumes.id, { onDelete: "cascade" }),
-  fontSize: integer("fontSize").notNull(),
-  primaryColor: text("primaryColor").notNull(),
+  fontSize: integer("fontSize").notNull().default(9), // pt
+  primaryColor: text("primaryColor").notNull(), // black
+  fontFamily: text("fontFamily").notNull(), // Merriweather
+  paperSize: text("paperSize").notNull().default("A4"), // A4
+  showIcons: boolean("showIcons").default(true), // true
+  sectionSpacing: integer("sectionSpacing").notNull().default(1), //em
+  letterSpacing: integer("letterSpacing").notNull().default(1), // em
+  lineHeight: integer("lineHeight").notNull().default(1.6), // 1.5em to 1.85em
+  indent: boolean("indent").notNull().default(false), // false,
+  showSeparators: boolean("showSeparators").notNull().default(false),
 });
 
 // Relations

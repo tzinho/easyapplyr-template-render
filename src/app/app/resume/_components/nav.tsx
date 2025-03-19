@@ -183,7 +183,6 @@ export const Nav = () => {
       const resultLinks = appSections.map((section) => {
         return section;
       });
-      // console.log("resultLinks", resultLinks);
     }
   }, [sections.isLoading]);
 

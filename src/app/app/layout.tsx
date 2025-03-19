@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import Sidebar from "~/components/sidebar";
 import { useStore } from "~/store";
+import { UpgradePlan } from "~/components/shared/upgrade-plan";
 
 export default function AppLayout({ children }: Readonly<PropsWithChildren>) {
   const { isSidebarOpen, setIsSidebarOpen } = useStore();
@@ -52,6 +53,7 @@ export default function AppLayout({ children }: Readonly<PropsWithChildren>) {
           </div>
         </div>
       </motion.div>
+      <UpgradePlan />
     </>
   );
 }

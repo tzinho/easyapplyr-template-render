@@ -109,3 +109,9 @@ useEffect(() => {
 ```
 
 ## Summary depends on the experiences
+
+# Bugs
+
+## when i click to show dropdown on more options the app redirects to edit resume pages
+
+## sidebar needs to be a fixed

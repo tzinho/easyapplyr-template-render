@@ -109,6 +109,9 @@ export const ResumePreview = ({
               variant="ghost"
               size="icon"
               className="h-6 w-6 text-gray-400"
+              onClick={(e) => {
+                console.log("event", e);
+              }}
             >
               <MoreVertical className="h-4 w-4" />
               <span className="sr-only">More options</span>

@@ -17,6 +17,7 @@ import {
 } from "~/components/ui/select";
 import { ColorPicker } from "~/components/colorpicker";
 import { useState } from "react";
+import { ValueSlider } from "~/components/value-slider";
 
 export const PAPER_SIZES = {
   A4: { width: 210, height: 297, name: "A4" },
@@ -150,6 +151,7 @@ export const Toolbar = () => {
       <FontSelectAdjust />
       <PaperSelectAdjust />
       <ColorPicker value={color} onChange={handleOnChangeColor} />
+      <ValueSlider />
       <Button onClick={downloadPdf}>Baixar PDF</Button>
     </div>
   );
