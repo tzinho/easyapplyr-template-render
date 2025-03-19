@@ -42,7 +42,7 @@ export function MenuLink({
       onClick={handleOnClick}
       variant="secondary"
       className={cn(
-        "group flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-300 hover:bg-primary hover:text-primary-foreground",
+        "group flex w-full items-center rounded-md bg-transparent px-3 py-2 text-sm font-medium transition-all duration-300 hover:bg-primary hover:text-primary-foreground",
         isCollapsed ? "justify-center" : "justify-start",
         pathname === href && "bg-primary text-primary-foreground",
       )}

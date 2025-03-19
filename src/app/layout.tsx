@@ -14,7 +14,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
     <html lang="pt-BR" className={`${fontSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          <main className="h-screen">{children}</main>
+          <main className="h-screen antialiased">{children}</main>
         </TRPCReactProvider>
         <Toaster />
         <Sonner />

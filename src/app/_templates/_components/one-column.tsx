@@ -44,7 +44,7 @@ export const OneColumn = ({
         <div
           id="resume"
           // className="flex h-full w-full flex-col rounded-sm border bg-white p-4 shadow-xl"
-          className="flex h-full w-full flex-col rounded-sm border p-4 shadow-xl"
+          className="flex h-full w-full flex-col rounded-sm p-4"
           style={{
             fontFamily: resumeTemplate?.settings?.fontFamily,
             fontSize: resumeTemplate?.settings?.fontSize,

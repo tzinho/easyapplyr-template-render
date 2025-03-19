@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import {
   Bell,
   FileText,
@@ -92,7 +93,12 @@ function NotificationButton() {
           ) : (
             <ul className="space-y-4">
               {notifications.map((notification) => (
-                <li key={notification.id} className="rounded-md bg-muted p-3">
+                <motion.li
+                  key={notification.id}
+                  className="cursor-pointer rounded-md bg-muted p-3"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                >
                   <h3 className="font-medium">{notification.title}</h3>
                   <p className="text-sm text-muted-foreground">
                     {notification.message}
@@ -100,7 +106,7 @@ function NotificationButton() {
                   <p className="mt-1 text-xs text-muted-foreground">
                     {notification.date}
                   </p>
-                </li>
+                </motion.li>
               ))}
             </ul>
           )}

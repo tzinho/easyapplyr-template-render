@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import { CheckIcon, RefreshCcwIcon } from "lucide-react";
+import { CheckIcon, RefreshCcwIcon, X } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -31,16 +31,15 @@ export function UpgradePlan() {
             <RefreshCcwIcon className="opacity-80" size={16} />
           </div>
           <DialogHeader>
-            <DialogTitle className="text-left">Change your plan</DialogTitle>
+            <DialogTitle className="text-left">Se torne PRO</DialogTitle>
             <DialogDescription className="text-left">
-              Pick one of the following plans.
+              Escolha um dos seguintes planos
             </DialogDescription>
           </DialogHeader>
         </div>
 
         <form className="space-y-5">
           <RadioGroup className="gap-2" defaultValue="2">
-            {/* Radio card #1 */}
             <div className="has-data-[state=checked]:border-ring has-data-[state=checked]:bg-accent shadow-xs relative flex w-full items-center gap-2 rounded-md border border-input px-4 py-3 outline-none">
               <RadioGroupItem
                 value="1"
@@ -54,7 +53,7 @@ export function UpgradePlan() {
                   id={`${id}-1-description`}
                   className="text-xs text-muted-foreground"
                 >
-                  $4 per member/month
+                  R$9,90/mês
                 </p>
               </div>
             </div>
@@ -72,11 +71,10 @@ export function UpgradePlan() {
                   id={`${id}-2-description`}
                   className="text-xs text-muted-foreground"
                 >
-                  $19 per member/month
+                  R$19,90/mês
                 </p>
               </div>
             </div>
-            {/* Radio card #3 */}
             <div className="has-data-[state=checked]:border-ring has-data-[state=checked]:bg-accent shadow-xs relative flex w-full items-center gap-2 rounded-md border border-input px-4 py-3 outline-none">
               <RadioGroupItem
                 value="3"
@@ -90,7 +88,7 @@ export function UpgradePlan() {
                   id={`${id}-3-description`}
                   className="text-xs text-muted-foreground"
                 >
-                  $32 per member/month
+                  R$32,90/mês
                 </p>
               </div>
             </div>
@@ -98,7 +96,9 @@ export function UpgradePlan() {
 
           <div className="space-y-3">
             <p>
-              <strong className="text-sm font-medium">Features include:</strong>
+              <strong className="text-sm font-medium">
+                Funcionalidades incluídas:
+              </strong>
             </p>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex gap-2">
@@ -107,7 +107,7 @@ export function UpgradePlan() {
                   className="mt-0.5 shrink-0 text-primary"
                   aria-hidden="true"
                 />
-                Create unlimited projects.
+                Crie currículos ilimitados
               </li>
               <li className="flex gap-2">
                 <CheckIcon
@@ -117,20 +117,24 @@ export function UpgradePlan() {
                 />
                 Remove watermarks.
               </li>
-              <li className="flex gap-2">
-                <CheckIcon
-                  size={16}
-                  className="mt-0.5 shrink-0 text-primary"
-                  aria-hidden="true"
-                />
+              <li className="flex items-center gap-2">
+                <div className="inline-flex size-4 items-center justify-center rounded-full bg-red-500">
+                  <X
+                    size={14}
+                    className="mt-0.5 shrink-0 text-white"
+                    aria-hidden="true"
+                  />
+                </div>
                 Add unlimited users and free viewers.
               </li>
-              <li className="flex gap-2">
-                <CheckIcon
-                  size={16}
-                  className="mt-0.5 shrink-0 text-primary"
-                  aria-hidden="true"
-                />
+              <li className="flex items-center gap-2">
+                <div className="inline-flex size-4 items-center justify-center rounded-full bg-green-500">
+                  <CheckIcon
+                    size={14}
+                    className="mt-0.5 shrink-0 text-white"
+                    aria-hidden="true"
+                  />
+                </div>
                 Upload unlimited files.
               </li>
               <li className="flex gap-2">
@@ -154,11 +158,11 @@ export function UpgradePlan() {
 
           <div className="grid gap-2">
             <Button type="button" className="w-full">
-              Change plan
+              Continuar
             </Button>
             <DialogClose asChild>
               <Button type="button" variant="ghost" className="w-full">
-                Cancel
+                Cancelar
               </Button>
             </DialogClose>
           </div>

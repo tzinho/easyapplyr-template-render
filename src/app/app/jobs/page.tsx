@@ -1,7 +1,13 @@
-import { PageContent } from "~/components/page";
+import { Header } from "./_components/header";
+import { Body } from "./_components/body";
 
 const Jobs = () => {
-  return <PageContent>Jobs</PageContent>;
+  return (
+    <>
+      <Header />
+      <Body />
+    </>
+  );
 };
 
 export default Jobs;
