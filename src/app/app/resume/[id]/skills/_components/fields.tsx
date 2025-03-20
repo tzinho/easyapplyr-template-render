@@ -12,7 +12,7 @@ interface FormFieldsProps {
 export const FormFields = ({ index }: FormFieldsProps) => {
   const form = useFormContext();
 
-  const appear = form.watch(`educations.${index}.appear`);
+  const appear = form.watch(`skills.${index}.appear`);
 
   return (
     <div className="flex flex-col gap-3">

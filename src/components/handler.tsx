@@ -11,7 +11,6 @@ import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import lodash from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import ReactPlayer from "react-player/lazy";
 
 import { Form } from "~/components/ui/form";
 import { Confirm } from "./confirm";
@@ -35,6 +34,7 @@ interface HandlerProps {
   }) => React.ReactNode;
   generateANewItem: any;
   mutations: any;
+  info: any;
 }
 
 export function Handler({
@@ -45,6 +45,7 @@ export function Handler({
   schema,
   generateANewItem,
   mutations,
+  info,
 }: HandlerProps) {
   const { id } = useParams<{ id: string }>();
   const [activeIndex, setActiveIndex] = useState<string | null>(null);
@@ -267,24 +268,7 @@ export function Handler({
           fields={fields}
         >
           <div className="w-full space-y-4 md:max-w-[306px]">
-            {/* <ReactPlayer
-              url="https://www.youtube.com/watch?v=OtEJTgmL5rc"
-              width={306}
-              height={175}
-              config={{
-                youtube: {
-                  playerVars: {
-                    showinfo: 1,
-                    modestbranding: 0,
-                    rel: 1,
-                    controls: 0,
-                    enablejsapi: 1,
-                  },
-                  embedOptions: {},
-                },
-              }}
-              style={{ borderRadius: "25px" }}
-            /> */}
+            {info}
             {renderList({
               onAppend,
               onMove,

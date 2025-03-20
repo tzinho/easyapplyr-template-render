@@ -101,10 +101,10 @@ function Form<T extends FormGenerics>({
                   width: "100%",
                   pointerEvents: isActive ? "auto" : "none",
                 }}
-                className="rounded-xl border bg-background/95 p-6 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
+                className="flex flex-col rounded-xl border bg-background/95 p-6 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-background/60"
               >
                 {render({ index })}
-                <ButtonLoading isLoading={isLoading} className="mt-3 w-full">
+                <ButtonLoading isLoading={isLoading} className="mt-3 self-end">
                   {submitText}
                 </ButtonLoading>
               </motion.div>

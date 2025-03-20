@@ -96,7 +96,7 @@ function NotificationButton() {
                 <motion.li
                   key={notification.id}
                   className="cursor-pointer rounded-md bg-muted p-3"
-                  whileHover={{ scale: 1.03 }}
+                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <h3 className="font-medium">{notification.title}</h3>
