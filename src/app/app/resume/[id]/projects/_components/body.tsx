@@ -9,6 +9,7 @@ import { FormList } from "~/components/form";
 import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { Info } from "~/components/info";
 
 export const Body = () => {
   const resumeTemplate = useResumeStore((state) => state.resumeTemplate);
@@ -22,6 +23,9 @@ export const Body = () => {
     <PageContentTwoSections isLoading={!resumeTemplate}>
       <Handler
         name={name}
+        info={
+          <Info message="Descreva projetos que demonstrem suas habilidades e conquistas. Inclua o nome do projeto, seu papel, as tecnologias ou metodologias utilizadas e os resultados alcançados. Use números para quantificar seu impacto, como 'aumentei a eficiência em 20%' ou 'gerenciei uma equipe de 5 pessoas'. Se possível, adicione links para portfólios ou repositórios (como GitHub)" />
+        }
         schema={projectsSchema}
         defaultValues={resumeTemplate?.projects.sort(
           (a, b) => a.order - b.order,

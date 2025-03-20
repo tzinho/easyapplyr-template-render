@@ -9,6 +9,7 @@ import { FormList } from "~/components/form";
 import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { Info } from "~/components/info";
 
 export const Body = () => {
   const resumeTemplate = useResumeStore((state) => state.resumeTemplate);
@@ -22,6 +23,9 @@ export const Body = () => {
     <PageContentTwoSections isLoading={!resumeTemplate}>
       <Handler
         name={name}
+        info={
+          <Info message="Mencione certificações que validam suas habilidades e conhecimentos. Inclua o nome da certificação, a instituição emissora e a data de obtenção. Se a certificação estiver relacionada a uma habilidade muito valorizada na vaga, destaque-a! Por exemplo: 'Certificação PMP para gerenciamento de projetos'." />
+        }
         schema={certificationsSchema}
         defaultValues={resumeTemplate?.certifications.sort(
           (a, b) => a.order - b.order,

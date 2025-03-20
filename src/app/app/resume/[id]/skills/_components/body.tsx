@@ -9,6 +9,7 @@ import { FormList } from "~/components/form";
 import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { Info } from "~/components/info";
 
 export const Body = () => {
   const name = "skills";
@@ -22,6 +23,9 @@ export const Body = () => {
     <PageContentTwoSections isLoading={!resumeTemplate}>
       <Handler
         name={name}
+        info={
+          <Info message="Liste suas habilidades técnicas e comportamentais mais relevantes para a vaga. Seja específico: em vez de 'bom em comunicação', use 'comunicação assertiva em equipes multidisciplinares'. Priorize habilidades que são mencionadas na descrição da vaga. Para habilidades técnicas, inclua ferramentas, softwares ou metodologias que você domina." />
+        }
         schema={skillsSchema}
         defaultValues={resumeTemplate?.skills.sort((a, b) => a.order - b.order)}
         generateANewItem={generateANewItem}

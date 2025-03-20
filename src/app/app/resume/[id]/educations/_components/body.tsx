@@ -9,6 +9,8 @@ import { FormList } from "~/components/form";
 import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 import { useResumeStore } from "~/providers/resume-store-provider";
+import { Info } from "~/components/info";
+import { info } from "console";
 
 export const Body = () => {
   const name = "educations";
@@ -19,6 +21,9 @@ export const Body = () => {
     <PageContentTwoSections isLoading={!resumeTemplate}>
       <Handler
         name={name}
+        info={
+          <Info message="Descreva sua formação acadêmica de forma clara e objetiva. Inclua o nome da instituição, o curso, o grau obtido e as datas de início e conclusão. Se você teve um desempenho acadêmico destacado (como prêmios, bolsas ou média alta), mencione! Para cursos técnicos ou profissionalizantes, destaque habilidades relevantes adquiridas." />
+        }
         schema={educationsSchema}
         defaultValues={resumeTemplate?.educations.sort(
           (a, b) => a.order - b.order,
