@@ -6,6 +6,7 @@ import { DateTimeRangePicker } from "~/components/form/datetime-range-picker";
 import { Input } from "~/components/form/input";
 import { TextareaList } from "~/components/form/textarea-list";
 import { Badge } from "~/components/ui/badge";
+import { useHandlerInner } from "~/providers/handler-provider";
 
 interface FormFieldsProps {
   index: number;
@@ -13,6 +14,7 @@ interface FormFieldsProps {
 
 export const FormFields = ({ index }: FormFieldsProps) => {
   const form = useFormContext();
+  const { highlightWords } = useHandlerInner();
 
   const company =
     form.watch(`experiences.${index}.company`) || `Empresa ${index + 1}`;
@@ -65,7 +67,7 @@ export const FormFields = ({ index }: FormFieldsProps) => {
         name={`experiences.${index}.did`}
         label={`O que você fez na(o) ${company}?`}
         className="min-h-[120px] focus-visible:ring-2"
-        highlightWords={["25%"]}
+        highlightWords={highlightWords}
       />
     </div>
   );

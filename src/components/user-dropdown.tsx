@@ -7,6 +7,7 @@ import {
   Lightbulb,
   Palette,
   ChevronDown,
+  X,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -40,6 +41,29 @@ type Notification = {
   title: string;
   message: string;
   date: string;
+};
+
+const NotificationItem = ({ notification }: { notification: Notification }) => {
+  return (
+    <motion.li
+      key={notification.id}
+      className="cursor-pointer rounded-md bg-card p-3"
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <div className="flex justify-between">
+        <h3 className="font-semibold">{notification.title}</h3>
+        <Button
+          variant="ghost"
+          className="h-4 w-4 shrink-0 grow-0 rounded-full px-2 py-2 [&_svg]:size-3"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+      <p className="text-sm text-muted-foreground">{notification.message}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{notification.date}</p>
+    </motion.li>
+  );
 };
 
 function NotificationButton() {
@@ -93,20 +117,10 @@ function NotificationButton() {
           ) : (
             <ul className="space-y-4">
               {notifications.map((notification) => (
-                <motion.li
+                <NotificationItem
+                  notification={notification}
                   key={notification.id}
-                  className="cursor-pointer rounded-md bg-muted p-3"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <h3 className="font-medium">{notification.title}</h3>
-                  <p className="text-sm text-muted-foreground">
-                    {notification.message}
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {notification.date}
-                  </p>
-                </motion.li>
+                />
               ))}
             </ul>
           )}

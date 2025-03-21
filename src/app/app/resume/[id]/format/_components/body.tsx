@@ -14,7 +14,7 @@ export const Body = () => {
   return (
     <PageContent className="flex flex-col" isLoading={!resumeTemplate}>
       <Toolbar />
-      <div className="container mx-auto max-w-5xl p-4">
+      <div className="container mx-auto max-w-5xl bg-gray-100 p-4">
         <ScalablePdfPreview>
           <TemplatePreview resumeTemplate={resumeTemplate!} />
         </ScalablePdfPreview>

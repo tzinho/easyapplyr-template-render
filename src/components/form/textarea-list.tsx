@@ -59,7 +59,7 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
     return (
       <span
         {...attributes}
-        className="relative cursor-pointer rounded bg-yellow-100 px-1 transition-colors hover:bg-yellow-200 dark:bg-yellow-900/50 dark:hover:bg-yellow-900/70"
+        className="relative cursor-pointer rounded bg-yellow-100 transition-colors hover:bg-yellow-200 dark:bg-yellow-900/50 dark:hover:bg-yellow-900/70"
       >
         {children}
       </span>
@@ -263,6 +263,7 @@ export const TextareaList = ({
       render={({ field }) => {
         let initialValue = emptyValue;
 
+        console.log("field.value", field.value);
         if (field.value) {
           // If field.value is a string, convert it to Slate format
           if (typeof field.value === "string") {

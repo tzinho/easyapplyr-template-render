@@ -115,3 +115,7 @@ useEffect(() => {
 ## when i click to show dropdown on more options the app redirects to edit resume pages
 
 ## sidebar needs to be a fixed
+
+## fields are with styles inherit
+
+## refactor field date

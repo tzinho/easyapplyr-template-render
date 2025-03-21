@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { PageContentTwoSections } from "~/components/page";
 import { Handler } from "~/components/handler";
 import { experiencesSchema, generateANewItem } from "./hooks";
@@ -11,7 +9,6 @@ import { FormList } from "~/components/form";
 import { FormFields } from "./fields";
 import { useMutations } from "~/hooks/use-mutations";
 import { useResumeStore } from "~/providers/resume-store-provider";
-import { cn } from "~/lib/utils";
 import { Info } from "~/components/info";
 
 export const Body = () => {

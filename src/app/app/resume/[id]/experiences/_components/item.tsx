@@ -203,16 +203,24 @@ const Insights = ({ text }: { text: string }) => {
 
   return (
     <ul>
-      {results.map((result, index) => (
-        <li key={index} className="flex items-center gap-1 text-xs">
-          {result.pass ? (
-            <CircleCheckBig size={12} className="stroke-green-500" />
-          ) : (
-            <CircleX size={12} className="stroke-red-500" />
-          )}
-          {result.title}
-        </li>
-      ))}
+      {results
+        .filter((result) => !result.pass)
+        .map((result, index) => (
+          <li
+            key={index}
+            className="flex cursor-pointer items-center gap-1 rounded-sm py-1 text-xs hover:bg-card/90"
+            onMouseEnter={() => {
+              console.log("mouseEnter", result);
+            }}
+          >
+            {result.pass ? (
+              <CircleCheckBig size={12} className="stroke-green-500" />
+            ) : (
+              <CircleX size={12} className="stroke-red-500" />
+            )}
+            {result.title}
+          </li>
+        ))}
     </ul>
   );
 };
@@ -269,7 +277,7 @@ export const Item = ({
             )}
             {...listeners}
           />
-          <div className="flex flex-1 cursor-pointer items-center justify-between rounded-md border bg-white px-2 py-1">
+          <div className="flex flex-1 cursor-pointer select-none items-center justify-between rounded-md border bg-white px-2 py-1">
             <div className="flex w-full flex-col">
               <div
                 onClick={() => {

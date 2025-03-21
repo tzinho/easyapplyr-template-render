@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
@@ -14,7 +14,6 @@ import {
   SelectGroup,
 } from "~/components/ui/select";
 import { useIsMobile } from "~/hooks/use-mobile";
-import { api } from "~/trpc/react";
 
 type LinkEditPage = {
   label: string;
@@ -89,13 +88,6 @@ const getLinksEditPages = ({ id }: { id: string }) => {
       required: true,
       appear: true,
     },
-    // {
-    //   label: "Visualização",
-    //   href: `/app/resume/${id}/format`,
-    //   value: "format",
-    //   required: true,
-    //   appear: true,
-    // },
   ];
 
   return links;
@@ -125,6 +117,9 @@ export const SelectPage = ({ required }: NavProps) => {
                 <Link href={link.href}>{link.label}</Link>
               </SelectItem>
             ))}
+            <SelectItem key="format" value="format">
+              <Link href={`/app/resume/${id}/format`}>Finalizar e baixar</Link>
+            </SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
@@ -176,18 +171,9 @@ export const Nav = () => {
   const [links, setLinks] = useState(() => {
     return getLinksEditPages({ id });
   });
-  const sections = api.resumes.getSections.useQuery(id);
-
-  useEffect(() => {
-    if (sections.data) {
-      const resultLinks = appSections.map((section) => {
-        return section;
-      });
-    }
-  }, [sections.isLoading]);
+  // const sections = api.resumes.getSections.useQuery(id);
 
   const required = links.filter((link) => link.required);
-  // const notRequired = links.filter((link) => !link.required);
   const isMobile = useIsMobile();
 
   if (isMobile) return <SelectPage required={required} />;

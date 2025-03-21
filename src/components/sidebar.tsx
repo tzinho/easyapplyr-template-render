@@ -24,7 +24,7 @@ function Sidebar() {
     <div
       className={cn(
         "sticky top-0 h-screen shrink-0 overflow-hidden font-sans transition-all duration-300 ease-in-out md:block",
-        isCollapsed ? "w-16" : "w-56",
+        isCollapsed ? "w-16" : "w-64",
       )}
     >
       <div className="relative h-full w-full border-r bg-white">
@@ -52,12 +52,12 @@ function Sidebar() {
           <div className="flex flex-col space-y-4">
             <div
               className={cn(
-                "mx-1 flex items-center gap-1",
+                "mx-1 flex flex-col items-center gap-1",
                 isCollapsed && "hidden",
               )}
             >
-              <div className="">
-                <p className="font-semibold tracking-tight text-primary">
+              <div className="flex flex-col text-center">
+                <p className="text-nowrap font-semibold tracking-tight text-primary">
                   Acesse todas as funcionalidades
                 </p>
                 <span className="text-xs">Clique aqui e se torne pro</span>

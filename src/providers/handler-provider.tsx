@@ -1,4 +1,4 @@
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
 type HandlerApi = {
   name: string;
@@ -8,6 +8,8 @@ type HandlerInnerApi = {
   activeIndex: string | null;
   isSubmitting: boolean;
   fields: any[];
+  highlightWords: any[];
+  setHighlightWords: any;
 };
 
 const HandlerContext = createContext<HandlerApi | undefined>(undefined);
@@ -37,8 +39,17 @@ export const HandlerInnerProvider = ({
   isSubmitting,
   fields,
 }: HandlerInnerProviderProps) => {
+  const [highlightWords, setHighlightWords] = useState<any[]>(["Trabalhei na"]);
   return (
-    <HandlerInnerContext.Provider value={{ activeIndex, isSubmitting, fields }}>
+    <HandlerInnerContext.Provider
+      value={{
+        activeIndex,
+        isSubmitting,
+        fields,
+        highlightWords,
+        setHighlightWords,
+      }}
+    >
       {children}
     </HandlerInnerContext.Provider>
   );

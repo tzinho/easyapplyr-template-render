@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { BadgeHelp } from "lucide-react";
+import { BadgeHelp, CircleCheckBig } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { cn } from "~/lib/utils";
+import { Button } from "./ui/button";
 
 enum InfoType {
   do,
@@ -45,12 +46,7 @@ export const Info = ({ message, items }: InfoProps) => {
                 key={index}
                 className="flex w-full items-center gap-8 md:items-start"
               >
-                <div
-                  className={cn(
-                    "h-3 w-3 shrink-0 grow-0 flex-wrap rounded-lg",
-                    item.type ? "bg-red-500" : "bg-green-500",
-                  )}
-                ></div>
+                <CircleCheckBig className="h-4 w-4 shrink-0 grow-0 stroke-green-500" />
                 <p className="text-xs">{item.message}</p>
               </div>
             );
