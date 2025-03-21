@@ -14,8 +14,40 @@ import { type Resume } from "~/stores/resume-store";
 import { Item } from "~/components/templates/item";
 import { Section } from "~/components/templates/section";
 import { SectionList } from "~/components/templates/section-list";
-import { SectionTitle } from "~/components/templates/section-title";
+import { ContentEditable } from "~/components/contenteditable";
 
+const Languages: React.FC<SectionProps> = ({
+  resumeTemplate,
+  section,
+  isPreview,
+}) => {
+  return (
+    <SectionList
+      id={section.id}
+      title={section.title}
+      resumeTemplate={resumeTemplate}
+      disabled={section.disabled || !!isPreview}
+      type="languages"
+      renderItem={(items) =>
+        items.map((item) => (
+          <Item
+            key={item.id}
+            id={item.id}
+            disabled={section.disabled || !!isPreview}
+          >
+            <li className="list-disc">
+              <ContentEditable
+                onChange={(value) => console.log("language", item.name)}
+              >
+                {item.name}
+              </ContentEditable>
+            </li>
+          </Item>
+        ))
+      }
+    />
+  );
+};
 const Skills: React.FC<SectionProps> = ({
   resumeTemplate,
   section,
@@ -24,6 +56,7 @@ const Skills: React.FC<SectionProps> = ({
   return (
     <SectionList
       id={section.id}
+      title={section.title}
       resumeTemplate={resumeTemplate}
       disabled={section.disabled || !!isPreview}
       type="skills"
@@ -34,13 +67,17 @@ const Skills: React.FC<SectionProps> = ({
             id={item.id}
             disabled={section.disabled || !!isPreview}
           >
-            <li className="list-disc">{item.text}</li>
+            <li className="list-disc">
+              <ContentEditable
+                onChange={(value) => console.log("skill", item.text)}
+              >
+                {item.text}
+              </ContentEditable>
+            </li>
           </Item>
         ))
       }
-    >
-      <SectionTitle>{section.title}</SectionTitle>
-    </SectionList>
+    />
   );
 };
 
@@ -51,6 +88,7 @@ const Experiences: React.FC<SectionProps> = ({
 }) => {
   return (
     <SectionList
+      title={section.title}
       id={section.id}
       disabled={section.disabled || !!isPreview}
       resumeTemplate={resumeTemplate}
@@ -63,14 +101,17 @@ const Experiences: React.FC<SectionProps> = ({
             disabled={section.disabled || !!isPreview}
           >
             <li className="list-disc">
-              {item.role} - {item.company}
+              <ContentEditable
+                onChange={(value) => console.log("experience", item.role)}
+              >
+                {item.role}
+              </ContentEditable>{" "}
+              - {item.company}
             </li>
           </Item>
         ))
       }
-    >
-      <SectionTitle>{section.title}</SectionTitle>
-    </SectionList>
+    />
   );
 };
 
@@ -81,6 +122,7 @@ const Education: React.FC<SectionProps> = ({
 }) => {
   return (
     <SectionList
+      title={section.title}
       id={section.id}
       disabled={section.disabled || !!isPreview}
       resumeTemplate={resumeTemplate}
@@ -96,9 +138,7 @@ const Education: React.FC<SectionProps> = ({
           </Item>
         ))
       }
-    >
-      <SectionTitle>{section.title}</SectionTitle>
-    </SectionList>
+    />
   );
 };
 
@@ -108,9 +148,14 @@ const Summary: React.FC<SectionProps> = ({
   isPreview,
 }) => {
   return (
-    <Section id={section.id} disabled={section.disabled || !!isPreview}>
-      <h3>{section.title}</h3>
-      <p>{resumeTemplate?.summary?.text}</p>
+    <Section
+      id={section.id}
+      disabled={section.disabled || !!isPreview}
+      title={section.title}
+    >
+      <ContentEditable onChange={(value) => console.log("summary", value)}>
+        {resumeTemplate?.summary?.text}
+      </ContentEditable>
     </Section>
   );
 };
@@ -209,6 +254,16 @@ export const Template = ({
           />
         );
       }
+
+      case "languages":
+        return (
+          <Languages
+            key={section.id}
+            resumeTemplate={resumeTemplate}
+            section={section}
+            isPreview={isPreview}
+          />
+        );
 
       default:
         return null;

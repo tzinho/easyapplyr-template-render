@@ -170,9 +170,20 @@ export const analyzeActiveVoice = (bullets: string[]): AnalyseItem => {
     passiveIndicators.some((word) => new RegExp(`\\b${word}\\b`, "i").test(b)),
   );
 
+  const highlightWords: string[] = lodash
+    .concat(
+      ...passiveIndicators.map((passiveIndicator) => {
+        return bullets.map((b) => {
+          const match = new RegExp(`\\b${passiveIndicator}\\b`, "i").exec(b);
+          return match ? match[0] : null;
+        });
+      }),
+    )
+    .filter((pronoun) => !!pronoun) as string[];
+
   return {
     pass: !hasPassiveVoice,
-    highlightWords: [],
+    highlightWords: [...new Set(highlightWords)],
     title: "Use uma voz ativa",
     message: hasPassiveVoice
       ? "Considere usar mais voz ativa em seus itens."

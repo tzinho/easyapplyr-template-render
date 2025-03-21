@@ -22,12 +22,10 @@ export const OneColumn = ({
   renderSection,
   isPreview,
 }: OneColumnProps) => {
-  const { sensors, handleDragStart, handleDragEnd, items, activeId } =
+  const { sensors, handleDragStart, handleDragEnd, items } =
     useDragEndOneColumn<SectionType>({
       resumeTemplate,
     });
-
-  console.log("[settings]: ", resumeTemplate?.settings);
 
   return (
     <DndContext
@@ -43,7 +41,6 @@ export const OneColumn = ({
       >
         <div
           id="resume"
-          // className="flex h-full w-full flex-col rounded-sm border bg-white p-4 shadow-xl"
           className="flex h-full w-full flex-col rounded-sm p-4"
           style={{
             fontFamily: resumeTemplate?.settings?.fontFamily,
@@ -56,14 +53,6 @@ export const OneColumn = ({
           {items.filter((item) => item.appear).map(renderSection)}
         </div>
       </SortableContext>
-
-      <DragOverlay>
-        {activeId ? (
-          <div className="rounded border-2 border-primary bg-white shadow-lg">
-            {items.find((item) => item.id === activeId)!.title}
-          </div>
-        ) : null}
-      </DragOverlay>
     </DndContext>
   );
 };

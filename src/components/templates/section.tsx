@@ -1,21 +1,18 @@
 import { type PropsWithChildren } from "react";
 import { useSortable } from "@dnd-kit/sortable";
-import { ArrowDownUp } from "lucide-react";
+import { GripVertical } from "lucide-react";
 
 import { cn } from "~/lib/utils";
+import { SectionTitle } from "./section-title";
 
 interface SectionProps extends PropsWithChildren {
   id: string | number;
   disabled?: boolean;
   className?: string;
+  title?: string;
 }
 
-export const Section = ({
-  id,
-  disabled,
-  className,
-  children,
-}: SectionProps) => {
+export const Section = ({ id, disabled, children, title }: SectionProps) => {
   const {
     attributes,
     listeners,
@@ -37,24 +34,23 @@ export const Section = ({
   if (disabled) return children;
 
   return (
-    <div
-      className={cn("group relative", className)}
-      style={style}
-      ref={setNodeRef}
-      {...attributes}
-    >
-      {!disabled && (
-        <div className="absolute -left-4 top-0" {...listeners}>
-          <ArrowDownUp
+    <div style={style} ref={setNodeRef}>
+      <div className="group relative" {...attributes}>
+        <div
+          className="absolute -left-2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
+          {...listeners}
+        >
+          <GripVertical
             className={cn(
-              "h-2 w-2 cursor-grab opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100",
+              "inset-x-0 h-4 w-4 cursor-grab opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100",
               "group-hover:scale-110",
               "active:scale-110",
             )}
             strokeWidth={2}
           />
         </div>
-      )}
+        {title && <SectionTitle>{title}</SectionTitle>}
+      </div>
       <div>{children}</div>
     </div>
   );

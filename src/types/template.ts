@@ -8,6 +8,7 @@ export interface Section {
     | "skills"
     | "experiences"
     | "educations"
+    | "languages"
     | "certifications"
     | "courseworks"
     | "projects"
