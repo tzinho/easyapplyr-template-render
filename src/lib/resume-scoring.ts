@@ -1,3 +1,5 @@
+import lodash from "lodash";
+
 interface ScoreResult {
   score: number;
   feedback: string;
@@ -70,4 +72,199 @@ export const calculateOverallScore = (
   const weightedSummaryScore = summaryScore * 0.3; // Summary is 30% of total score
 
   return Math.round(bulletScore + weightedSummaryScore);
+};
+
+const buzzwords = [
+  "inovação",
+  "transformação digital",
+  "inteligência artificial",
+  "machine learning",
+  "big data",
+  "cloud computing",
+  "blockchain",
+  "metaverso",
+  "realidade aumentada",
+  "realidade virtual",
+  "internet das coisas",
+  "cybersegurança",
+  "tecnologia disruptiva",
+  "api",
+  "plataforma",
+  "algoritmo",
+  "agilidade",
+  "escalabilidade",
+  "data driven",
+  "metodologias ágeis",
+  "startup",
+  "empreendedorismo",
+  "sinergia",
+  "otimização",
+  "performance",
+  "impacto",
+  "sustentabilidade",
+  "colaboração",
+  "empoderamento",
+  "liderança",
+  "proativo",
+  "resiliência",
+  "pensamento crítico",
+  "networking",
+  "mentoria",
+  "cultura organizacional",
+  "roi",
+  "retorno sobre o investimento",
+  "experiência do usuário",
+  "ux",
+  "ui",
+  "engajamento",
+  "branding",
+  "marketing digital",
+  "conteúdo relevante",
+  "influenciador digital",
+  "storytelling",
+  "posicionamento de marca",
+  "comunidade",
+  "tráfego orgânico",
+  "seo",
+  "otimização para mecanismos de busca",
+  "mindset",
+  "competências",
+  "habilidades",
+  "desenvolvimento pessoal",
+  "protagonismo",
+  "flexibilidade",
+  "versatilidade",
+  "inclusão",
+  "diversidade",
+  "propósito",
+  "jornada",
+];
+
+export const analyzeNumberOfBullets = (bullets: string[]): AnalyseItem => {
+  const pass = bullets.length >= 3 && bullets.length <= 10;
+  return {
+    pass,
+    highlightWords: bullets,
+    title: "Quantidade de items",
+    message:
+      bullets.length < 3
+        ? "Adicione mais itens (tente ter pelo menos 3)."
+        : bullets.length > 10
+          ? "Considere reduzir o número de itens (tente ter no máximo 10)."
+          : "Bom número de itens!",
+  };
+};
+
+export const analyzeActiveVoice = (bullets: string[]): AnalyseItem => {
+  const passiveIndicators = [
+    "foi",
+    "foram",
+    "sido",
+    "sendo",
+    "é",
+    "são",
+    "era",
+    "eram",
+  ];
+  const hasPassiveVoice = bullets.some((b) =>
+    passiveIndicators.some((word) => new RegExp(`\\b${word}\\b`, "i").test(b)),
+  );
+
+  return {
+    pass: !hasPassiveVoice,
+    highlightWords: [],
+    title: "Use uma voz ativa",
+    message: hasPassiveVoice
+      ? "Considere usar mais voz ativa em seus itens."
+      : "Bom uso de voz ativa!",
+  };
+};
+
+export const analyzeBuzzwords = (bullets: string[]): AnalyseItem => {
+  const hasBuzzwords = bullets.some((bullet) => {
+    const wordsInBullet = bullet.toLowerCase().split(/\b/); // Split using word boundaries
+    const cleanedWords = wordsInBullet.filter((word) => word.trim() !== ""); // Remove empty strings
+
+    return buzzwords.some((buzzword) => {
+      return cleanedWords.includes(buzzword);
+    });
+  });
+
+  return {
+    pass: !hasBuzzwords,
+    highlightWords: [],
+    title: "Remova as palavras da moda",
+    message: hasBuzzwords
+      ? "Considere substituir palavras da moda por descrições mais específicas e significativas."
+      : "Bom trabalho evitando palavras da moda genéricas!",
+  };
+};
+
+interface AnalyseItem {
+  pass: boolean;
+  title: string;
+  message: string;
+  highlightWords: string[];
+}
+
+export const analyzePersonalPronouns = (bullets: string[]): AnalyseItem => {
+  const pronouns = [
+    "eu",
+    "me",
+    "meu",
+    "minha",
+    "meus",
+    "minhas",
+    "nós",
+    "nosso",
+    "nossa",
+    "nossos",
+    "nossas",
+  ];
+  const hasPronouns = bullets.some((b) =>
+    pronouns.some((pronoun) => new RegExp(`\\b${pronoun}\\b`, "i").test(b)),
+  );
+
+  const highlightWords: string[] = lodash
+    .concat(
+      ...pronouns.map((pronoun) => {
+        return bullets.map((b) => {
+          const match = new RegExp(`\\b${pronoun}\\b`, "i").exec(b);
+          return match ? match[0] : null;
+        });
+      }),
+    )
+    .filter((pronoun) => !!pronoun) as string[];
+
+  return {
+    pass: !hasPronouns,
+    title: "Remova os pronomes pessoais",
+    highlightWords: [...new Set(highlightWords)],
+    message: hasPronouns
+      ? "Remova os pronomes pessoais para manter um tom profissional."
+      : "Bom trabalho por evitar pronomes pessoais!",
+  };
+};
+
+export const analyzeQuantification = (bullets: string[]): AnalyseItem => {
+  // const hasNumbers = /\d/.test(bullets.join(""));
+  const hasNumbers = bullets.every((b) => /\d/.exec(b));
+  const highlightWords = bullets.filter((b) => !/\d/.exec(b));
+
+  if (highlightWords.length) {
+    console.log(
+      "every",
+      bullets.every((b) => /\d/.exec(b)),
+      highlightWords,
+    );
+  }
+
+  return {
+    pass: hasNumbers,
+    highlightWords,
+    title: "Inserir quantificação",
+    message: hasNumbers
+      ? "Bom uso de dados numéricos!"
+      : "Tente incluir números para quantificar suas conquistas (ex: aumentou as vendas em 25%).",
+  };
 };

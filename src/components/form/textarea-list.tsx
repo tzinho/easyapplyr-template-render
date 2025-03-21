@@ -9,6 +9,8 @@ import {
   Node,
   type Descendant,
   Element as SlateElement,
+  type NodeEntry,
+  type Range,
 } from "slate";
 import {
   Slate,
@@ -18,6 +20,7 @@ import {
   type RenderLeafProps,
 } from "slate-react";
 import { useFormContext } from "react-hook-form";
+import { withHistory } from "slate-history";
 
 import {
   FormControl,
@@ -26,7 +29,17 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { withHistory } from "slate-history";
+
+export type CustomText = {
+  placeholder?: string;
+  bold?: boolean;
+  italic?: boolean;
+  text: string;
+};
+
+interface HighlightLeaf extends CustomText {
+  highlight?: boolean;
+}
 
 interface TextareaListProps {
   name: string;
@@ -55,16 +68,20 @@ const ListItem = ({ attributes, children }: RenderElementProps) => {
 };
 
 const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
-  if (leaf.highlight) {
+  const highlightLeaf = leaf as HighlightLeaf;
+
+  if (highlightLeaf.highlight) {
     return (
       <span
         {...attributes}
         className="relative cursor-pointer rounded bg-yellow-100 transition-colors hover:bg-yellow-200 dark:bg-yellow-900/50 dark:hover:bg-yellow-900/70"
+        data-cy="search-highlighted"
       >
         {children}
       </span>
     );
   }
+
   return <span {...attributes}>{children}</span>;
 };
 
@@ -140,7 +157,7 @@ const stringToSlate = (
 };
 
 const withBullets = (editor: Editor) => {
-  const { normalizeNode, onChange, insertText } = editor;
+  const { normalizeNode, insertText } = editor;
 
   // Override insertText to convert paragraph to bullet when typing starts
   editor.insertText = (text) => {
@@ -195,6 +212,32 @@ export const TextareaList = ({
     [],
   );
   const form = useFormContext();
+
+  const decorate = useCallback(
+    ([node, path]: NodeEntry) => {
+      const ranges: Range[] = [];
+
+      if (SlateElement.isElement(node) && Array.isArray(node.children)) {
+        const texts = node.children.map((it) => it.text);
+        highlightWords.forEach((word) => {
+          const regex = new RegExp(word, "gi");
+          let match;
+          regex.lastIndex = 0;
+
+          // Iterate over all matches in the node's text
+          while ((match = regex.exec(texts[0])) !== null) {
+            ranges.push({
+              anchor: { path, offset: match.index },
+              focus: { path, offset: match.index + match[0].length },
+              highlight: true,
+            });
+          }
+        });
+      }
+      return ranges;
+    },
+    [highlightWords],
+  );
 
   const renderElement = useCallback((props: RenderElementProps) => {
     switch (props.element.type) {
@@ -263,12 +306,12 @@ export const TextareaList = ({
       render={({ field }) => {
         let initialValue = emptyValue;
 
-        console.log("field.value", field.value);
         if (field.value) {
           // If field.value is a string, convert it to Slate format
           if (typeof field.value === "string") {
             initialValue = stringToSlate(field.value, highlightWords);
           }
+
           // If it's already an array (Slate format), use it directly
           else if (Array.isArray(field.value) && field.value.length > 0) {
             initialValue = field.value;
@@ -297,6 +340,7 @@ export const TextareaList = ({
                 >
                   <ul className="outline-none">
                     <Editable
+                      decorate={decorate}
                       renderElement={renderElement}
                       renderLeaf={renderLeaf}
                       onKeyDown={onKeyDown}

@@ -6,6 +6,7 @@
 
 * {
   font-family: "Atma", sans-serif;
+  font-weight: 300;
 }
 
 @layer base {

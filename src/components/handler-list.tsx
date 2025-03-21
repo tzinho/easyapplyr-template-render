@@ -82,7 +82,7 @@ const List = ({
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>{title}</CardTitle>
+            <CardTitle className="select-none">{title}</CardTitle>
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
