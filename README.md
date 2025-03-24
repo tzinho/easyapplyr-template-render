@@ -119,3 +119,5 @@ useEffect(() => {
 ## fields are with styles inherit
 
 ## refactor field date
+
+## first insert the contact section is with undefined values

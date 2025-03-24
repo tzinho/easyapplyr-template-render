@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Linkedin, MapPin, Phone } from "lucide-react";
 
 import {
   type Contact,
@@ -15,6 +14,7 @@ import { Item } from "~/components/templates/item";
 import { Section } from "~/components/templates/section";
 import { SectionList } from "~/components/templates/section-list";
 import { ContentEditable } from "~/components/contenteditable";
+import { LocationView, EmailView, PhoneView } from "../_components/views";
 
 const Languages: React.FC<SectionProps> = ({
   resumeTemplate,
@@ -152,6 +152,7 @@ const Summary: React.FC<SectionProps> = ({
       id={section.id}
       disabled={section.disabled || !!isPreview}
       title={section.title}
+      className="flex bg-red-100"
     >
       <ContentEditable onChange={(value) => console.log("summary", value)}>
         {resumeTemplate?.summary?.text}
@@ -167,25 +168,11 @@ const Contact: React.FC<SectionProps> = ({
 }) => {
   return (
     <Section id={section.id} disabled={section.disabled || !!isPreview}>
-      <h2 className="text-3xl">{resumeTemplate?.contact?.name}</h2>
-      <div className="flex items-center gap-3">
-        <div className="inline-flex items-center gap-1 text-muted-foreground">
-          <MapPin size={12} />
-          <div className="flex">
-            <p>
-              {resumeTemplate?.contact?.city} - {resumeTemplate?.contact?.state}{" "}
-              - {resumeTemplate?.contact?.country}
-            </p>
-          </div>
-        </div>
-        <div className="inline-flex items-center gap-1 text-muted-foreground">
-          <Linkedin size={12} />
-          <p>{resumeTemplate?.contact?.email}</p>
-        </div>
-        <div className="inline-flex items-center gap-1 text-muted-foreground">
-          <Phone size={12} />
-          <p>{resumeTemplate?.contact?.phone}</p>
-        </div>
+      <h2 className="text-[2em]">{resumeTemplate?.contact?.name}</h2>
+      <div className="flex items-center justify-center gap-3">
+        <LocationView {...resumeTemplate.contact} delimitier=" - " />
+        <EmailView {...resumeTemplate.contact} />
+        <PhoneView {...resumeTemplate.contact} />
       </div>
     </Section>
   );
@@ -275,6 +262,7 @@ export const Template = ({
       renderSection={renderSection}
       resumeTemplate={resumeTemplate}
       isPreview={isPreview}
+      className="pt-10"
     />
   );
 };

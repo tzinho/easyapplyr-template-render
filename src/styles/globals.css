@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Acme&family=Atma:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +7,6 @@
 
 * {
   font-family: "Atma", sans-serif;
-  font-weight: 300;
 }
 
 @layer base {
@@ -66,4 +66,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.center {
+  @apply flex items-center justify-center;
 }

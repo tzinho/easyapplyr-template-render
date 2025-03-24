@@ -12,14 +12,20 @@ interface SectionProps extends PropsWithChildren {
   title?: string;
 }
 
-export const Section = ({ id, disabled, children, title }: SectionProps) => {
+export const Section = ({
+  id,
+  disabled,
+  children,
+  title,
+  className,
+}: SectionProps) => {
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    // isDragging,
+    isDragging,
   } = useSortable({ id, disabled });
 
   const style = {
@@ -28,27 +34,24 @@ export const Section = ({ id, disabled, children, title }: SectionProps) => {
       : undefined,
     transition,
     cursor: disabled ? "not-allowed" : "grab",
-    // opacity: isDragging ? 0.5 : 1,
+    opacity: isDragging ? 0.5 : 1,
   };
 
-  if (disabled) return children;
-
   return (
-    <div style={style} ref={setNodeRef}>
+    <div style={style} ref={setNodeRef} className="px-[1.4cm]">
       <div className="group relative" {...attributes}>
-        <div
-          className="absolute -left-2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
-          {...listeners}
-        >
-          <GripVertical
-            className={cn(
-              "inset-x-0 h-4 w-4 cursor-grab opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100",
-              "group-hover:scale-110",
-              "active:scale-110",
-            )}
-            strokeWidth={2}
-          />
-        </div>
+        {!disabled && (
+          <div
+            className="absolute -left-2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
+            {...listeners}
+          >
+            <GripVertical
+              className={cn(
+                "inset-x-0 size-[75%] cursor-grab opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100",
+              )}
+            />
+          </div>
+        )}
         {title && <SectionTitle>{title}</SectionTitle>}
       </div>
       <div>{children}</div>
