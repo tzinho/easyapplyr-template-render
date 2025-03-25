@@ -262,14 +262,6 @@ export const analyzeQuantification = (bullets: string[]): AnalyseItem => {
   const hasNumbers = bullets.every((b) => /\d/.exec(b));
   const highlightWords = bullets.filter((b) => !/\d/.exec(b));
 
-  if (highlightWords.length) {
-    console.log(
-      "every",
-      bullets.every((b) => /\d/.exec(b)),
-      highlightWords,
-    );
-  }
-
   return {
     pass: hasNumbers,
     highlightWords,

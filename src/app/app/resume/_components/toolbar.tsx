@@ -44,8 +44,13 @@ const PaperSelectAdjust = () => {
 };
 
 const FontSelectAdjust = () => {
+  const { resumeTemplate, setSettings } = useResumeStore((state) => state);
+
   return (
-    <Select>
+    <Select
+      onValueChange={(fontFamily) => setSettings({ fontFamily })}
+      defaultValue={resumeTemplate?.settings.fontFamily}
+    >
       <SelectTrigger className="w-[180px] flex-1">
         <SelectValue placeholder="Select a font family" />
       </SelectTrigger>

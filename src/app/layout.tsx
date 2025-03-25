@@ -12,7 +12,7 @@ import "~/styles/globals.css";
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="pt-BR" className={`${fontSans.variable}`}>
-      <body>
+      <body className="--font-sans">
         <TRPCReactProvider>
           <main className="h-screen antialiased">{children}</main>
         </TRPCReactProvider>
